@@ -2,12 +2,9 @@ import { Button } from "@/components/ui/button";
 import {
     LayoutDashboardIcon,
     TableIcon,
-    BarcodeIcon,
-    RouterIcon,
     MailsIcon,
     UsersIcon,
-    LogInIcon,
-} from "@/components/Icons.tsx"; // 导入图标
+} from "@/components/Icons.tsx"; // load icon
 
 export const Sidebar: React.FC = () => {
     return (
@@ -28,14 +25,6 @@ export const Sidebar: React.FC = () => {
                     <span>Tables</span>
                 </Button>
                 <Button variant="link" className="flex items-center space-x-2 p-2">
-                    <BarcodeIcon className="w-6 h-6" />
-                    <span>null</span>
-                </Button>
-                <Button variant="link" className="flex items-center space-x-2 p-2">
-                    <RouterIcon className="w-6 h-6" />
-                    <span>RTL</span>
-                </Button>
-                <Button variant="link" className="flex items-center space-x-2 p-2">
                     <MailsIcon className="w-6 h-6" />
                     <span>Notifications</span>
                 </Button>
@@ -43,14 +32,7 @@ export const Sidebar: React.FC = () => {
                     <UsersIcon className="w-6 h-6" />
                     <span>Profile</span>
                 </Button>
-                <Button variant="link" className="flex items-center space-x-2 p-2">
-                    <LogInIcon className="w-6 h-6" />
-                    <span>Sign In</span>
-                </Button>
-                <Button variant="link" className="flex items-center space-x-2 p-2">
-                    <LogInIcon className="w-6 h-6" />
-                    <span>Sign Up</span>
-                </Button>
+
             </nav>
             <div className="p-4">
                 <Button className="w-full bg-blue-500">UPGRADE TO PRO</Button>
