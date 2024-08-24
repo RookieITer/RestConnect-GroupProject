@@ -1,6 +1,37 @@
 import React from 'react';
 import {ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart.tsx";
 import {CartesianGrid, Line, LineChart, XAxis} from "recharts";
+import {
+    LayoutDashboard,
+    Table,
+    Mail,
+    Map,
+    MapPin,
+    Barcode,
+    BookA,
+    Home,
+    LogIn,
+    Receipt,
+    Router,
+    Settings,
+} from "lucide-react";
+
+export type Icon = React.FC<React.SVGProps<SVGSVGElement>>;
+
+export const Icons = {
+    LayoutDashboard: LayoutDashboard as Icon,
+    Table: Table as Icon,
+    Mail: Mail as Icon,
+    Map: Map as Icon,
+    MapPin: MapPin as Icon,
+    Barcode: Barcode as Icon,
+    BookA: BookA as Icon,
+    Home: Home as Icon,
+    LogIn: LogIn as Icon,
+    Receipt: Receipt as Icon,
+    Router: Router as Icon,
+    Settings: Settings as Icon,
+};
 // BarcodeIcon.tsx
 export function BarcodeIcon(props: React.SVGProps<SVGSVGElement>) {
     return (

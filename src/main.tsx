@@ -1,10 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Dashboard from './layouts/Dashboard.tsx'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Dashboard from './layouts/Dashboard'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Dashboard />
-  </StrictMode>,
+    <StrictMode>
+        <Router>
+            <Dashboard />
+        </Router>
+    </StrictMode>,
 )
