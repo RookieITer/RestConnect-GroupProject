@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
                 <div className="flex-1 overflow-auto">
                     <Routes>
                         <Route path="/" element={<DashboardMainContent />} />
-                        <Route path="/map" element={<InteractiveMap />} />
+                        <Route path="/interactive-map" element={<InteractiveMap />} />
                         {/* Add other routes as needed */}
                     </Routes>
                 </div>

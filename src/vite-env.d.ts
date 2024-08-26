@@ -1,2 +1,2 @@
 /// <reference types="vite/client" />
-VITE_MAPBOX_TOKEN= sk.eyJ1IjoiamR1dTAwMzYiLCJhIjoiY20wOGZ2dDA5MWNkajJubmNjd2w0Mmd6cSJ9.ZDJbnO9vDhXJWuvigy0VHA
+VITE_MAPBOX_TOKEN= pk.eyJ1IjoibW9uYXNoYXVyYWUiLCJhIjoiY2pyMGJqbzV2MDk3dTQ0bndqaHA4d3hzeSJ9.TDvqYvsmY1DHhE8N8_UbFg

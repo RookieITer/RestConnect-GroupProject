@@ -26,33 +26,6 @@ export const Sidebar: React.FC = () => {
                         <span>Dashboard</span>
                     </Button>
                 </Link>
-                <Link to="/tables" className="w-full">
-                    <Button
-                        variant="link"
-                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/tables') ? 'bg-blue-500' : ''} rounded-md`}
-                    >
-                        <Icons.Table className="w-6 h-6" />
-                        <span>Tables</span>
-                    </Button>
-                </Link>
-                <Link to="/notifications" className="w-full">
-                    <Button
-                        variant="link"
-                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/notifications') ? 'bg-blue-500' : ''} rounded-md`}
-                    >
-                        <Icons.Mail className="w-6 h-6" />
-                        <span>Notifications</span>
-                    </Button>
-                </Link>
-                <Link to="/map" className="w-full">
-                    <Button
-                        variant="link"
-                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/map') ? 'bg-blue-500' : ''} rounded-md`}
-                    >
-                        <Icons.Map className="w-6 h-6" />
-                        <span>Map</span>
-                    </Button>
-                </Link>
                 <Link to="/interactive-map" className="w-full">
                     <Button
                         variant="link"
