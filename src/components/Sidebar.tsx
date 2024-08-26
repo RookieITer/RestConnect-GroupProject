@@ -13,7 +13,7 @@ export const Sidebar: React.FC = () => {
             <div className="p-4">
                 <div className="flex items-center space-x-2">
                     <Icons.LayoutDashboard className="w-6 h-6" />
-                    <span className="text-xl font-semibold">Material Dashboard 2</span>
+                    <span className="text-xl font-semibold">RestConnect SideBar</span>
                 </div>
             </div>
             <nav className="flex flex-col p-4 space-y-4">
@@ -22,8 +22,8 @@ export const Sidebar: React.FC = () => {
                         variant="link"
                         className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/') ? 'bg-blue-500' : ''} rounded-md`}
                     >
-                        <Icons.LayoutDashboard className="w-6 h-6" />
-                        <span>Dashboard</span>
+                        <Icons.LayoutDashboard className="w-6 h-6 text-white" />
+                        <span className="font-semibold text-white">Dashboard</span>
                     </Button>
                 </Link>
                 <Link to="/interactive-map" className="w-full">
@@ -31,8 +31,8 @@ export const Sidebar: React.FC = () => {
                         variant="link"
                         className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/interactive-map') ? 'bg-blue-500' : ''} rounded-md`}
                     >
-                        <Icons.MapPin className="w-6 h-6" />
-                        <span>Interactive Map</span>
+                        <Icons.MapPin className="w-6 h-6 text-white" />
+                        <span className="font-semibold text-white">Interactive Map</span>
                     </Button>
                 </Link>
             </nav>
