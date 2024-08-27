@@ -151,9 +151,16 @@ export const InteractiveMap: React.FC = () => {
                             anchor="top"
                             onClose={() => setSelectedItem(null)}
                             closeOnClick={false}
+                            closeButton={false}
                         >
-                            <div className="p-2">
-                                <h3 className="font-bold mb-2">{selectedItem.Location}</h3>
+                            <div className="p-2 relative">
+                                <button
+                                    className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                                    onClick={() => setSelectedItem(null)}
+                                >
+                                    <Icons.X className="w-6 h-6" />
+                                </button>
+                                <h3 className="font-bold mb-2 pr-8">{selectedItem.Location}</h3>
                                 <p>Male: {selectedItem.male}</p>
                                 <p>Female: {selectedItem.female}</p>
                                 <p>Wheelchair: {selectedItem.wheelchair}</p>
@@ -176,9 +183,16 @@ export const InteractiveMap: React.FC = () => {
                             anchor="top"
                             onClose={() => setSelectedItem(null)}
                             closeOnClick={false}
+                            closeButton={false}
                         >
-                            <div className="p-2">
-                                <h3 className="font-bold mb-2">Tree ID: {selectedItem.id}</h3>
+                            <div className="p-2 relative">
+                                <button
+                                    className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                                    onClick={() => setSelectedItem(null)}
+                                >
+                                    <Icons.X className="w-6 h-6" />
+                                </button>
+                                <h3 className="font-bold mb-2 pr-8">Tree ID: {selectedItem.id}</h3>
                                 <p>Latitude: {selectedItem.latitude}</p>
                                 <p>Longitude: {selectedItem.longitude}</p>
                             </div>
