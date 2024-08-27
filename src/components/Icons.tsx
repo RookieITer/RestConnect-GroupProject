@@ -14,6 +14,7 @@ import {
     Receipt,
     Router,
     Settings,
+    Copy,
 } from "lucide-react";
 
 export type Icon = React.FC<React.SVGProps<SVGSVGElement>>;
@@ -34,6 +35,7 @@ export const Icons = {
     Receipt: Receipt as Icon,
     Router: Router as Icon,
     Settings: Settings as Icon,
+    Copy: Copy as Icon,
     Pin: ({ size = 20, ...props }: PinProps) => (
         <svg height={size} width={size} viewBox="0 0 24 24" {...props}>
             <path d="M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
@@ -42,6 +44,7 @@ export const Icons = {
         </svg>
     ),
 };
+
 // BarcodeIcon.tsx
 export function BarcodeIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -332,4 +335,3 @@ export function UsersIcon(props: React.SVGProps<SVGSVGElement>) {
         </svg>
     );
 }
-
