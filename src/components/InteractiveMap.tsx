@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import { Icons } from '@/components/Icons'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface ToiletData {
     Toilet_ID: number
@@ -16,6 +17,12 @@ interface ToiletData {
     lon: number
 }
 
+interface TreeData {
+    id: number
+    latitude: number
+    longitude: number
+}
+
 interface ApiResponse {
     statusCode: number
     body: string
@@ -23,8 +30,10 @@ interface ApiResponse {
 
 export const InteractiveMap: React.FC = () => {
     const [toilets, setToilets] = useState<ToiletData[]>([])
-    const [selectedToilet, setSelectedToilet] = useState<ToiletData | null>(null)
+    const [trees, setTrees] = useState<TreeData[]>([])
+    const [selectedItem, setSelectedItem] = useState<ToiletData | TreeData | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [filter, setFilter] = useState<'toilets' | 'trees' | 'all'>('all')
 
     useEffect(() => {
         const fetchToilets = async () => {
@@ -45,7 +54,21 @@ export const InteractiveMap: React.FC = () => {
             }
         }
 
+        const fetchTrees = async () => {
+            try {
+                const response = await axios.get<ApiResponse>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_tree_canopies')
+                const parsedBody = JSON.parse(response.data.body)
+                const treesData = parsedBody.tree_canopies as TreeData[]
+
+                setTrees(treesData)
+            } catch (error) {
+                console.error('Error fetching tree data:', error)
+                setError('Failed to load tree data. Please try again later.')
+            }
+        }
+
         fetchToilets()
+        fetchTrees()
     }, [])
 
     const handleCopyLocation = (location: string) => {
@@ -64,6 +87,18 @@ export const InteractiveMap: React.FC = () => {
     return (
         <div className="w-full h-full">
             <h2 className="text-2xl font-bold mb-4">Melbourne Interactive Map</h2>
+            <div className="mb-4">
+                <Select onValueChange={(value: 'toilets' | 'trees' | 'all') => setFilter(value)}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="toilets">Toilets</SelectItem>
+                        <SelectItem value="trees">Trees</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             <div className="w-full h-[calc(100vh-200px)] min-h-[400px]">
                 <Map
                     initialViewState={{
@@ -76,15 +111,15 @@ export const InteractiveMap: React.FC = () => {
                     mapStyle="mapbox://styles/mapbox/streets-v11"
                     mapboxAccessToken="pk.eyJ1IjoibW9uYXNoYXVyYWUiLCJhIjoiY2pyMGJqbzV2MDk3dTQ0bndqaHA4d3hzeSJ9.TDvqYvsmY1DHhE8N8_UbFg"
                 >
-                    {toilets.map((toilet) => (
+                    {(filter === 'all' || filter === 'toilets') && toilets.map((toilet) => (
                         <Marker
-                            key={toilet.Toilet_ID.toString()}
+                            key={`toilet-${toilet.Toilet_ID}`}
                             latitude={toilet.lat}
                             longitude={toilet.lon}
                             anchor="bottom"
                             onClick={e => {
                                 e.originalEvent.stopPropagation()
-                                setSelectedToilet(toilet)
+                                setSelectedItem(toilet)
                             }}
                         >
                             <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
@@ -92,29 +127,60 @@ export const InteractiveMap: React.FC = () => {
                             </div>
                         </Marker>
                     ))}
+                    {(filter === 'all' || filter === 'trees') && trees.map((tree) => (
+                        <Marker
+                            key={`tree-${tree.id}`}
+                            latitude={tree.latitude}
+                            longitude={tree.longitude}
+                            anchor="bottom"
+                            onClick={e => {
+                                e.originalEvent.stopPropagation()
+                                setSelectedItem(tree)
+                            }}
+                        >
+                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <Icons.Tree className="w-4 h-4 text-white" />
+                            </div>
+                        </Marker>
+                    ))}
 
-                    {selectedToilet && (
+                    {selectedItem && 'Toilet_ID' in selectedItem && (
                         <Popup
-                            latitude={selectedToilet.lat}
-                            longitude={selectedToilet.lon}
+                            latitude={selectedItem.lat}
+                            longitude={selectedItem.lon}
                             anchor="top"
-                            onClose={() => setSelectedToilet(null)}
+                            onClose={() => setSelectedItem(null)}
                             closeOnClick={false}
                         >
                             <div className="p-2">
-                                <h3 className="font-bold mb-2">{selectedToilet.Location}</h3>
-                                <p>Male: {selectedToilet.male}</p>
-                                <p>Female: {selectedToilet.female}</p>
-                                <p>Wheelchair: {selectedToilet.wheelchair}</p>
-                                <p>Baby Facilities: {selectedToilet.baby_facil}</p>
+                                <h3 className="font-bold mb-2">{selectedItem.Location}</h3>
+                                <p>Male: {selectedItem.male}</p>
+                                <p>Female: {selectedItem.female}</p>
+                                <p>Wheelchair: {selectedItem.wheelchair}</p>
+                                <p>Baby Facilities: {selectedItem.baby_facil}</p>
                                 <Button
-                                    onClick={() => handleCopyLocation(selectedToilet.Location)}
+                                    onClick={() => handleCopyLocation(selectedItem.Location)}
                                     className="mt-2 w-full"
                                     variant="outline"
                                 >
                                     <Icons.Copy className="w-4 h-4 mr-2" />
                                     Copy Location
                                 </Button>
+                            </div>
+                        </Popup>
+                    )}
+                    {selectedItem && 'id' in selectedItem && (
+                        <Popup
+                            latitude={selectedItem.latitude}
+                            longitude={selectedItem.longitude}
+                            anchor="top"
+                            onClose={() => setSelectedItem(null)}
+                            closeOnClick={false}
+                        >
+                            <div className="p-2">
+                                <h3 className="font-bold mb-2">Tree ID: {selectedItem.id}</h3>
+                                <p>Latitude: {selectedItem.latitude}</p>
+                                <p>Longitude: {selectedItem.longitude}</p>
                             </div>
                         </Popup>
                     )}
