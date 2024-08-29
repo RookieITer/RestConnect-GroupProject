@@ -17,8 +17,10 @@ interface ToiletData {
     lon: number
 }
 
-interface TreeData {
-    id: number
+interface OpenSpaceData {
+    PARK_NAME: string
+    LGA: string
+    OS_CATEGORY: string
     latitude: number
     longitude: number
 }
@@ -30,10 +32,10 @@ interface ApiResponse {
 
 export const InteractiveMap: React.FC = () => {
     const [toilets, setToilets] = useState<ToiletData[]>([])
-    const [trees, setTrees] = useState<TreeData[]>([])
-    const [selectedItem, setSelectedItem] = useState<ToiletData | TreeData | null>(null)
+    const [openSpaces, setOpenSpaces] = useState<OpenSpaceData[]>([])
+    const [selectedItem, setSelectedItem] = useState<ToiletData | OpenSpaceData | null>(null)
     const [error, setError] = useState<string | null>(null)
-    const [filter, setFilter] = useState<'toilets' | 'trees' | 'all'>('all')
+    const [filter, setFilter] = useState<'toilets' | 'openSpaces' | 'all'>('all')
 
     useEffect(() => {
         const fetchToilets = async () => {
@@ -54,21 +56,21 @@ export const InteractiveMap: React.FC = () => {
             }
         }
 
-        const fetchTrees = async () => {
+        const fetchOpenSpaces = async () => {
             try {
-                const response = await axios.get<ApiResponse>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_tree_canopies')
+                const response = await axios.get<ApiResponse>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_open_spaces')
                 const parsedBody = JSON.parse(response.data.body)
-                const treesData = parsedBody.tree_canopies as TreeData[]
+                const openSpacesData = parsedBody.open_spaces as OpenSpaceData[]
 
-                setTrees(treesData)
+                setOpenSpaces(openSpacesData)
             } catch (error) {
-                console.error('Error fetching tree data:', error)
-                setError('Failed to load tree data. Please try again later.')
+                console.error('Error fetching open spaces data:', error)
+                setError('Failed to load open spaces data. Please try again later.')
             }
         }
 
         fetchToilets()
-        fetchTrees()
+        fetchOpenSpaces()
     }, [])
 
     const handleCopyLocation = (location: string) => {
@@ -88,14 +90,14 @@ export const InteractiveMap: React.FC = () => {
         <div className="w-full h-full">
             <h2 className="text-2xl font-bold mb-4">Melbourne Interactive Map</h2>
             <div className="mb-4">
-                <Select onValueChange={(value: 'toilets' | 'trees' | 'all') => setFilter(value)}>
+                <Select onValueChange={(value: 'toilets' | 'openSpaces' | 'all') => setFilter(value)}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select filter" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">All</SelectItem>
                         <SelectItem value="toilets">Toilets</SelectItem>
-                        <SelectItem value="trees">Trees</SelectItem>
+                        <SelectItem value="openSpaces">Open Spaces</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -127,19 +129,19 @@ export const InteractiveMap: React.FC = () => {
                             </div>
                         </Marker>
                     ))}
-                    {(filter === 'all' || filter === 'trees') && trees.map((tree) => (
+                    {(filter === 'all' || filter === 'openSpaces') && openSpaces.map((space, index) => (
                         <Marker
-                            key={`tree-${tree.id}`}
-                            latitude={tree.latitude}
-                            longitude={tree.longitude}
+                            key={`space-${index}`}
+                            latitude={space.latitude}
+                            longitude={space.longitude}
                             anchor="bottom"
                             onClick={e => {
                                 e.originalEvent.stopPropagation()
-                                setSelectedItem(tree)
+                                setSelectedItem(space)
                             }}
                         >
                             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                <Icons.Tree className="w-4 h-4 text-white" />
+                                <Icons.Trees className="w-4 h-4 text-white" />
                             </div>
                         </Marker>
                     ))}
@@ -176,7 +178,7 @@ export const InteractiveMap: React.FC = () => {
                             </div>
                         </Popup>
                     )}
-                    {selectedItem && 'id' in selectedItem && (
+                    {selectedItem && 'PARK_NAME' in selectedItem && (
                         <Popup
                             latitude={selectedItem.latitude}
                             longitude={selectedItem.longitude}
@@ -192,9 +194,17 @@ export const InteractiveMap: React.FC = () => {
                                 >
                                     <Icons.X className="w-6 h-6" />
                                 </button>
-                                <h3 className="font-bold mb-2 pr-8">Tree ID: {selectedItem.id}</h3>
-                                <p>Latitude: {selectedItem.latitude}</p>
-                                <p>Longitude: {selectedItem.longitude}</p>
+                                <h3 className="font-bold mb-2 pr-8">{selectedItem.PARK_NAME}</h3>
+                                <p>LGA: {selectedItem.LGA}</p>
+                                <p>Category: {selectedItem.OS_CATEGORY}</p>
+                                <Button
+                                    onClick={() => handleCopyLocation(`${selectedItem.latitude}, ${selectedItem.longitude}`)}
+                                    className="mt-2 w-full"
+                                    variant="outline"
+                                >
+                                    <Icons.Copy className="w-4 h-4 mr-2" />
+                                    Copy Location
+                                </Button>
                             </div>
                         </Popup>
                     )}
