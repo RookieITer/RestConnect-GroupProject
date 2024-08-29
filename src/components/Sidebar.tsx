@@ -36,9 +36,6 @@ export const Sidebar: React.FC = () => {
                     </Button>
                 </Link>
             </nav>
-            <div className="p-4">
-                <Button className="w-full bg-blue-500">UPGRADE TO PRO</Button>
-            </div>
         </aside>
     );
 };
