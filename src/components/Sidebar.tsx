@@ -19,7 +19,7 @@ export const Sidebar: React.FC = () => {
 
     return (
         <motion.aside
-            className="bg-gray-800 text-white h-screen overflow-hidden"
+            className="bg-gradient-to-br from-pink-200 via-pink-300 to-orange-200 text-gray-800 h-screen overflow-hidden"
             initial="expanded"
             animate={isExpanded ? "expanded" : "collapsed"}
             variants={sidebarVariants}
@@ -28,8 +28,8 @@ export const Sidebar: React.FC = () => {
             <div className="p-4 flex items-center justify-between">
                 {isExpanded && (
                     <div className="flex items-center space-x-2">
-                        <Icons.LayoutDashboard className="w-6 h-6" />
-                        <span className="text-xl font-semibold">RestConnect</span>
+                        <Icons.LayoutDashboard className="w-6 h-6 text-gray-800" />
+                        <span className="text-xl font-semibold text-gray-800">RestConnect</span>
                     </div>
                 )}
                 <Button
@@ -37,7 +37,7 @@ export const Sidebar: React.FC = () => {
                     size="icon"
                     onClick={toggleSidebar}
                     aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
-                    className="text-white hover:bg-gray-700"
+                    className="text-gray-800 hover:bg-pink-400 hover:bg-opacity-50"
                 >
                     {isExpanded ? <Icons.ChevronLeft className="w-6 h-6" /> : <Icons.ChevronRight className="w-6 h-6" />}
                 </Button>
@@ -46,19 +46,28 @@ export const Sidebar: React.FC = () => {
                 <Link to="/" className="w-full">
                     <Button
                         variant="link"
-                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/') ? 'bg-blue-500' : ''} rounded-md`}
+                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/') ? 'bg-pink-500 bg-opacity-50' : 'hover:bg-pink-400 hover:bg-opacity-30'} rounded-md`}
                     >
-                        <Icons.LayoutDashboard className="w-6 h-6 text-white" />
-                        {isExpanded && <span className="font-semibold text-white">Dashboard</span>}
+                        <Icons.HomeIcon className="w-6 h-6 text-gray-800" />
+                        {isExpanded && <span className="font-semibold text-gray-800">Home Page</span>}
                     </Button>
                 </Link>
                 <Link to="/interactive-map" className="w-full">
                     <Button
                         variant="link"
-                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/interactive-map') ? 'bg-blue-500' : ''} rounded-md`}
+                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/interactive-map') ? 'bg-pink-500 bg-opacity-50' : 'hover:bg-pink-400 hover:bg-opacity-30'} rounded-md`}
                     >
-                        <Icons.MapPin className="w-6 h-6 text-white" />
-                        {isExpanded && <span className="font-semibold text-white">Interactive Map</span>}
+                        <Icons.MapPin className="w-6 h-6 text-gray-800" />
+                        {isExpanded && <span className="font-semibold text-gray-800">Interactive Map</span>}
+                    </Button>
+                </Link>
+                <Link to="/statistics" className="w-full">
+                    <Button
+                        variant="link"
+                        className={`flex items-center justify-start space-x-2 p-2 w-full ${isActive('/statistics') ? 'bg-pink-500 bg-opacity-50' : 'hover:bg-pink-400 hover:bg-opacity-30'} rounded-md`}
+                    >
+                        <Icons.BarChart className="w-6 h-6 text-gray-800" />
+                        {isExpanded && <span className="font-semibold text-gray-800">Statistics</span>}
                     </Button>
                 </Link>
             </nav>
