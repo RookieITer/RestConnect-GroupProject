@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 export const DashboardHeader: React.FC = () => {
     return (
         <motion.div
-            className="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-100 to-purple-100"
+            className="flex items-center justify-center px-6 py-4 bg-gradient-to-br from-pink-200 via-pink-300 to-orange-200"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
