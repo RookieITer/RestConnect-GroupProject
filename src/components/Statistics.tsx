@@ -25,8 +25,6 @@ export const Statistics: React.FC = () => {
         { name: 'Jun', revenue: 55 },
     ];
 
-
-
     const chartConfig = {
         sales: {
             label: 'Sales',
@@ -39,7 +37,7 @@ export const Statistics: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-300 to-orange-200 text-gray-800 overflow-auto p-8">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
             <h1 className="text-4xl font-bold mb-8 text-center">Statistics</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-lg shadow-md">

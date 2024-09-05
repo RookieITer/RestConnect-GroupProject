@@ -67,7 +67,7 @@ export const InteractiveMap: React.FC = () => {
     }
 
     return (
-        <div className="w-full h-full bg-gradient-to-br from-pink-200 via-pink-300 to-orange-200 p-6 rounded-lg">
+        <div className="w-full h-full bg-white p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-gray-800">Melbourne Interactive Map</h2>
             <MapFilters
                 filter={filter}

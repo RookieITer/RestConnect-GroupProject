@@ -15,7 +15,7 @@ interface MapViewProps {
 
 export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, filter, selectedItem, onItemSelect }) => {
     return (
-        <div className="w-full h-[calc(100vh-200px)] min-h-[400px] rounded-lg overflow-hidden">
+        <div className="w-full h-[calc(100vh-200px)] min-h-[400px] rounded-lg overflow-hidden bg-white">
             <Map
                 initialViewState={{
                     latitude: -37.8136,

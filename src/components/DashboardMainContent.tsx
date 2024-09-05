@@ -2,25 +2,18 @@ import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/Icons";
 
 export const DashboardMainContent: React.FC = () => {
     const controls1 = useAnimation();
     const controls2 = useAnimation();
-    const controls3 = useAnimation();
-    const controls4 = useAnimation();
 
     const [ref1, inView1] = useInView({ triggerOnce: true, threshold: 0.1 });
     const [ref2, inView2] = useInView({ triggerOnce: true, threshold: 0.1 });
-    const [ref3, inView3] = useInView({ triggerOnce: true, threshold: 0.1 });
-    const [ref4, inView4] = useInView({ triggerOnce: true, threshold: 0.1 });
 
     useEffect(() => {
         if (inView1) controls1.start('visible');
         if (inView2) controls2.start('visible');
-        if (inView3) controls3.start('visible');
-        if (inView4) controls4.start('visible');
-    }, [controls1, controls2, controls3, controls4, inView1, inView2, inView3, inView4]);
+    }, [controls1, controls2, inView1, inView2]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -45,30 +38,29 @@ export const DashboardMainContent: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-200 via-pink-300 to-orange-200 text-gray-800 overflow-auto">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
             <main className="container mx-auto px-4 py-12">
                 <motion.section
                     ref={ref1}
-                    className="text-center mb-16"
+                    className="flex flex-col md:flex-row items-center justify-between mb-16"
                     initial="hidden"
                     animate={controls1}
                     variants={containerVariants}
                 >
-                    <motion.h1
-                        className="text-4xl md:text-5xl font-bold mb-4"
-                        variants={itemVariants}
-                    >
-                        Welcome to RestConnect
-                    </motion.h1>
-                    <motion.p
-                        className="text-xl text-gray-700 mb-8"
-                        variants={itemVariants}
-                    >
-                        Manage your projects, track your progress, and achieve your goals with RestConnect.
-                    </motion.p>
-                    <motion.div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4" variants={itemVariants}>
-                        <Button size="lg" className="bg-pink-500 hover:bg-pink-600 text-white">Create New Project</Button>
-                        <Button size="lg" variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-100">View Analytics</Button>
+                    <motion.div className="md:w-1/2 mb-8 md:mb-0" variants={itemVariants}>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight">
+                            Rest without hassle! Find your perfect unwinding spot between Gigs
+                        </h1>
+                        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                            Need a break? Explore Melbourne's rest spots, complimentary amenities, and simplified parking information to ensure peace of mind with RestConnect.
+                        </p>
+                        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                            Achieve work-life balance and avoid parking fines, all while finding the perfect spot to recharge!
+                        </p>
+                        <Button size="lg" className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Learn More</Button>
+                    </motion.div>
+                    <motion.div className="md:w-1/2" variants={itemVariants}>
+                        <img src="/placeholder.svg?height=400&width=400" alt="Gig worker illustration" className="w-full h-auto rounded-lg shadow-lg" />
                     </motion.div>
                 </motion.section>
 
@@ -77,70 +69,31 @@ export const DashboardMainContent: React.FC = () => {
                     initial="hidden"
                     animate={controls2}
                     variants={containerVariants}
-                    className="grid md:grid-cols-3 gap-8 mb-16"
+                    className="mb-16"
                 >
-                    {[1, 2, 3, 4, 5, 6].map((item) => (
-                        <motion.div key={item} className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-sm" variants={itemVariants}>
-                            <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mb-4">
-                                <Icons.Check className="w-6 h-6 text-white" />
-                            </div>
-                            <h3 className="text-xl font-semibold mb-2">Key Feature {item}</h3>
-                            <p className="text-gray-700">
-                                Explore the powerful features of RestConnect designed to streamline your workflow and boost productivity.
-                            </p>
-                        </motion.div>
-                    ))}
-                </motion.section>
-
-                <motion.section
-                    ref={ref3}
-                    initial="hidden"
-                    animate={controls3}
-                    variants={containerVariants}
-                    className="text-center mb-16"
-                >
-                    <motion.h2 className="text-3xl font-bold mb-4" variants={itemVariants}>
-                        Your Project Roadmap
+                    <motion.h2 className="text-3xl font-bold mb-6 text-gray-900" variants={itemVariants}>
+                        Key challenges for Gig Workers
                     </motion.h2>
-                    <motion.p className="text-xl text-gray-700 mb-8" variants={itemVariants}>
-                        Track your project milestones and stay on top of your goals with our interactive roadmap.
+                    <motion.p className="text-lg text-gray-700 mb-8 leading-relaxed" variants={itemVariants}>
+                        As a member of the gig community, you're well-acquainted with the various challenges of the job. Check out the articles below to see the major issues affecting the gig community in Melbourne and how RestConnect addresses them.
                     </motion.p>
-                    <motion.div className="space-y-4 bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-sm" variants={itemVariants}>
-                        {['PHASE 1', 'PHASE 2', 'PHASE 3', 'PHASE 4', 'PHASE 5'].map((phase, index) => (
-                            <div key={index} className="flex items-center">
-                                <div className="w-4 h-4 bg-pink-500 rounded-full mr-4"></div>
-                                <div className="text-left">
-                                    <p className="text-sm text-gray-600">{phase}</p>
-                                    <p className="font-semibold text-gray-800">Complete project milestone and conduct progress review</p>
-                                </div>
-                            </div>
-                        ))}
+                    <motion.div className="flex flex-wrap justify-center gap-4 mb-8" variants={itemVariants}>
+                        <Button variant="outline" className="border-gray-700 text-gray-700 hover:bg-gray-100 font-medium px-4 py-2 rounded-md">Rest Areas and Amenities</Button>
+                        <Button variant="outline" className="border-gray-700 text-gray-700 hover:bg-gray-100 font-medium px-4 py-2 rounded-md">Safe Rest Areas and Risk</Button>
+                        <Button variant="outline" className="border-gray-700 text-gray-700 hover:bg-gray-100 font-medium px-4 py-2 rounded-md">Parking</Button>
                     </motion.div>
-                </motion.section>
-
-                <motion.section
-                    ref={ref4}
-                    initial="hidden"
-                    animate={controls4}
-                    variants={containerVariants}
-                    className="text-center mb-16"
-                >
-                    <motion.h2 className="text-3xl font-bold mb-4" variants={itemVariants}>
-                        Recent Updates
-                    </motion.h2>
-                    <motion.p className="text-xl text-gray-700 mb-8" variants={itemVariants}>
-                        Stay informed about the latest features and improvements in RestConnect.
-                    </motion.p>
                     <motion.div className="grid md:grid-cols-3 gap-8" variants={itemVariants}>
-                        {[1, 2, 3].map((item) => (
-                            <div key={item} className="bg-white bg-opacity-80 rounded-lg overflow-hidden shadow-md backdrop-filter backdrop-blur-sm">
-                                <img src={`https://source.unsplash.com/random/800x600?sig=${item}`} alt="Update" className="w-full h-48 object-cover" />
+                        {[
+                            { title: "Rest Areas and Amenities", image: "/placeholder.svg?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets." },
+                            { title: "Safe Rest Areas and Risk", image: "/placeholder.svg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault." },
+                            { title: "Parking", image: "/placeholder.svg?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors." }
+                        ].map((item, index) => (
+                            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md">
+                                <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
                                 <div className="p-6">
-                                    <h3 className="text-xl font-semibold mb-2">New Feature Release</h3>
-                                    <p className="text-gray-700 mb-4">
-                                        We've added exciting new capabilities to enhance your project management experience. Discover how these updates can improve your workflow.
-                                    </p>
-                                    <a href="#" className="text-pink-500 hover:underline">Learn more →</a>
+                                    <h3 className="text-xl font-semibold mb-2 text-gray-900">{item.title}</h3>
+                                    <p className="text-gray-700 mb-4 leading-relaxed">{item.description}</p>
+                                    <a href="#" className="text-blue-500 hover:underline font-medium">Learn more →</a>
                                 </div>
                             </div>
                         ))}
