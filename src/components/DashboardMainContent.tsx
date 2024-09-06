@@ -60,7 +60,7 @@ export const DashboardMainContent: React.FC = () => {
                         <Button size="lg" className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Learn More</Button>
                     </motion.div>
                     <motion.div className="md:w-1/2" variants={itemVariants}>
-                        <img src="/placeholder.svg?height=400&width=400" alt="Gig worker illustration" className="w-full h-auto rounded-lg shadow-lg" />
+                        <img src="/Rest11.jpeg?height=400&width=400" alt="Gig worker illustration" className="w-full h-auto rounded-lg shadow-lg" />
                     </motion.div>
                 </motion.section>
 
@@ -84,9 +84,9 @@ export const DashboardMainContent: React.FC = () => {
                     </motion.div>
                     <motion.div className="grid md:grid-cols-3 gap-8" variants={itemVariants}>
                         {[
-                            { title: "Rest Areas and Amenities", image: "/placeholder.svg?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets." },
-                            { title: "Safe Rest Areas and Risk", image: "/placeholder.svg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault." },
-                            { title: "Parking", image: "/placeholder.svg?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors." }
+                            { title: "Rest Areas and Amenities", image: "/Rest1.png?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets." },
+                            { title: "Safe Rest Areas and Risk", image: "/Rest2.jpg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault." },
+                            { title: "Parking", image: "/Rest3.png?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors." }
                         ].map((item, index) => (
                             <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md">
                                 <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
