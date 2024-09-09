@@ -9,6 +9,7 @@ export const DashboardHeader: React.FC = () => {
         { name: 'Home', path: '/' },
         { name: 'Interactive Map', path: '/interactive-map' },
         { name: 'Statistics', path: '/statistics' },
+        { name: 'Can I Park Here?', path: '/CanIParkHere' },
     ];
 
     return (

@@ -21,6 +21,6 @@
     "jsx": "react-jsx",
     "strict": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/components/CanIParkHere.d ts"],
   "exclude": ["node_modules"]
 }
