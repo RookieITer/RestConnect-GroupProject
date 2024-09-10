@@ -36,8 +36,8 @@ export const CanIParkHere: React.FC = () => {
 
     // placeholders FOR TESTING ONLY
     // don't name variables this way!
-    const [var1, setVar1] = useState('');
-    const [var2, setVar2] = useState('');
+ //   const [var1, setVar1] = useState('');
+//    const [var2, setVar2] = useState('');
     const [var3, setVar3] = useState('');
 
     function clearMessages()
@@ -61,46 +61,7 @@ export const CanIParkHere: React.FC = () => {
         }
     };
 
-    // handles the upload process (upload button)
-    const HandleImageSubmit2 = async () => {
-        setUploading(true);
-        setUploadMessage('');
-        setErrorMessage('');
-
-        if (files.length === 0) 
-        {
-        setErrorMessage('Please select files to upload.');
-        setUploading(false);
-        return;
-        }
-
-        try {
-            const uploadPromises = files.map(async (file) => 
-            {
-                // new routine to post base 64 data via api
-                const result = file;
-                return result;
-            });
-
-            const results = await Promise.all(uploadPromises);
-            setUploadMessage('Files uploaded successfully.');
-            console.log('Files uploaded successfully..', results);
-            setFiles([]); 
-            } 
-            catch (error) 
-            {
-            setErrorMessage('Error uploading files');
-            setUploadMessage('Error uploading files');
-            setFiles([]);
-            } 
-            finally 
-            {
-            setHasFile(false);
-            setUploading(false);
-            }
-    };
-
-
+  
     // handles the browse button and os file selection
     // note the file drop is done by the drop zone control itself
     const onFilePickerChange = (event: { target: { files: any; }; }) => {
@@ -170,9 +131,11 @@ export const CanIParkHere: React.FC = () => {
             const jsonResponse = await response.json();
             const data = jsonResponse.body; // No need to parse again if already an object
             setVar3(data)
-            
-            if (data && data.hours) {
-                setUploadMessage(data.hours);
+  
+            const bodytext = JSON.parse(data)
+
+            if (bodytext && bodytext.message) {
+                setUploadMessage(bodytext.message);
               } else {
                 setUploadMessage('No message found');
               }
@@ -243,13 +206,15 @@ export const CanIParkHere: React.FC = () => {
                     {parkingWarning && <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Note">{parkingWarning}</Message>}
                     {parkingInformationOk && <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Parking Information">{parkingInformationOk}</Message>}
 
-                    {uploadMessage && <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Success">{uploadMessage}</Message>}
+                    {uploadMessage && 
+                    <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Parking Sign Details">
+                      <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+                    </Message>}
+                    
                     {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="Error">{errorMessage}</Message>}
                 </div>
 
                 <br />
-                {var1}<br />
-                {var2}<br />
                 {var3}<br />
 
                 {currentTime}
