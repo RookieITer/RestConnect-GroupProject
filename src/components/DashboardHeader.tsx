@@ -19,19 +19,7 @@ export const DashboardHeader: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
         >
-            <motion.div
-                className="flex items-center h-full"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-            >
-                <img
-                    src="/Rest&connect.svg"
-                    alt="RestConnect Logo"
-                    className="h-full w-auto max-w-none object-contain"
-                />
-                <span className="sr-only">RestConnect</span>
-            </motion.div>
-            <nav className="ml-4">
+            <nav className="mr-4">
                 <ul className="flex space-x-6">
                     {navItems.map((item) => (
                         <li key={item.name}>
@@ -61,6 +49,20 @@ export const DashboardHeader: React.FC = () => {
                     ))}
                 </ul>
             </nav>
+            <motion.div
+                className="flex items-center h-full"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+            >
+                <Link to="/">
+                    <img
+                        src="/Rest&connect.svg"
+                        alt="RestConnect Logo"
+                        className="h-full w-auto max-w-none object-contain"
+                    />
+                    <span className="sr-only">RestConnect</span>
+                </Link>
+            </motion.div>
         </motion.div>
     );
 };

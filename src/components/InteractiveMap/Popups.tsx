@@ -10,6 +10,10 @@ interface PopupProps {
     onClose: () => void
 }
 
+const handleGetDirections = (lat: number, lon: number) => {
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, '_blank')
+}
+
 export const ToiletPopup: React.FC<PopupProps> = ({ item, onClose }) => {
     const toilet = item as ToiletData
     return (
@@ -40,6 +44,14 @@ export const ToiletPopup: React.FC<PopupProps> = ({ item, onClose }) => {
                 >
                     <Icons.Copy className="w-4 h-4 mr-2" />
                     Copy Location
+                </Button>
+                <Button
+                    onClick={() => handleGetDirections(toilet.lat, toilet.lon)}
+                    className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white"
+                    variant="outline"
+                >
+                    <Icons.Navigation className="w-4 h-4 mr-2" />
+                    Get Directions
                 </Button>
             </div>
         </Popup>
@@ -74,6 +86,14 @@ export const OpenSpacePopup: React.FC<PopupProps> = ({ item, onClose }) => {
                 >
                     <Icons.Copy className="w-4 h-4 mr-2" />
                     Copy Location
+                </Button>
+                <Button
+                    onClick={() => handleGetDirections(space.latitude, space.longitude)}
+                    className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white"
+                    variant="outline"
+                >
+                    <Icons.Navigation className="w-4 h-4 mr-2" />
+                    Get Directions
                 </Button>
             </div>
         </Popup>
