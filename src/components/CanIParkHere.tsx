@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Grid} from '@aws-amplify/ui-react'; 
+import { Heading, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Grid} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';
 import './extra.css';
 
@@ -37,6 +37,8 @@ export const CanIParkHere: React.FC = () => {
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
+//    const [tab, setTab] = useState('1');
+
 
     // placeholders FOR TESTING ONLY
     // don't name variables this way!
@@ -150,31 +152,60 @@ export const CanIParkHere: React.FC = () => {
                 {/* --------------------------------- */}
 
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#fcfcfc"}>
-                    <Heading level={4}>Step 1 - Locate Your Image</Heading>
-                    <br/>
+                    <Tabs  
+                        items={[
+                          { label: 'Select Image File', value: '1', 
+                            content: ( 
+                              <>
+                              <div className='perc99'>
+                                  <ThemeProvider theme={dztheme}>
+                                      <DropZone 
+                                      acceptedFileTypes={['image/*']}
+                                      >
+                                      Drag image here or select by clicking the browse option below
+                                      <br/>
+                                      <br/>
+                                      <Button size="small" onMouseDown={clearMessages} onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                                      <VisuallyHidden>
+                                          <input
+                                          type="file"
+                                          tabIndex={-1}
+                                          ref={hiddenInput}
+                                          onChange={onFilePickerChange}
+                                          multiple={false}
+                                          accept={acceptedFileTypes.join(',')}
+                                          />
+                                      </VisuallyHidden>
+                                      </DropZone>
+                                  </ThemeProvider>
+                              </div>
 
-                    <div className='perc99'>
-                        <ThemeProvider theme={dztheme}>
-                            <DropZone 
-                            acceptedFileTypes={['image/*']}
-                            >
-                            Drag image here or select by clicking the browse option below
-                            <br/>
-                            <br/>
-                            <Button size="small" onMouseDown={clearMessages} onClick={() => hiddenInput.current?.click()}>Browse</Button>
-                            <VisuallyHidden>
-                                <input
-                                type="file"
-                                tabIndex={-1}
-                                ref={hiddenInput}
-                                onChange={onFilePickerChange}
-                                multiple={false}
-                                accept={acceptedFileTypes.join(',')}
-                                />
-                            </VisuallyHidden>
-                            </DropZone>
-                        </ThemeProvider>
-                    </div>
+                              </>
+                          )},
+                          { label: 'Check Your File', value: '2', 
+                            content: ( 
+                              <>
+                              Upload a photo of a parking sign for help and more information about that sign
+                              <br/>
+
+                              <img
+                              ref={imgRef}
+                              src={imgSrc}
+                              width={"200"}
+                              />
+                              </>
+                          )},
+                          { label: 'Sign Information', value: '3', 
+                            content: ( 
+                              <>
+
+                              </>
+                          )},
+                        ]}
+                    />
+
+
+
             </Card>
 
 
