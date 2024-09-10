@@ -1,5 +1,14 @@
 
-
-.perc50 {
-  width: 50%;
+@media only screen and (max-width: 768px) {
+  .perc50 {
+    width: 100%;
+  }
 }
+
+@media only screen and (min-width: 768px) {
+  .perc50 {
+    width: 800px;
+  }
+}
+
+

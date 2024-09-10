@@ -73,7 +73,7 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Select Image File', value: '1', 
                 content: ( 
                   <>
-                  <div className='perc99'>
+                  <div className='perc50'>
                       <ThemeProvider theme={dztheme}>
                           <DropZone 
                           acceptedFileTypes={['image/*']}
@@ -105,6 +105,7 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Check Your File', value: '2', 
                     content: ( 
                     <>
+                      <div className='perc50'>
                         {uploading ? <ShowLoader /> : <div></div>}
                         <br />
         
@@ -120,6 +121,7 @@ export const CanIParkHere: React.FC = () => {
                         src={imgSrc}
                         width={"200"}
                         />
+                      </div>
                     </>
                 )},
 
@@ -129,6 +131,7 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Sign Information', value: '3', 
                     content: ( 
                   <>
+                  <div className='perc50'>
                     {uploadMessage && 
                     <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Parking Sign Details">
                     <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
@@ -139,7 +142,7 @@ export const CanIParkHere: React.FC = () => {
                     <br />
                     {var3}<br />
                     {currentTime}
-
+                  </div>
                   </>
                 )}
             ]}
