@@ -3,6 +3,10 @@ import { Heading, Card, Button, Message, ThemeProvider, createTheme, DropZone, V
 import '@aws-amplify/ui-react/styles.css';
 import './extra.css';
 
+//{parkingWarning && <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Note">{parkingWarning}</Message>}
+//{parkingInformationOk && <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Parking Information">{parkingInformationOk}</Message>}
+
+
 // determine file types to be processed.  Limit these typpng/jpg at this time
 const acceptedFileTypes = ['image/png', 'image/jpeg'];
 
@@ -183,8 +187,6 @@ export const CanIParkHere: React.FC = () => {
                 <br />
 
                 <div className='perc99'>
-                    {parkingWarning && <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Note">{parkingWarning}</Message>}
-                    {parkingInformationOk && <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Parking Information">{parkingInformationOk}</Message>}
 
                     {uploadMessage && 
                     <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Parking Sign Details">
