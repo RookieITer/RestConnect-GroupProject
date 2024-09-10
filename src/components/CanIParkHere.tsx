@@ -136,6 +136,7 @@ export const CanIParkHere: React.FC = () => {
 
             if (bodytext && bodytext.message) {
                 setUploadMessage(bodytext.message);
+                setCurrentTime(bodytext.currenttime);
               } else {
                 setUploadMessage('No message found');
               }
@@ -172,7 +173,6 @@ export const CanIParkHere: React.FC = () => {
                         <ThemeProvider theme={dztheme}>
                             <DropZone 
                             acceptedFileTypes={['image/*']}
-                            onDrop={onFileDrop}
                             >
                             Drag image here or select by clicking the browse option below
                             <br/>
