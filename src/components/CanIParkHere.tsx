@@ -31,8 +31,8 @@ export const CanIParkHere: React.FC = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [parkingInformationOk, setParkingInformationOk] = useState('');
-    const [parkingWarning, setParkingWarning] = useState('');
+//    const [parkingInformationOk, setParkingInformationOk] = useState('');
+//    const [parkingWarning, setParkingWarning] = useState('');
     const [currentTime, setCurrentTime] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
