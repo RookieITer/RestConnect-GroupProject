@@ -82,26 +82,6 @@ export const CanIParkHere: React.FC = () => {
         }
     };
 
-    // alternate version of the above to handle the file drop process
-    // which has slightly different arguments
-    const onFileDrop = (acceptedFiles: File[]) => {
-        setUploadMessage('');
-        setErrorMessage('');
-
-        const file = acceptedFiles[0];
-        if (file) {
-          // Create a FileReader to read the file as a data URL
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (reader.result) {
-              // Set the data URL to state
-              setImgSrc(reader.result as string);
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-
 
       // routine to handle the actual upload and api invocation
       const HandleImageSubmit = async (event: { preventDefault: () => void; }) => {
