@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Grid} from '@aws-amplify/ui-react'; 
+import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';
 import './extra.css';
 
