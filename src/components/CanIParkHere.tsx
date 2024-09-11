@@ -1,7 +1,8 @@
 import React, { useState, useRef  } from 'react';
 import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs} from '@aws-amplify/ui-react'; 
-import '@aws-amplify/ui-react/styles.css';
-import './extra.css';
+import '@aws-amplify/ui-react/styles.css';          // amplify react styling
+import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
+import './extra.css';                               // own css styling
 
 //{parkingWarning && <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Note">{parkingWarning}</Message>}
 //{parkingInformationOk && <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Parking Information">{parkingInformationOk}</Message>}
@@ -25,7 +26,6 @@ const dztheme = createTheme({
 
 
 
-
 //-------------------------------------------------------------------------
 // Main export routine for this screen
 //-------------------------------------------------------------------------
@@ -42,8 +42,38 @@ export const CanIParkHere: React.FC = () => {
     const imgRef = useRef<HTMLImageElement>(null)
     const [tab, setTab] = useState('1');
 
-//    const [parkingInformationOk, setParkingInformationOk] = useState('');
-//    const [parkingWarning, setParkingWarning] = useState('');
+    // default lat and long - melbourne cbd
+    const [latitude, setLatitude] = useState(-37.8136);
+    const [longitude, setLongitude] = useState(145.9631);
+    const [latlongtext, setLatLongText] = useState('');
+    const [locationMessage, setLocationMessage] = useState('');
+
+
+    // get location from user.  actually comes from browser and
+    // depends on permissions (browser will prompt)
+    // see the 'where am i?' tab details below for details on how this is invoked
+    const getUserGeolocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLatitude(position.coords.latitude);
+                    setLongitude(position.coords.longitude);
+
+                    setLatLongText(latitude.toString() + "," + longitude.toString() )
+                },
+                () => {
+                    setLocationMessage('Could not obtain position details');
+                }
+            );
+        } else {
+            setLocationMessage('Browser is not providing position details');
+        }
+    };
+
+
+
+    //    const [parkingInformationOk, setParkingInformationOk] = useState('');
+    //    const [parkingWarning, setParkingWarning] = useState('');
 
     // placeholders FOR TESTING ONLY
     // don't name variables this way!
@@ -66,6 +96,20 @@ export const CanIParkHere: React.FC = () => {
         return (
             <Tabs value={tab} onValueChange={(tab) => setTab(tab)}  
             items={[
+
+                // Tab 0
+                // Map (and parking?)
+
+                { label: 'Where Am I?', value: '4', 
+                    content: ( 
+                      <>
+                        <Button size="small" onMouseDown={clearMessages} onClick={getUserGeolocation}>Locate Me!</Button>
+                        <br />
+                        {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="Error">{locationMessage}</Message>}
+                        <br />
+                        {latlongtext}
+                      </>
+                )},
 
                 // Tab 1
                 // File selection tab
