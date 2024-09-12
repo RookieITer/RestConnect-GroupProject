@@ -25,7 +25,6 @@ const dztheme = createTheme({
 });
 
 
-
 //-------------------------------------------------------------------------
 // Main export routine for this screen
 //-------------------------------------------------------------------------
@@ -36,6 +35,7 @@ export const CanIParkHere: React.FC = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [warningMessage, setWarningMessage] = useState('');
     const [currentTime, setCurrentTime] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -43,32 +43,32 @@ export const CanIParkHere: React.FC = () => {
     const [tab, setTab] = useState('1');
 
     // default lat and long - melbourne cbd
-    const [latitude, setLatitude] = useState(-37.8136);
-    const [longitude, setLongitude] = useState(145.9631);
-    const [latlongtext, setLatLongText] = useState('');
-    const [locationMessage, setLocationMessage] = useState('');
+//    const [latitude, setLatitude] = useState(-37.8136);
+//    const [longitude, setLongitude] = useState(145.9631);
+//    const [latlongtext, setLatLongText] = useState('');
+//    const [locationMessage, setLocationMessage] = useState('');
 
 
     // get location from user.  actually comes from browser and
     // depends on permissions (browser will prompt)
     // see the 'where am i?' tab details below for details on how this is invoked
-    const getUserGeolocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setLatitude(position.coords.latitude);
-                    setLongitude(position.coords.longitude);
-
-                    setLatLongText(latitude.toString() + "," + longitude.toString() )
-                },
-                () => {
-                    setLocationMessage('Could not obtain position details');
-                }
-            );
-        } else {
-            setLocationMessage('Browser is not providing position details');
-        }
-    };
+//    const getUserGeolocation = () => {
+//        if (navigator.geolocation) {
+//            navigator.geolocation.getCurrentPosition(
+//                (position) => {
+//                    setLatitude(position.coords.latitude);
+//                    setLongitude(position.coords.longitude);
+//
+//                    setLatLongText(latitude.toString() + "," + longitude.toString() )
+//                },
+//                () => {
+//                    setLocationMessage('Could not obtain position details');
+//                }
+//            );
+//        } else {
+//            setLocationMessage('Browser is not providing position details');
+//        }
+//    };
 
 
 
@@ -96,20 +96,19 @@ export const CanIParkHere: React.FC = () => {
         return (
             <Tabs value={tab} onValueChange={(tab) => setTab(tab)}  
             items={[
-
                 // Tab 0
                 // Map (and parking?)
 
-                { label: 'Where Am I?', value: '4', 
-                    content: ( 
-                      <>
-                        <Button size="small" onMouseDown={clearMessages} onClick={getUserGeolocation}>Locate Me!</Button>
-                        <br />
-                        {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="Error">{locationMessage}</Message>}
-                        <br />
-                        {latlongtext}
-                      </>
-                )},
+//                { label: 'Where Am I?', value: '4', 
+//                    content: ( 
+//                      <>
+//                        <Button size="small" onMouseDown={clearMessages} onClick={getUserGeolocation}>Locate Me!</Button>
+//                        <br />
+//                        {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="Error">{locationMessage}</Message>}
+//                        <br />
+//                        {latlongtext}
+//                      </>
+//                )},
 
                 // Tab 1
                 // File selection tab
@@ -176,12 +175,20 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                   <>
                   <div className='perc50'>
-                    {uploadMessage && 
-                    <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Parking Sign Details">
-                    <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+
+                  {warningMessage && <Message hasIcon={true} isDismissible={true} colorTheme="warning" heading="Warning">
+                      <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
                     </Message>}
-                   
-                    {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="Error">{errorMessage}</Message>}
+
+                    {uploadMessage && 
+                    <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Here's what we can tell you about this sign:">
+                      <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+                    </Message>}
+                  
+                    
+                    {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="We're having difficulty reading this sign">
+                       {errorMessage}
+                    </Message>}
 
                     <br />
                     {var3}<br />
@@ -204,6 +211,7 @@ export const CanIParkHere: React.FC = () => {
         setUploadMessage('');
         setErrorMessage('');
         setUploading(false);
+        setVar3('');
     }
 
     //-------------------------------------------------------------------------
@@ -233,6 +241,7 @@ export const CanIParkHere: React.FC = () => {
     const onFilePickerChange = (event: { target: { files: any; }; }) => {
         setUploadMessage('');
         setErrorMessage('');
+        setWarningMessage('');
 
         const file = event.target.files?.[0];
         if (file) {
@@ -260,6 +269,8 @@ export const CanIParkHere: React.FC = () => {
         event.preventDefault();
         setUploadMessage('');
         setErrorMessage('');
+        setWarningMessage('');
+
         setUploading(true);
     
         // calls the AWS API and sends the image data as a base 64 string
@@ -275,13 +286,14 @@ export const CanIParkHere: React.FC = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
+                setTab('3')                      // move to next tab
               throw new Error(`Network response was not ok: ${response.statusText}, ${errorText}`);
             }
     
             // display the data that has been returned from the server
             const jsonResponse = await response.json();
             const data = jsonResponse.body; 
-            setVar3(data)
+            //setVar3(data)
   
             const bodytext = JSON.parse(data)
 
@@ -291,12 +303,22 @@ export const CanIParkHere: React.FC = () => {
                 setUploading(false);
                 setTab('3')                      // move to next tab
             } else {
-                setUploadMessage('No message found');
+                setTab('3')                      // move to next tab
+                setErrorMessage('Unable to interpret that sign.');
             }
+
+            // display a warning message if needed (no standing, permit etc)
+            if (bodytext && bodytext.warningmessage) {
+              setWarningMessage(bodytext.warningmessage);
+              setErrorMessage('');
+            }
+
+
 
         // error with API call
         } catch (error) {
-          setErrorMessage('Failed to fetch data... Please try again. Error: ${error.message}');
+          setTab('3')                      // move to next tab
+          setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
         }
       };
     
