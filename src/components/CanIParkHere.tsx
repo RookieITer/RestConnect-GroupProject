@@ -137,6 +137,20 @@ export const CanIParkHere: React.FC = () => {
                           </VisuallyHidden>
                           </DropZone>
                       </ThemeProvider>
+
+                      <br />
+
+                      <Message
+                        variation="outlined"
+                        colorTheme ="info"
+                        heading=""
+                        color={"#888888"}
+                        fontSize={"0.9em"}
+                        lineHeight={"1.5em"}>
+                        On a mobile device, you'll also have an option to take the photo directly (please give your browser
+                        permission to access the camera if needed).  For any photos, please ensure the sign is square/straight 
+                        within the photo (we're working on some functionality to help with this in a future release also!).
+                      </Message>
                   </div>
     
                   </>
@@ -152,13 +166,26 @@ export const CanIParkHere: React.FC = () => {
                         {uploading ? <ShowLoader /> : <div></div>}
                         <br />
         
-                        <Button onClick={HandleImageSubmit} variation="primary">Upload and Check Sign
+                        <Button onClick={HandleImageSubmit} variation="primary" width={"16em"}>Upload and Check Sign
                         </Button>&nbsp;
                         
-                        <Button isDisabled={hasFile} onClick={handleClearFiles}>Clear Selection</Button>
+                        <Button isDisabled={hasFile} onClick={handleClearFiles}  width={"16em"}>Select a new image</Button>
                         <br/>
                         <br/>
-        
+
+                        <Message
+                          variation="outlined"
+                          colorTheme ="info"
+                          heading=""
+                          color={"#888888"}
+                          fontSize={"0.9em"}
+                          lineHeight={"1.5em"}>
+                          Please review your photo below and click 'Upload and Check Sign' to see more information aboutt this sign.  Please ensure the photo of the sign is square/straight 
+                          within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
+                          </Message>
+                        <br/>
+
+
                         <img
                         ref={imgRef}
                         src={imgSrc}
@@ -191,6 +218,21 @@ export const CanIParkHere: React.FC = () => {
                     </Message>}
 
                     <br />
+                    <Message
+                          variation="outlined"
+                          colorTheme ="info"
+                          heading=""
+                          color={"#888888"}
+                          fontSize={"0.9em"}
+                          lineHeight={"1.5em"}>
+                          Please also check the times and valid days shown within the image.  (We're working on providing more guidance for this in a future release).
+                     </Message>
+
+                     <br />
+                     <Button isDisabled={hasFile} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
+                     <br />
+
+
                     {var3}<br />
                     {currentTime}
                   </div>
@@ -223,6 +265,7 @@ export const CanIParkHere: React.FC = () => {
         setHasFile(false);
         setUploadMessage('');
         setErrorMessage('');
+        setTab('1')                      // move to first tab
 
         if (files.length !== 0) 
         {
