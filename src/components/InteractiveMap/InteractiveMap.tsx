@@ -118,6 +118,7 @@ export const InteractiveMap: React.FC = () => {
                 onFilterChange={handleFilterChange}
                 onLocationTypeChange={handleLocationTypeChange}
             />
+
             <MapView
                 toilets={toilets}
                 openSpaces={openSpaces}

@@ -73,6 +73,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
                             <Label htmlFor={key}>{key.split(/(?=[A-Z])/).join(' ')}</Label>
                         </div>
                     ))}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="CanIParkHere">Need help with a parking sign? Click Here</a>
                 </div>
             )}
         </div>
