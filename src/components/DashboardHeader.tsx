@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export const DashboardHeader: React.FC = () => {
     const location = useLocation();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
         { name: 'Home', path: '/' },
@@ -14,102 +14,54 @@ export const DashboardHeader: React.FC = () => {
         { name: 'Can I Park Here?', path: '/CanIParkHere' },
     ];
 
-    const mainNavItems = navItems.slice(0, 1);
-    const dropdownNavItems = navItems.slice(1);
-
     return (
         <motion.div
-            className="flex items-center justify-between px-6 bg-[#e6f3f5] h-32"
+            className="flex items-center justify-between px-4 lg:px-6 bg-[#e6f3f5] h-16 sm:h-20 md:h-24 lg:h-28"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
         >
-            <nav className="mr-4">
-                <ul className="flex space-x-6 items-center">
-                    {mainNavItems.map((item) => (
+            <div className="flex items-center lg:hidden">
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="text-gray-700 hover:text-gray-900 mr-4"
+                >
+                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+            <nav className="hidden lg:block">
+                <ul className="flex space-x-4 items-center">
+                    {navItems.map((item) => (
                         <li key={item.name}>
                             <Link
                                 to={item.path}
                                 className={`
                                     text-gray-700 hover:text-gray-900
                                     transition-all duration-300 ease-in-out
-                                    text-xl font-medium
-                                    px-4 py-2 rounded-full
+                                    text-sm xl:text-base font-medium
+                                    px-2 py-1 xl:px-3 xl:py-2 rounded-full
                                     bg-[#e6f3f5] hover:bg-[#d1e9ec] hover:shadow-lg
                                     hover:scale-110 transform
-                                    ${location.pathname === item.path ? 'font-semibold bg-[#d1e9ec]' : ''}
+                                    ${location.pathname === item.path ? 'font-semibold bg-[#d1e9ec] text-gray-900 shadow-lg' : ''}
                                     relative
                                     group
                                 `}
                             >
                                 {item.name}
-                                <span className="
+                                <span className={`
                                     absolute inset-0 rounded-full
                                     bg-[#c0e0e4] opacity-0 group-hover:opacity-25
                                     transition-opacity duration-300 ease-in-out
                                     blur-md
-                                "></span>
+                                    ${location.pathname === item.path ? 'opacity-25' : ''}
+                                `}></span>
                             </Link>
                         </li>
                     ))}
-                    <li className="relative">
-                        <button
-                            onMouseEnter={() => setIsDropdownOpen(true)}
-                            onMouseLeave={() => setIsDropdownOpen(false)}
-                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className={`
-                                text-gray-700 hover:text-gray-900
-                                transition-all duration-300 ease-in-out
-                                text-xl font-medium
-                                px-4 py-2 rounded-full
-                                bg-[#e6f3f5] hover:bg-[#d1e9ec] hover:shadow-lg
-                                hover:scale-110 transform
-                                relative
-                                group
-                                flex items-center
-                            `}
-                        >
-                            What can you do? <ChevronDown className="ml-2 h-4 w-4" />
-                            <span className="
-                                absolute inset-0 rounded-full
-                                bg-[#c0e0e4] opacity-0 group-hover:opacity-25
-                                transition-opacity duration-300 ease-in-out
-                                blur-md
-                            "></span>
-                        </button>
-                        <AnimatePresence>
-                            {isDropdownOpen && (
-                                <motion.ul
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
-                                    onMouseEnter={() => setIsDropdownOpen(true)}
-                                    onMouseLeave={() => setIsDropdownOpen(false)}
-                                >
-                                    {dropdownNavItems.map((item) => (
-                                        <li key={item.name}>
-                                            <Link
-                                                to={item.path}
-                                                className={`
-                                                    block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
-                                                    ${location.pathname === item.path ? 'font-semibold bg-gray-100' : ''}
-                                                `}
-                                                onClick={() => setIsDropdownOpen(false)}
-                                            >
-                                                {item.name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </motion.ul>
-                            )}
-                        </AnimatePresence>
-                    </li>
                 </ul>
             </nav>
             <motion.div
-                className="flex items-center h-full"
+                className="flex items-center justify-end flex-grow lg:flex-grow-0"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
             >
@@ -117,11 +69,39 @@ export const DashboardHeader: React.FC = () => {
                     <img
                         src="/Rest&connect.svg"
                         alt="RestConnect Logo"
-                        className="h-full w-auto max-w-none object-contain"
+                        className="h-25"
                     />
                     <span className="sr-only">RestConnect</span>
                 </Link>
             </motion.div>
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-16 sm:top-20 md:top-24 left-0 right-0 bg-white shadow-lg z-20 lg:hidden"
+                    >
+                        <ul className="py-2">
+                            {navItems.map((item) => (
+                                <li key={item.name}>
+                                    <Link
+                                        to={item.path}
+                                        className={`
+                                            block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
+                                            ${location.pathname === item.path ? 'font-semibold bg-gray-100 text-gray-900' : ''}
+                                        `}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };
