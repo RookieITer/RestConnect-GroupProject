@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ApiResponse, ToiletData, OpenSpaceData } from './types'
+import { ApiResponse, ToiletData, OpenSpaceData, ParkingData } from './types'
 
 export const fetchToilets = async (): Promise<ToiletData[]> => {
     try {
@@ -20,5 +20,16 @@ export const fetchOpenSpaces = async (): Promise<OpenSpaceData[]> => {
     } catch (error) {
         console.error('Error fetching open spaces data:', error)
         throw new Error('Failed to load open spaces data. Please try again later.')
+    }
+}
+
+export const fetchParkingData = async (): Promise<ParkingData[]> => {
+    try {
+        const response = await axios.get<ApiResponse>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_public_parking')
+        const parsedBody = JSON.parse(response.data.body)
+        return parsedBody.public_parking as ParkingData[]
+    } catch (error) {
+        console.error('Error fetching parking data:', error)
+        throw new Error('Failed to load parking data. Please try again later.')
     }
 }

@@ -2,11 +2,11 @@ import React from 'react'
 import { Popup } from 'react-map-gl'
 import { Button } from "@/components/ui/button"
 import { Icons } from '@/components/Icons'
-import { ToiletData, OpenSpaceData } from '@/utils/types'
+import { ToiletData, OpenSpaceData, ParkingData } from '@/utils/types'
 import { handleCopyLocation } from '@/utils/utils'
 
 interface PopupProps {
-    item: ToiletData | OpenSpaceData
+    item: ToiletData | OpenSpaceData | ParkingData
     onClose: () => void
 }
 
@@ -89,6 +89,51 @@ export const OpenSpacePopup: React.FC<PopupProps> = ({ item, onClose }) => {
                 </Button>
                 <Button
                     onClick={() => handleGetDirections(space.latitude, space.longitude)}
+                    className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white"
+                    variant="outline"
+                >
+                    <Icons.Navigation className="w-4 h-4 mr-2" />
+                    Get Directions
+                </Button>
+            </div>
+        </Popup>
+    )
+}
+
+export const ParkingPopup: React.FC<PopupProps> = ({ item, onClose }) => {
+    const parking = item as ParkingData
+    const [lat, lon] = parking.geo_point.split(',').map(parseFloat)
+    return (
+        <Popup
+            latitude={lat}
+            longitude={lon}
+            anchor="top"
+            onClose={onClose}
+            closeOnClick={false}
+            closeButton={false}
+        >
+            <div className="p-2 relative bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm rounded-lg">
+                <button
+                    className="absolute top-0 right-0 p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                    onClick={onClose}
+                >
+                    <Icons.X className="w-6 h-6" />
+                </button>
+                <h3 className="font-bold mb-2 pr-8 text-gray-800">{parking.onstreet}</h3>
+                <p className="text-gray-700">Type: {parking.str_type}</p>
+                <p className="text-gray-700">Restriction: {parking.restriction_display}</p>
+                <p className="text-gray-700">Day: {parking.day_of_week}</p>
+                <p className="text-gray-700">Time: {parking.time_restrictions_start} - {parking.time_restrictions_finish}</p>
+                <Button
+                    onClick={() => handleCopyLocation(parking.onstreet)}
+                    className="mt-2 w-full bg-pink-500 hover:bg-pink-600 text-white"
+                    variant="outline"
+                >
+                    <Icons.Copy className="w-4 h-4 mr-2" />
+                    Copy Location
+                </Button>
+                <Button
+                    onClick={() => handleGetDirections(lat, lon)}
                     className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white"
                     variant="outline"
                 >

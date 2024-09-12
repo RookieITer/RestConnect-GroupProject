@@ -17,13 +17,26 @@ export interface OpenSpaceData {
     longitude: number
 }
 
+export interface ParkingData {
+    segment_id: number
+    geo_shape: string
+    geo_point: string
+    str_type: string
+    onstreet: string
+    parkingzone: string
+    restriction_display: string
+    day_of_week: string
+    time_restrictions_start: string
+    time_restrictions_finish: string
+}
+
 export interface ApiResponse {
     statusCode: number
     body: string
 }
 
 export interface FilterState {
-    locationType: 'all' | 'toilets' | 'openSpaces'
+    locationType: 'all' | 'toilets' | 'openSpaces' | 'parking'
     toiletFilters: {
         male: boolean
         female: boolean
@@ -33,5 +46,11 @@ export interface FilterState {
     openSpaceFilters: {
         melbourne: boolean
         others: boolean
+    }
+    parkingFilters: {
+        councilMajor: boolean
+        councilMinor: boolean
+        weekday: boolean
+        weekend: boolean
     }
 }
