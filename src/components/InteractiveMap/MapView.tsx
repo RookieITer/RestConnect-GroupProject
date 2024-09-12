@@ -1,19 +1,21 @@
 import React from 'react'
 import Map, { Marker } from 'react-map-gl'
 import { Icons } from '@/components/Icons'
-import { ToiletData, OpenSpaceData, FilterState } from '@/utils/types'
-import { ToiletPopup, OpenSpacePopup } from './Popups'
-import { filterToilets, filterOpenSpaces } from '@/utils/utils'
+import { ToiletData, OpenSpaceData, ParkingData, FilterState } from '@/utils/types'
+import { ToiletPopup, OpenSpacePopup, ParkingPopup } from './Popups'
+import { filterToilets, filterOpenSpaces, filterParkingSpaces } from '@/utils/utils'
 
 interface MapViewProps {
     toilets: ToiletData[]
     openSpaces: OpenSpaceData[]
+    parkingSpaces: ParkingData[]
     filter: FilterState
-    selectedItem: ToiletData | OpenSpaceData | null
-    onItemSelect: (item: ToiletData | OpenSpaceData | null) => void
+    selectedItem: ToiletData | OpenSpaceData | ParkingData | null
+    onItemSelect: (item: ToiletData | OpenSpaceData | ParkingData | null) => void
+    isLoadingOpenSpaces: boolean
 }
 
-export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, filter, selectedItem, onItemSelect }) => {
+export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSpaces, filter, selectedItem, onItemSelect }) => {
     return (
         <div className="w-full h-[calc(100vh-200px)] min-h-[400px] rounded-lg overflow-hidden bg-white">
             <Map
@@ -59,12 +61,31 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, filter, s
                         </div>
                     </Marker>
                 ))}
+                {(filter.locationType === 'all' || filter.locationType === 'parking') && parkingSpaces.filter(space => filterParkingSpaces(space, filter.parkingFilters)).map((space) => (
+                    <Marker
+                        key={`parking-${space.segment_id}-${space.geo_point}`}
+                        latitude={parseFloat(space.geo_point.split(',')[0])}
+                        longitude={parseFloat(space.geo_point.split(',')[1])}
+                        anchor="bottom"
+                        onClick={e => {
+                            e.originalEvent.stopPropagation()
+                            onItemSelect(space)
+                        }}
+                    >
+                        <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <Icons.ParkingCircle className="w-4 h-4 text-white" />
+                        </div>
+                    </Marker>
+                ))}
 
                 {selectedItem && 'Toilet_ID' in selectedItem && (
                     <ToiletPopup item={selectedItem} onClose={() => onItemSelect(null)} />
                 )}
                 {selectedItem && 'PARK_NAME' in selectedItem && (
                     <OpenSpacePopup item={selectedItem} onClose={() => onItemSelect(null)} />
+                )}
+                {selectedItem && 'segment_id' in selectedItem && (
+                    <ParkingPopup item={selectedItem} onClose={() => onItemSelect(null)} />
                 )}
             </Map>
         </div>
