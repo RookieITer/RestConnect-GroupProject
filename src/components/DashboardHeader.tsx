@@ -9,8 +9,8 @@ export const DashboardHeader: React.FC = () => {
 
     const navItems = [
         { name: 'Home', path: '/' },
-        { name: 'Interactive Map', path: '/interactive-map' },
-        { name: 'Statistics', path: '/statistics' },
+        { name: 'Find the Nearest Amenities', path: '/interactive-map' },
+        { name: 'Know your risks', path: '/statistics' },
         { name: 'Can I Park Here?', path: '/CanIParkHere' },
     ];
 

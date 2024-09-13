@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { Heading } from '@aws-amplify/ui-react'; 
+
 import { ToiletData, OpenSpaceData, ParkingData, FilterState } from '@/utils/types'
 import { fetchToilets, fetchOpenSpaces, fetchParkingData } from '@/utils/api'
 import { MapFilters } from './MapFilters'
@@ -105,7 +107,7 @@ export const InteractiveMap: React.FC = () => {
 
     return (
         <div className="w-full h-full bg-white p-6 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Melbourne Interactive Map</h2>
+            <Heading level={3}>Find the nearest rest areas and amenities</Heading>
             {error && (
                 <Alert variant="destructive" className="mb-4">
                     <AlertCircle className="h-4 w-4" />

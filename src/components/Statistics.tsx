@@ -1,5 +1,7 @@
 'use client'
 
+import { Heading } from '@aws-amplify/ui-react'; 
+
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
@@ -94,7 +96,8 @@ export default function Statistics() {
 
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-            <h1 className="text-4xl font-bold mb-8 text-center">Statistics Visualisation</h1>
+            <Heading level={3}>Know your risks</Heading>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-2xl font-semibold mb-4">Trends in Different Types of Offences</h2>

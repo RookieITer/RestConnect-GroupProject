@@ -39,9 +39,9 @@ export const DashboardMainContent: React.FC = () => {
     };
 
     const articles = [
-        { title: "Rest Areas and Amenities", image: "/Rest1.png?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets.", path: "rest-areas-and-amenities" },
-        { title: "Safe Rest Areas and Risk", image: "/Rest2.jpg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault.", path: "safe-rest-areas" },
-        { title: "Parking", image: "/Rest3.png?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors.", path: "parking" }
+        { title: "Find the nearest rest areas and amenities", image: "/Rest1.png?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets.", path: "rest-areas-and-amenities" },
+        { title: "Know your risks", image: "/Rest2.jpg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault.", path: "safe-rest-areas" },
+        { title: "Can I park here?", image: "/Rest3.png?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors.", path: "parking" }
     ];
 
     return (
@@ -56,16 +56,16 @@ export const DashboardMainContent: React.FC = () => {
                 >
                     <motion.div className="md:w-3/5 mb-8 md:mb-0 pr-0 md:pr-8" variants={itemVariants}>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
-                            Rest without hassle! Find your perfect unwinding spot between Gigs
+                            Find your perfect unwinding spot between gigs
                         </h1>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
-                            Need a break? Explore Melbourne's rest spots, complimentary amenities, and simplified parking information to ensure peace of mind with RestConnect.
+                            Need a break? Explore Melbourne's rest spots, amenities, and simplified parking information to ensure peace of mind with RestConnect.
                         </p>
                         <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">
-                            Achieve work-life balance and avoid parking fines, all while finding the perfect spot to recharge!
+                            Avoid parking fines, all while finding the perfect spot to recharge!
                         </p>
                         <Link to="/rest-areas-and-amenities">
-                            <Button size="lg" className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Learn More</Button>
+                            <Button size="lg" className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>
                     <motion.div className="md:w-2/5" variants={itemVariants}>
