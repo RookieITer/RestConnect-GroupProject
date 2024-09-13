@@ -372,7 +372,7 @@ export const CanIParkHere: React.FC = () => {
         <div>
                 <Card columnStart="1" columnEnd="1" backgroundColor={"#fcfcfc"}>
                     <Heading level={3}>Can I Park Here?</Heading>
-                    Upload a photo of a parking sign for help and more information about that sign
+                    Upload a photo of a parking sign for help and more information about that sign.  This can help you avoid fines.
                 </Card>
 
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#fcfcfc"}>
