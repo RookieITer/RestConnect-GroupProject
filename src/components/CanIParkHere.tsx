@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Flex, View} from '@aws-amplify/ui-react'; 
+import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import './extra.css';                               // own css styling
@@ -57,7 +57,7 @@ const tabtheme = createTheme({
 
 export const CanIParkHere: React.FC = () => {
     const [files, setFiles] = useState([]);
-//    const [hasFile, setHasFile] = useState(false);
+    const [hasFile, setHasFile] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -67,7 +67,7 @@ export const CanIParkHere: React.FC = () => {
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
-    const [tab, setTab] = useState('1');
+    const [tab, setTab] = useState('0');
 
     // default lat and long - melbourne cbd
 //    const [latitude, setLatitude] = useState(-37.8136);
@@ -139,6 +139,23 @@ export const CanIParkHere: React.FC = () => {
 //                      </>
 //                )},
 
+                // Tab 0
+
+                { label: 'Start Here', value: '0', 
+                    content: ( 
+                      <>
+                        In this screen, you can upload a photo of a parking sign (and/or take a photo if your device allows)
+                        <br />
+                        We'll then provide you with further information about the details on the sign.
+                        <br />
+                        This can help you avoid parking fines.
+                        <br /><br />
+                        Note: the advice here is provided mainly for drivers of cars, vans and trucks..
+                        <br /><br />
+                        <Button onClick={() => setTab('1')} variation="primary" width={"16em"}>Let's get started...</Button>&nbsp;
+                        </>
+                )},
+
                 // Tab 1
                 // File selection tab
 
@@ -192,67 +209,78 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                     <>
                       <div className='perc5aaa0'>
-                      {!uploading &&
-                          <>
-                            <Message
-                              variation="outlined"
-                              colorTheme ="info"
-                              heading=""
-                              color={"#888888"}
-                              fontSize={"0.9em"}
-                              lineHeight={"1.5em"}>
-                              Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
-                              within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
-                            </Message>
-                            <br/>
+                        {hasFile && 
+                        <>
+                          {!uploading &&
+                            <>
+                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"16em"}>Upload and Check Sign</Button>&nbsp;
+                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"16em"}>Select a new image</Button>
+                            </>
+                          }
                         </>
                         }
-                        <Flex
-                          direction="row"
-                          justifyContent="flex-start"
-                          alignItems="stretch"
-                          alignContent="flex-start"
-                          wrap="nowrap"
-                          gap="1rem"
-                        >
-                          <View width="auto">
-                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"8em"}>Upload and<br/>Check Sign</Button>&nbsp;
-                            <br />
-                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"8em"}>Select a<br />new image</Button>
-                          </View>
-                          <View width="auto">
-                              {uploading &&
+
+       
+                          {uploading &&
+                            <>
+                            <Message
+                              colorTheme ="info"
+                              heading=""
+                              hasIcon={false}
+                              isDismissible={false}
+                              backgroundColor={"#fafafa"}>
+                              Checking your file... please wait...
+                              </Message> 
+                            </>
+                          }
+
+                          {uploading &&
+                            <>
+                              <ShowLoader /> 
+                              <br />
+                            </>
+                          }
+
+                          {!uploading && hasFile &&
                               <>
                                 <Message
-                                colorTheme ="info"
-                                heading=""
-                                hasIcon={false}
-                                isDismissible={false}
-                                backgroundColor={"#fafafa"}>
-                                Checking your file... please wait...
-                                </Message> 
-                              </>
+                                  variation="filled"
+                                  colorTheme ="info"
+                                  heading=""
+                                  isDismissible={true}
+                                  backgroundColor={"#f5faff"}
+                                  color={"#666666"}
+                                  fontSize={"0.95em"}
+                                  lineHeight={"1.5em"}
+                                  margin={"20px 0px 0px 0px"}>
+                                  Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
+                                  within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
+                                </Message>
+                            </>
                             }
 
-                            {uploading &&
-                              <>
-                                <ShowLoader /> 
-                                <br />
-                              </>
-                            }
+                          <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
 
-                            <img
-                              ref={imgRef}
-                              src={imgSrc}
-                              width={"200"}
-                            />
+                            <Flex
+                              direction="row"
+                              justifyContent="flex-start"
+                              alignItems="stretch"
+                              alignContent="flex-start"
+                              wrap="nowrap"
+                              gap="1rem"
+                            >
+                              <View width="auto">
+                              </View>
+                              <View width="auto">
 
-                          </View>
-                        </Flex>
+                                <img
+                                  ref={imgRef}
+                                  src={imgSrc}
+                                  width={"200"}
+                                />
 
-
-                      
-
+                              </View>
+                            </Flex>
                       </div>
                     </>
                 )},
@@ -264,24 +292,32 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                   <>
                   <div className='percaaa50'>
-                    {warningMessage && 
+                    {hasFile && 
                       <>
-                        <Message hasIcon={true} isDismissible={true} colorTheme="warning" heading="Warning">
-                          <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
-                        </Message>
-                        <br />
+                        <Button isDisabled={uploading} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
                       </>
                     }
 
+                    <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
+
                     {uploadMessage && 
                       <>
-                        <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Here's what we can tell you about this sign:">
+                        <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Here's what we can tell you about this sign:">
                           <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
                         </Message>
                         <br />
                       </>
                     }
                   
+                  {warningMessage && 
+                      <>
+                        <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Warning - Please Note:">
+                          <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
+                        </Message>
+                        <br />
+                      </>
+                    }
+
                     {errorMessage && 
                       <>
                         <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="We're having difficulty reading this sign">
@@ -289,22 +325,6 @@ export const CanIParkHere: React.FC = () => {
                           </Message>
                       </>
                     }
-
-                    <br />
-                    <Message
-                          variation="outlined"
-                          colorTheme ="info"
-                          heading=""
-                          color={"#888888"}
-                          fontSize={"0.9em"}
-                          lineHeight={"1.5em"}>
-                          Please also check the times and valid days shown within the image.  (We're working on providing more guidance for this in a future release).
-                     </Message>
-
-                     <br />
-                     <Button isDisabled={uploading} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
-                     <br />
-
 
                     {var3}<br />
                     {currentTime}
@@ -336,7 +356,7 @@ export const CanIParkHere: React.FC = () => {
 
     const handleClearFiles = () => {
         setUploading(false);
-//        setHasFile(false);
+        setHasFile(false);
         setUploadMessage('');
         setErrorMessage('');
         setTab('1')                      // move to first tab
@@ -374,7 +394,7 @@ export const CanIParkHere: React.FC = () => {
 
           // move to next tab
           setTab('2')
-
+          setHasFile(true);
         }
     };
 
@@ -451,7 +471,6 @@ export const CanIParkHere: React.FC = () => {
               <div>
                 <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"}>
                     <Heading level={3}>Can I Park Here?</Heading>
-                    Upload a photo of a parking sign for help and more information about that sign.  This can help you avoid fines.
                 </Card>
 
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
