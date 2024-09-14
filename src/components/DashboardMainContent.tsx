@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Button } from "@/components/ui/button";
+//import { Button } from "@/components/ui/button";
+import { Button, Divider } from '@aws-amplify/ui-react'; 
 import { Link } from 'react-router-dom';
 
 export const DashboardMainContent: React.FC = () => {
@@ -39,9 +40,9 @@ export const DashboardMainContent: React.FC = () => {
     };
 
     const articles = [
-        { title: "Find the nearest rest areas and amenities", image: "/Rest1.png?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets.", path: "rest-areas-and-amenities" },
-        { title: "Know your risks", image: "/Rest2.jpg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault.", path: "safe-rest-areas" },
-        { title: "Can I park here?", image: "/Rest3.png?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors.", path: "parking" }
+        { title: "Locate the  nearest rest area and amenities", image: "/Rest1.png?height=200&width=300", description: "The article highlights the challenge of finding a dignified rest area as a gig worker. This includes the availability of basic amenities such as toilets.", path: "rest-areas-and-amenities", ourpage: "interactive-map" },
+        { title: "Know your risks", image: "/Rest2.jpg?height=200&width=300", description: "This article highlights safety issues experienced by gig workers between gig work. This includes challenges with robberies, vandalization, and physical and verbal assault.", path: "safe-rest-areas", ourpage: "statistics"  },
+        { title: "Can I park here?", image: "/Rest3.png?height=200&width=300", description: "This article highlights gig workers' challenges with parking, often due to their unfamiliarity with available parking options. The lack of knowledge about suitable parking spots also affects finding appropriate rest areas, increasing their risk of unsafe behaviors.", path: "parking", ourpage: "CanIParkHere"  }
     ];
 
     return (
@@ -59,19 +60,23 @@ export const DashboardMainContent: React.FC = () => {
                             Find your perfect unwinding spot between gigs
                         </h1>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
-                            Need a break? Explore Melbourne's rest spots, amenities, and simplified parking information to ensure peace of mind with RestConnect.
-                        </p>
-                        <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed">
+                            <b>Need a break?</b>&nbsp;
+                            Explore Melbourne's rest spots, amenities, and simplified parking information to ensure peace of mind with RestConnect.
+                            <br /><br />
                             Avoid parking fines, all while finding the perfect spot to recharge!
+                            <br /><br />
                         </p>
                         <Link to="/rest-areas-and-amenities">
-                            <Button size="lg" className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Locate the nearest rest area and amenities</Button>
+                            <Button className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>
-                    <motion.div className="md:w-2/5" variants={itemVariants}>
-                        <img src="/Rest11.jpeg?height=300&width=300" alt="Gig worker illustration" className="w-full h-auto rounded-lg shadow-lg" />
+                    <motion.div className="md:w-1/4" variants={itemVariants}>
+                        <img src="/Rest11.jpeg" alt="Gig worker illustration" className="w-full h-auto rounded-lg shadow-lg" />
                     </motion.div>
                 </motion.section>
+
+                <Divider size="small" orientation="horizontal" />
+                <br />
 
                 <motion.section
                     ref={ref2}
@@ -84,21 +89,19 @@ export const DashboardMainContent: React.FC = () => {
                         Key challenges for Gig Workers
                     </motion.h2>
                     <motion.p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed" variants={itemVariants}>
-                        As a member of the gig community, you're well-acquainted with the various challenges of the job. Check out the articles below to see the major issues affecting the gig community in Melbourne and how RestConnect addresses them.
+                        As a member of the gig community, you're well-acquainted with the various challenges of the job.
+                        <br />
+                        Check out the articles below to see the major issues affecting the gig community in Melbourne and how RestConnect addresses them.
                     </motion.p>
-                    <motion.div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-6 md:mb-8" variants={itemVariants}>
-                        {articles.map((article, index) => (
-                            <Link key={index} to={`/${article.path}`}>
-                                <Button variant="outline" className="border-gray-700 text-gray-700 hover:bg-gray-100 font-medium px-3 md:px-4 py-2 rounded-md text-sm md:text-base">{article.title}</Button>
-                            </Link>
-                        ))}
-                    </motion.div>
+
                     <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" variants={itemVariants}>
                         {articles.map((item, index) => (
                             <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md">
                                 <img src={item.image} alt={item.title} className="w-full h-40 object-cover" />
                                 <div className="p-4 md:p-6">
-                                    <h3 className="text-lg md:text-xl font-semibold mb-2 text-gray-900">{item.title}</h3>
+                                    <Button isFullWidth={true} onClick={() => window.location.href=(item.ourpage)}>{item.title}</Button>
+                                    <br />
+                                    <br />
                                     <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">{item.description}</p>
                                     <Link to={`/${item.path}`} className="text-blue-500 hover:underline font-medium">Learn more →</Link>
                                 </div>

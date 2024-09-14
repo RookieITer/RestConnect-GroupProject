@@ -24,6 +24,32 @@ const dztheme = createTheme({
   },
 });
 
+const tabtheme = createTheme({
+  name: 'tabs-theme',
+  tokens: {
+    components: {
+      tabs: {
+        item: {
+          color: { value: '#666666' },
+          _hover: {
+            color: { value: '#66bbbb' },
+          },
+          _focus: {
+            color: { value: '{colors.blue.60}' },
+          },
+          _active: {
+            color: { value: '#666666' },
+            backgroundColor: { value: '#f1f1f1' },
+          },
+          _disabled: {
+            color: { value: 'gray' },
+            backgroundColor: { value: 'transparent' },
+          },
+        },
+      },
+    },
+  },
+});
 
 //-------------------------------------------------------------------------
 // Main export routine for this screen
@@ -36,6 +62,7 @@ export const CanIParkHere: React.FC = () => {
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
+    const [progressMessage, setProgressMessage] = useState('');
     const [currentTime, setCurrentTime] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -87,13 +114,15 @@ export const CanIParkHere: React.FC = () => {
 
 
     //-------------------------------------------------------------------------
-    // Tabs display - this has all the active  html content used for the
+    // TABS DISPLAY
+    // this has all the active  html content used for the
     // on this function.  It has it's own function here so we can 
     // programatically control the active tab
     //-------------------------------------------------------------------------
 
     const ControlledTabDisplay = () => {
         return (
+          <ThemeProvider theme={tabtheme} colorMode="light">
             <Tabs value={tab} onValueChange={(tab) => setTab(tab)}  
             items={[
                 // Tab 0
@@ -116,7 +145,7 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Select Image File', value: '1', 
                 content: ( 
                   <>
-                  <div className='perc50'>
+                  <div className='percaaa'>
                       <ThemeProvider theme={dztheme}>
                           <DropZone 
                           acceptedFileTypes={['image/*']}
@@ -162,35 +191,55 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Check Your File', value: '2', 
                     content: ( 
                     <>
-                      <div className='perc50'>
-                        {uploading ? <ShowLoader /> : <div></div>}
-                        <br />
-        
-                        <Button onClick={HandleImageSubmit} variation="primary" width={"16em"}>Upload and Check Sign
-                        </Button>&nbsp;
-                        
-                        <Button isDisabled={hasFile} onClick={handleClearFiles}  width={"16em"}>Select a new image</Button>
-                        <br/>
-                        <br/>
+                      <div className='perc5aaa0'>
+      
+                        {uploading &&
+                          <>
+                            <Message
+                            colorTheme ="info"
+                            heading=""
+                            hasIcon={false}
+                            isDismissible={false}
+                            backgroundColor={"#fafafa"}>
+                            Checking your file... please wait...
+                            </Message> 
+                          </>
+                        }
 
-                        <Message
-                          variation="outlined"
-                          colorTheme ="info"
-                          heading=""
-                          color={"#888888"}
-                          fontSize={"0.9em"}
-                          lineHeight={"1.5em"}>
-                          Please review your photo below and click 'Upload and Check Sign' to see more information aboutt this sign.  Please ensure the photo of the sign is square/straight 
-                          within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
-                          </Message>
-                        <br/>
-
+                        {uploading &&
+                          <>
+                            <ShowLoader /> 
+                            <br />
+                          </>
+                        }
 
                         <img
-                        ref={imgRef}
-                        src={imgSrc}
-                        width={"200"}
+                          ref={imgRef}
+                          src={imgSrc}
+                          width={"200"}
                         />
+
+                        {!uploading &&
+                          <>
+                            <br/>
+                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"8em"}>Upload and<br/>Check Sign</Button>&nbsp;
+                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"8em"}>Select a<br />new image</Button>
+                            <br/><br/>
+                            <Message
+                              variation="outlined"
+                              colorTheme ="info"
+                              heading=""
+                              color={"#888888"}
+                              fontSize={"0.9em"}
+                              lineHeight={"1.5em"}>
+                              Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
+                              within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
+                            </Message>
+                            <br/>
+                        </>
+                        }
+                      
+
                       </div>
                     </>
                 )},
@@ -201,21 +250,32 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Sign Information', value: '3', 
                     content: ( 
                   <>
-                  <div className='perc50'>
-
-                  {warningMessage && <Message hasIcon={true} isDismissible={true} colorTheme="warning" heading="Warning">
-                      <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
-                    </Message>}
+                  <div className='percaaa50'>
+                    {warningMessage && 
+                      <>
+                        <Message hasIcon={true} isDismissible={true} colorTheme="warning" heading="Warning">
+                          <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
+                        </Message>
+                        <br />
+                      </>
+                    }
 
                     {uploadMessage && 
-                    <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Here's what we can tell you about this sign:">
-                      <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
-                    </Message>}
+                      <>
+                        <Message hasIcon={true} isDismissible={true} colorTheme="success" heading="Here's what we can tell you about this sign:">
+                          <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+                        </Message>
+                        <br />
+                      </>
+                    }
                   
-                    
-                    {errorMessage && <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="We're having difficulty reading this sign">
-                       {errorMessage}
-                    </Message>}
+                    {errorMessage && 
+                      <>
+                        <Message hasIcon={true} isDismissible={true} colorTheme="error" heading="We're having difficulty reading this sign">
+                          {errorMessage}
+                          </Message>
+                      </>
+                    }
 
                     <br />
                     <Message
@@ -229,7 +289,7 @@ export const CanIParkHere: React.FC = () => {
                      </Message>
 
                      <br />
-                     <Button isDisabled={hasFile} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
+                     <Button isDisabled={uploading} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
                      <br />
 
 
@@ -240,6 +300,7 @@ export const CanIParkHere: React.FC = () => {
                 )}
             ]}
             />
+            </ThemeProvider>
         );
     };
     
@@ -315,6 +376,7 @@ export const CanIParkHere: React.FC = () => {
         setWarningMessage('');
 
         setUploading(true);
+        setProgressMessage("Uploading and processing your image... pease wait...")
     
         // calls the AWS API and sends the image data as a base 64 string
         try {
@@ -338,12 +400,15 @@ export const CanIParkHere: React.FC = () => {
             const data = jsonResponse.body; 
             //setVar3(data)
   
+            // clear the uploading status, regardless of outcome
+            setProgressMessage("");
+            setUploading(false);
+
             const bodytext = JSON.parse(data)
 
             if (bodytext && bodytext.message) {
                 setUploadMessage(bodytext.message);
                 setCurrentTime(bodytext.currenttime);
-                setUploading(false);
                 setTab('3')                      // move to next tab
             } else {
                 setTab('3')                      // move to next tab
@@ -356,11 +421,13 @@ export const CanIParkHere: React.FC = () => {
               setErrorMessage('');
             }
 
-
-
-        // error with API call
+        // if error with API call
         } catch (error) {
-          setTab('3')                      // move to next tab
+          // moce to ext tab and clear messages
+          setTab('3')                      
+          setProgressMessage("");
+          setUploading(false);
+
           setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
         }
       };
@@ -369,7 +436,9 @@ export const CanIParkHere: React.FC = () => {
     // the basic HTML structure.  
     // Note the tabs have their own routine as above
     return (
-        <div>
+          <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
+            <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+              <div>
                 <Card columnStart="1" columnEnd="1" backgroundColor={"#fcfcfc"}>
                     <Heading level={3}>Can I Park Here?</Heading>
                     Upload a photo of a parking sign for help and more information about that sign.  This can help you avoid fines.
@@ -378,6 +447,8 @@ export const CanIParkHere: React.FC = () => {
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#fcfcfc"}>
                     <ControlledTabDisplay />
                 </Card>
+            </div>
+          </main>
         </div>
     );
 };

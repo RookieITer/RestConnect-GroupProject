@@ -12,3 +12,12 @@
 }
 
 
+.my-list {
+  list-style-type: disc; /* Default bullet style */
+  padding-left: 20px;    /* Space from the left edge */
+  margin: 0;             /* Remove default margin */
+}
+
+.my-list li {
+  margin-bottom: 8px;    /* Space between list items */
+}
