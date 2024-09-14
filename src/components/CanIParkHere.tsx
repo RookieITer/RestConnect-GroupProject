@@ -184,18 +184,12 @@ export const CanIParkHere: React.FC = () => {
                           </DropZone>
                       </ThemeProvider>
 
-                      <br />
-
                       <Message
-                        variation="outlined"
-                        colorTheme ="info"
-                        heading=""
-                        color={"#888888"}
-                        fontSize={"0.9em"}
-                        lineHeight={"1.5em"}>
-                        On a mobile device, you'll also have an option to take the photo directly (please give your browser
-                        permission to access the camera if needed).  For any photos, please ensure the sign is square/straight 
-                        within the photo (we're working on some functionality to help with this in a future release also!).
+                          variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
+                          fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"20px 0px 0px 0px"}>
+                          On a mobile device, you'll also have an option to take the photo directly (please give your browser
+                          permission to access the camera if needed).  For any photos, please ensure the sign is square/straight 
+                          within the photo (we're working on some functionality to help with this in a future release also!).
                       </Message>
                   </div>
     
@@ -209,6 +203,16 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                     <>
                       <div className='perc5aaa0'>
+                        {!hasFile && 
+                          <>
+                            <Message
+                                variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
+                                fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"10px 0px 0px 0px"}>
+                                No image  file selected.  Please click the 'Select Photo' tab above for options to select an image from your device (including camera on a mobile device).
+                            </Message>
+                          </>
+                        }
+
                         {hasFile && 
                         <>
                           {!uploading &&
@@ -292,6 +296,26 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                   <>
                   <div className='percaaa50'>
+                    {!hasFile && 
+                      <>
+                        <Message
+                            variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
+                            fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"10px 0px 0px 0px"}>
+                            No image file selected.  Please click the 'Select Photo' tab above for options to select an image from your device (including camera on a mobile device).
+                        </Message>
+                      </>
+                    }
+
+                    {(hasFile && !(uploadMessage || warningMessage)) && 
+                      <>
+                        <Message
+                            variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
+                            fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"10px 0px 20px 0px"}>
+                            No image file yet uploaded.  Please click the 'Check Photo' tab above to review and start processing your photo.
+                        </Message>
+                      </>
+                    }
+
                     {hasFile && 
                       <>
                         <Button isDisabled={uploading} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
