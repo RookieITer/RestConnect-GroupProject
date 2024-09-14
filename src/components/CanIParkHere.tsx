@@ -159,7 +159,7 @@ export const CanIParkHere: React.FC = () => {
                 // Tab 1
                 // File selection tab
 
-                { label: 'Select Image File', value: '1', 
+                { label: 'Select Photo', value: '1', 
                 content: ( 
                   <>
                   <div className='percaaa'>
@@ -205,7 +205,7 @@ export const CanIParkHere: React.FC = () => {
                 // Tab 2
                 // File preview tab
 
-                { label: 'Check Your File', value: '2', 
+                { label: 'Check Photo', value: '2', 
                     content: ( 
                     <>
                       <div className='perc5aaa0'>
@@ -228,7 +228,7 @@ export const CanIParkHere: React.FC = () => {
                               heading=""
                               hasIcon={false}
                               isDismissible={false}
-                              backgroundColor={"#fafafa"}>
+                              backgroundColor={"#f5faff"}>
                               Checking your file... please wait...
                               </Message> 
                             </>
@@ -288,7 +288,7 @@ export const CanIParkHere: React.FC = () => {
                 // Tab 3
                 // Results tab
 
-                { label: 'Sign Information', value: '3', 
+                { label: 'Sign Details', value: '3', 
                     content: ( 
                   <>
                   <div className='percaaa50'>

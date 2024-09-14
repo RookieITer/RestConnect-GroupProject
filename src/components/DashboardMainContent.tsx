@@ -91,7 +91,8 @@ export const DashboardMainContent: React.FC = () => {
                     <motion.p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed" variants={itemVariants}>
                         As a member of the gig community, you're well-acquainted with the various challenges of the job.
                         <br />
-                        Check out the articles below to see the major issues affecting the gig community in Melbourne and how RestConnect addresses them.
+                        Click on any of the buttons below for assistance for the different challenges, or 
+                        check out the articles below via the 'Learn More' links to see the major issues affecting the gig community in Melbourne, and how RestConnect addresses them.
                     </motion.p>
 
                     <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" variants={itemVariants}>
