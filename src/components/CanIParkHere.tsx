@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs} from '@aws-amplify/ui-react'; 
+import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Flex, View} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import './extra.css';                               // own css styling
@@ -57,12 +57,12 @@ const tabtheme = createTheme({
 
 export const CanIParkHere: React.FC = () => {
     const [files, setFiles] = useState([]);
-    const [hasFile, setHasFile] = useState(false);
+//    const [hasFile, setHasFile] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
-    const [progressMessage, setProgressMessage] = useState('');
+//    const [progressMessage, setProgressMessage] = useState('');
     const [currentTime, setCurrentTime] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -153,7 +153,7 @@ export const CanIParkHere: React.FC = () => {
                           Drag image here or select by clicking the browse option below
                           <br/>
                           <br/>
-                          <Button size="small" onMouseDown={clearMessages} onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                          <Button width="10em" onMouseDown={clearMessages} onClick={() => hiddenInput.current?.click()}>Browse</Button>
                           <VisuallyHidden>
                               <input
                               type="file"
@@ -192,39 +192,8 @@ export const CanIParkHere: React.FC = () => {
                     content: ( 
                     <>
                       <div className='perc5aaa0'>
-      
-                        {uploading &&
+                      {!uploading &&
                           <>
-                            <Message
-                            colorTheme ="info"
-                            heading=""
-                            hasIcon={false}
-                            isDismissible={false}
-                            backgroundColor={"#fafafa"}>
-                            Checking your file... please wait...
-                            </Message> 
-                          </>
-                        }
-
-                        {uploading &&
-                          <>
-                            <ShowLoader /> 
-                            <br />
-                          </>
-                        }
-
-                        <img
-                          ref={imgRef}
-                          src={imgSrc}
-                          width={"200"}
-                        />
-
-                        {!uploading &&
-                          <>
-                            <br/>
-                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"8em"}>Upload and<br/>Check Sign</Button>&nbsp;
-                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"8em"}>Select a<br />new image</Button>
-                            <br/><br/>
                             <Message
                               variation="outlined"
                               colorTheme ="info"
@@ -238,6 +207,50 @@ export const CanIParkHere: React.FC = () => {
                             <br/>
                         </>
                         }
+                        <Flex
+                          direction="row"
+                          justifyContent="flex-start"
+                          alignItems="stretch"
+                          alignContent="flex-start"
+                          wrap="nowrap"
+                          gap="1rem"
+                        >
+                          <View width="auto">
+                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"8em"}>Upload and<br/>Check Sign</Button>&nbsp;
+                            <br />
+                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"8em"}>Select a<br />new image</Button>
+                          </View>
+                          <View width="auto">
+                              {uploading &&
+                              <>
+                                <Message
+                                colorTheme ="info"
+                                heading=""
+                                hasIcon={false}
+                                isDismissible={false}
+                                backgroundColor={"#fafafa"}>
+                                Checking your file... please wait...
+                                </Message> 
+                              </>
+                            }
+
+                            {uploading &&
+                              <>
+                                <ShowLoader /> 
+                                <br />
+                              </>
+                            }
+
+                            <img
+                              ref={imgRef}
+                              src={imgSrc}
+                              width={"200"}
+                            />
+
+                          </View>
+                        </Flex>
+
+
                       
 
                       </div>
@@ -323,7 +336,7 @@ export const CanIParkHere: React.FC = () => {
 
     const handleClearFiles = () => {
         setUploading(false);
-        setHasFile(false);
+//        setHasFile(false);
         setUploadMessage('');
         setErrorMessage('');
         setTab('1')                      // move to first tab
@@ -376,7 +389,6 @@ export const CanIParkHere: React.FC = () => {
         setWarningMessage('');
 
         setUploading(true);
-        setProgressMessage("Uploading and processing your image... pease wait...")
     
         // calls the AWS API and sends the image data as a base 64 string
         try {
@@ -401,7 +413,6 @@ export const CanIParkHere: React.FC = () => {
             //setVar3(data)
   
             // clear the uploading status, regardless of outcome
-            setProgressMessage("");
             setUploading(false);
 
             const bodytext = JSON.parse(data)
@@ -425,7 +436,6 @@ export const CanIParkHere: React.FC = () => {
         } catch (error) {
           // moce to ext tab and clear messages
           setTab('3')                      
-          setProgressMessage("");
           setUploading(false);
 
           setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
@@ -439,12 +449,12 @@ export const CanIParkHere: React.FC = () => {
           <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
             <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
               <div>
-                <Card columnStart="1" columnEnd="1" backgroundColor={"#fcfcfc"}>
+                <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"}>
                     <Heading level={3}>Can I Park Here?</Heading>
                     Upload a photo of a parking sign for help and more information about that sign.  This can help you avoid fines.
                 </Card>
 
-                <Card columnStart="1" columnEnd="1"  backgroundColor={"#fcfcfc"}>
+                <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
                     <ControlledTabDisplay />
                 </Card>
             </div>
