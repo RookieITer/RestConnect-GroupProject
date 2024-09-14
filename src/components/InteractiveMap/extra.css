@@ -10,3 +10,8 @@
     width: 800px;
   }
 }
+
+.rowformat {
+  vertical-align: bottom;
+  padding: 6px 0px 6px 0px;
+}

@@ -2,7 +2,7 @@ import React, { useState, useRef  } from 'react';
 import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
-import './extra.css';                               // own css styling
+//import './extra.css';                               // own css styling
 
 //{parkingWarning && <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Note">{parkingWarning}</Message>}
 //{parkingInformationOk && <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Parking Information">{parkingInformationOk}</Message>}

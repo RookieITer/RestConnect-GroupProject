@@ -66,7 +66,7 @@ export const DashboardMainContent: React.FC = () => {
                             Avoid parking fines, all while finding the perfect spot to recharge!
                             <br /><br />
                         </p>
-                        <Link to="/rest-areas-and-amenities">
+                        <Link to="/interactive-map">
                             <Button className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md">Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>

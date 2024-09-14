@@ -107,7 +107,7 @@ export const InteractiveMap: React.FC = () => {
 
     return (
         <div className="w-full h-full bg-white p-6 rounded-lg">
-            <Heading level={3}>Find the nearest rest areas and amenities</Heading>
+            <Heading level={3}>Find the nearest rest areas and amenities</Heading><br />
             {error && (
                 <Alert variant="destructive" className="mb-4">
                     <AlertCircle className="h-4 w-4" />
