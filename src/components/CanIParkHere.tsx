@@ -112,7 +112,6 @@ export const CanIParkHere: React.FC = () => {
         return <Loader variation="linear" />;
     };
 
-
     //-------------------------------------------------------------------------
     // TABS DISPLAY
     // this has all the active  html content used for the
@@ -327,7 +326,9 @@ export const CanIParkHere: React.FC = () => {
                     {uploadMessage && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Here's what we can tell you about this sign:">
-                          <div dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+                          <>
+                            <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: uploadMessage }} />
+                          </>
                         </Message>
                         <br />
                       </>
@@ -336,7 +337,9 @@ export const CanIParkHere: React.FC = () => {
                   {warningMessage && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Warning - Please Note:">
-                          <div dangerouslySetInnerHTML={{ __html: warningMessage }} />
+                          <>
+                            <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: warningMessage }} />
+                          </>
                         </Message>
                         <br />
                       </>
@@ -444,7 +447,6 @@ export const CanIParkHere: React.FC = () => {
               body: JSON.stringify({ image: imgSrc })
             });
     
-
             if (!response.ok) {
                 const errorText = await response.text();
                 setTab('3')                      // move to next tab
@@ -454,6 +456,7 @@ export const CanIParkHere: React.FC = () => {
             // display the data that has been returned from the server
             const jsonResponse = await response.json();
             const data = jsonResponse.body; 
+
             //setVar3(data)
   
             // clear the uploading status, regardless of outcome
