@@ -11,6 +11,18 @@ import NotFound from '@/components/NotFound';
 const Dashboard: React.FC = () => {
     return (
         <div className="flex flex-col h-screen bg-white">
+            <ul className='list-disc pl-5'>
+                <li>
+                    hfjsdkhfdsjk                    
+                </li>
+                <li>
+                    ruewiyrewhkj
+                </li>
+                <li>
+                    vnsdmf,mdsm,                    
+                </li>
+            </ul>
+
 
             <DashboardHeader />
             <div className="flex-1 overflow-auto">
