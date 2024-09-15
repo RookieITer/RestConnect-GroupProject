@@ -22,7 +22,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                 initialViewState={{
                     latitude: -37.8136,
                     longitude: 144.9631,
-                    zoom: 13,
+                    zoom: 17,
                     bearing: 0,
                     pitch: 0
                 }}
@@ -40,8 +40,8 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                             onItemSelect(toilet)
                         }}
                     >
-                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                            <Icons.MapPin className="w-4 h-4 text-white" />
+                        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                            <Icons.MapPin className="w-8 h-8 text-white" />
                         </div>
                     </Marker>
                 ))}
@@ -56,8 +56,8 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                             onItemSelect(space)
                         }}
                     >
-                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                            <Icons.Trees className="w-4 h-4 text-white" />
+                        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                            <Icons.Trees className="w-8 h-8 text-white" />
                         </div>
                     </Marker>
                 ))}
@@ -72,8 +72,8 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                             onItemSelect(space)
                         }}
                     >
-                        <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                            <Icons.ParkingCircle className="w-4 h-4 text-white" />
+                        <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <Icons.ParkingCircle className="w-8 h-8 text-white" />
                         </div>
                     </Marker>
                 ))}

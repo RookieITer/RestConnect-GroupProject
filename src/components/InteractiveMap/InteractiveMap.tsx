@@ -106,7 +106,9 @@ export const InteractiveMap: React.FC = () => {
     }
 
     return (
-        <div className="w-full h-full bg-white p-6 rounded-lg">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
+        <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+
             <Heading level={3}>Find the nearest rest areas and amenities</Heading><br />
             {error && (
                 <Alert variant="destructive" className="mb-4">
@@ -130,6 +132,7 @@ export const InteractiveMap: React.FC = () => {
                 onItemSelect={setSelectedItem}
                 isLoadingOpenSpaces={isLoadingOpenSpaces}
             />
+        </div>
         </div>
     )
 }

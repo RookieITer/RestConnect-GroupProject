@@ -96,7 +96,9 @@ export default function Statistics() {
 
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-            <Heading level={3}>Know your risks</Heading>
+        <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+
+        <Heading level={3}>Know your risks</Heading>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-lg shadow-md">
@@ -162,6 +164,7 @@ export default function Statistics() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }
