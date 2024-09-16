@@ -102,8 +102,19 @@ export const CanIParkHere: React.FC = () => {
                         <br />
                         This can help you avoid parking fines.
                         <br /><br />
-                        Note: the advice here is provided mainly for drivers of cars, vans and trucks..
-                        <br /><br />
+                        Note: the advice here is provided mainly for drivers of cars, vans and trucks.
+                        <br />
+                        <Message
+                          variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
+                          fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"20px 0px 0px 0px"}>
+                          Tips:
+                          <ul  className="list-disc pl-5">
+                            <li>When taking photos, please keep the sign straight in the photo.  We're adding some functionality to help with this too!</li>
+                            <li>On mobile devices, you'll normally see an option to take a photo.  Please allow access to the camera when prompted by your browser.</li>
+                          </ul>
+                        </Message>
+
+                        <br />
                         <Button onClick={() => setTab('1')} variation="primary" width={"16em"}>Let's get started...</Button>&nbsp;
                         </>
                 )},
@@ -124,7 +135,7 @@ export const CanIParkHere: React.FC = () => {
                             onDrop={clearMessagesAndLoad}
                             >
 
-                          Drag image here or select by clicking the browse option below
+                          Please select an image by clicking the browse option below...
 
                           <br/>
                           <br/>
@@ -142,13 +153,6 @@ export const CanIParkHere: React.FC = () => {
                           </DropZone>
                       </ThemeProvider>
 
-                      <Message
-                          variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
-                          fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"20px 0px 0px 0px"}>
-                          On a mobile device, you'll also have an option to take the photo directly (please give your browser
-                          permission to access the camera if needed).  For any photos, please ensure the sign is square/straight 
-                          within the photo (we're working on some functionality to help with this in a future release also!).
-                      </Message>
                   </div>
     
                   </>
@@ -382,6 +386,7 @@ export const CanIParkHere: React.FC = () => {
         if (typeof result === 'string') {
           setImgSrc(result); 
         }
+
 
         // Move to next tab after the file is processed
         setTab('2');
