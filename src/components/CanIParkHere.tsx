@@ -378,8 +378,10 @@ export const CanIParkHere: React.FC = () => {
       const file = files[0];
       try {
         const result = await readFileAsDataURL(file); // Wait for the file to be read
-        setImgSrc(result); // Set the data URL to state
-  
+
+        if (typeof result === 'string') {
+          setImgSrc(result); 
+        }
 
         // Move to next tab after the file is processed
         setTab('2');
