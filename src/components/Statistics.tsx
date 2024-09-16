@@ -1,170 +1,329 @@
 'use client'
 
-import { Heading } from '@aws-amplify/ui-react'; 
-
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts';
+import { Heading } from '@aws-amplify/ui-react';
+import { useNavigate } from 'react-router-dom';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AlertCircle, Play } from 'lucide-react';
+
+interface CrashData {
+    Suburb: string;
+    year: string;
+    SPEED_ZONE: string;
+    flag: string;
+    crash_count: number;
+}
 
 interface CrimeData {
     LGA: string;
-    Crimes_against_the_person: number;
-    Property_and_deception_offences: number;
-    Drug_offences: number;
-    Public_order_and_security_offences: number;
-    Justice_procedures_offences: number;
-    Other_offences: number;
+    Postcode: number;
+    Suburb_Name: string;
+    Offence_Division: string;
+    Incidents_Recorded: number;
+    postcode_safety_rank: string;
     Safety_Index: number;
+    Suggested_Video: string | null;
 }
 
-interface CustomizedLabelProps {
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-}
+const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE'];
 
 export default function Statistics() {
+    const [crashData, setCrashData] = useState<CrashData[]>([]);
     const [crimeData, setCrimeData] = useState<CrimeData[]>([]);
-    const [selectedLGA, setSelectedLGA] = useState<string>('');
-    const chartRef = useRef<HTMLDivElement>(null);
+    const [selectedSuburb, setSelectedSuburb] = useState<string>('');
+    const [suburbs, setSuburbs] = useState<string[]>([]);
+    const [selectedPostcode, setSelectedPostcode] = useState<string>('');
+    const [postcodes, setPostcodes] = useState<string[]>([]);
+    const [activeTab, setActiveTab] = useState<'accident' | 'crime'>('accident');
+    const [videoError, setVideoError] = useState<boolean>(false);
+    const [videoErrorMessage, setVideoErrorMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
+    const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_crime_data');
-                const parsedData = JSON.parse(response.data.body).safety_info;
-                setCrimeData(parsedData);
-                setSelectedLGA(parsedData[0].LGA);
-            } catch (error) {
-                console.error('Error fetching crime data:', error);
-            }
-        };
-        fetchData();
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const [crashResponse, crimeResponse] = await Promise.all([
+                axios.get<{ body: string }>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_crash_data'),
+                axios.get<{ body: string }>('https://ug7jfdmytf.execute-api.ap-southeast-2.amazonaws.com/v1/get_crime_data')
+            ]);
+
+            const parsedCrashData = JSON.parse(crashResponse.data.body).crash_data as CrashData[];
+            const parsedCrimeData = JSON.parse(crimeResponse.data.body).safety_info as CrimeData[];
+
+            setCrashData(parsedCrashData);
+            setCrimeData(parsedCrimeData);
+
+            const uniqueSuburbs = Array.from(new Set(parsedCrashData.map(item => item.Suburb)));
+            setSuburbs(uniqueSuburbs);
+            setSelectedSuburb(uniqueSuburbs[0]);
+
+            const uniquePostcodes = Array.from(new Set(parsedCrimeData.map(item => item.Postcode.toString())));
+            setPostcodes(uniquePostcodes);
+            setSelectedPostcode(uniquePostcodes[0]);
+
+            console.log('Fetched data successfully');
+            console.log('Unique postcodes:', uniquePostcodes);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
-    const lineChartData = crimeData.map(item => ({
-        LGA: item.LGA,
-        'Crimes against the person': item.Crimes_against_the_person,
-        'Property and deception offences': item.Property_and_deception_offences,
-        'Drug offences': item.Drug_offences,
-        'Public order and security offences': item.Public_order_and_security_offences,
-        'Justice procedures offences': item.Justice_procedures_offences,
-        'Other offences': item.Other_offences,
-    }));
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
-    const pieChartData = selectedLGA ? [
-        { name: 'Crimes against the person', value: crimeData.find(item => item.LGA === selectedLGA)?.Crimes_against_the_person || 0 },
-        { name: 'Property and deception offences', value: crimeData.find(item => item.LGA === selectedLGA)?.Property_and_deception_offences || 0 },
-        { name: 'Drug offences', value: crimeData.find(item => item.LGA === selectedLGA)?.Drug_offences || 0 },
-        { name: 'Public order and security offences', value: crimeData.find(item => item.LGA === selectedLGA)?.Public_order_and_security_offences || 0 },
-        { name: 'Justice procedures offences', value: crimeData.find(item => item.LGA === selectedLGA)?.Justice_procedures_offences || 0 },
-        { name: 'Other offences', value: crimeData.find(item => item.LGA === selectedLGA)?.Other_offences || 0 },
-    ] : [];
-
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
-
-    const chartConfig = {
-        'Crimes against the person': { label: 'Crimes against the person', color: COLORS[0] },
-        'Property and deception offences': { label: 'Property and deception offences', color: COLORS[1] },
-        'Drug offences': { label: 'Drug offences', color: COLORS[2] },
-        'Public order and security offences': { label: 'Public order and security offences', color: COLORS[3] },
-        'Justice procedures offences': { label: 'Justice procedures offences', color: COLORS[4] },
-        'Other offences': { label: 'Other offences', color: COLORS[5] },
+    const handleSuburbChange = (value: string) => {
+        setSelectedSuburb(value);
     };
 
-    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: CustomizedLabelProps) => {
-        const RADIAN = Math.PI / 180;
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const handlePostcodeChange = (value: string) => {
+        console.log('Postcode changed to:', value);
+        setSelectedPostcode(value);
+        setVideoError(false);
+        setVideoErrorMessage('');
+        setSelectedVideo(null);
+    };
+
+    const navigateToCanIParkHere = () => {
+        navigate('/caniparkhere');
+    };
+
+    const processedCrashData = crashData
+        .filter(item => item.Suburb === selectedSuburb)
+        .reduce<Record<string, { SPEED_ZONE: string; [key: string]: number | string }>>((acc, item) => {
+            const key = `${item.SPEED_ZONE}-${item.flag}`;
+            if (!acc[key]) {
+                acc[key] = { SPEED_ZONE: item.SPEED_ZONE, [item.flag]: item.crash_count };
+            } else {
+                acc[key][item.flag] = (acc[key][item.flag] as number || 0) + item.crash_count;
+            }
+            return acc;
+        }, {});
+
+    const crashChartData = Object.values(processedCrashData);
+
+    const transportModes = Array.from(new Set(crashData.map(item => item.flag)));
+    const safestMode = transportModes.reduce((safest, mode) => {
+        const totalCrashes = crashChartData.reduce((sum, item) => sum + (item[mode] as number || 0), 0);
+        return totalCrashes < (safest.crashes || Infinity) ? { mode, crashes: totalCrashes } : safest;
+    }, { mode: '', crashes: Infinity });
+
+    const selectedPostcodeData = crimeData.filter(item => item.Postcode.toString() === selectedPostcode);
+    const top5Risks = selectedPostcodeData
+        .sort((a, b) => b.Incidents_Recorded - a.Incidents_Recorded)
+        .slice(0, 5);
+
+    const safetyIndex = selectedPostcodeData[0]?.Safety_Index;
+    const suggestedVideos = selectedPostcodeData
+        .map(item => item.Suggested_Video)
+        .filter((video, index, self) => video && self.indexOf(video) === index) as string[];
+
+    useEffect(() => {
+        if (suggestedVideos.length > 0) {
+            console.log('Suggested video URLs:', suggestedVideos);
+        } else {
+            console.log('No suggested videos for this postcode');
+        }
+    }, [suggestedVideos]);
+
+    const handleVideoError = useCallback((e: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
+        console.error('Video error:', e);
+        setVideoError(true);
+        setVideoErrorMessage('Sorry, the suggested video is currently unavailable. This may be due to content restrictions or network issues.');
+    }, []);
+
+    const getVideoId = (url: string) => {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    };
+
+    const handleVideoSelect = (video: string) => {
+        setSelectedVideo(video);
+        setVideoError(false);
+        setVideoErrorMessage('');
+    };
+
+    const analyzeCrashData = () => {
+        const totalCrashes = crashChartData.reduce((sum, item) =>
+            sum + transportModes.reduce((modeSum, mode) => modeSum + (item[mode] as number || 0), 0), 0);
+
+        const highestSpeedZone = crashChartData.reduce((highest, item) => {
+            const zoneTotal = transportModes.reduce((sum, mode) => sum + (item[mode] as number || 0), 0);
+            return zoneTotal > highest.total ? { zone: item.SPEED_ZONE, total: zoneTotal } : highest;
+        }, { zone: '', total: 0 });
 
         return (
-            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-                {`${(percent * 100).toFixed(0)}%`}
-            </text>
+            <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Crash Data Analysis</h3>
+                <p>In {selectedSuburb}, there have been a total of {totalCrashes} reported crashes across all speed zones and transport modes.</p>
+                <p>The speed zone with the highest number of crashes is {highestSpeedZone.zone} km/h, accounting for {highestSpeedZone.total} crashes.</p>
+                <p>The safest mode of transport appears to be {safestMode.mode}, with the lowest number of reported incidents.</p>
+                <p>This data suggests that extra caution should be exercised in {highestSpeedZone.zone} km/h zones, particularly when using modes of transport other than {safestMode.mode}.</p>
+            </div>
         );
     };
 
+    const analyzeCrimeData = () => {
+        const totalIncidents = top5Risks.reduce((sum, risk) => sum + risk.Incidents_Recorded, 0);
+        const highestRisk = top5Risks[0];
+
+        return (
+            <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2">Crime Data Analysis</h3>
+                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded incidents across the top 5 risk categories.</p>
+                <p>The most prevalent type of offense is {highestRisk.Offence_Division}, with {highestRisk.Incidents_Recorded} recorded incidents.</p>
+                <p>The overall safety index for this area is {safetyIndex?.toFixed(2)}, where a higher index indicates a safer area.</p>
+                <p>Based on this data, residents and visitors should be particularly vigilant about {highestRisk.Offence_Division.toLowerCase()} in this area. However, it's important to note that this data represents reported incidents and may not capture all aspects of safety in the area.</p>
+            </div>
+        );
+    };
+
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    }
+
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-        <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+                <Heading level={3}>Know your risks</Heading>
+                <p className="text-gray-600 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
 
-        <Heading level={3}>Know your risks</Heading>
+                <div className="mb-6 flex space-x-4">
+                    <Button variant={activeTab === 'crime' ? 'default' : 'outline'} onClick={() => setActiveTab('crime')}>Crime Insight</Button>
+                    <Button variant={activeTab === 'accident' ? 'default' : 'outline'} onClick={() => setActiveTab('accident')}>Accident Data</Button>
+                    <Button variant="outline" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
+                </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-2xl font-semibold mb-4">Trends in Different Types of Offences</h2>
-                    <div ref={chartRef} className="w-full aspect-[4/3]">
-                        <ChartContainer className="w-full h-full" config={chartConfig}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart data={lineChartData}>
-                                    <XAxis dataKey="LGA" />
-                                    <YAxis />
-                                    {Object.keys(chartConfig).map((key) => (
-                                        <Line
-                                            key={key}
-                                            type="monotone"
-                                            dataKey={key}
-                                            stroke={chartConfig[key as keyof typeof chartConfig].color}
-                                            strokeWidth={2}
-                                            dot={{ fill: chartConfig[key as keyof typeof chartConfig].color }}
-                                        />
+                {activeTab === 'accident' && (
+                    <div>
+                        <div className="mb-6 flex space-x-4">
+                            <Select value={selectedSuburb} onValueChange={handleSuburbChange}>
+                                <SelectTrigger className="w-[200px]">
+                                    <SelectValue placeholder="Select suburb" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {suburbs.map(suburb => (
+                                        <SelectItem key={suburb} value={suburb}>{suburb}</SelectItem>
                                     ))}
-                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h2 className="text-2xl font-semibold mb-4">Crash Data by Speed Zone and Transport Mode</h2>
+                            <ResponsiveContainer width="100%" height={400}>
+                                <LineChart data={crashChartData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="SPEED_ZONE" />
+                                    <YAxis />
+                                    <Tooltip />
                                     <Legend />
+                                    {transportModes.map((mode, index) => (
+                                        <Line key={mode} type="monotone" dataKey={mode} stroke={COLORS[index % COLORS.length]} />
+                                    ))}
                                 </LineChart>
                             </ResponsiveContainer>
-                        </ChartContainer>
+                            <p className="mt-4">
+                                Safest transport mode in {selectedSuburb}: <strong>{safestMode.mode}</strong>
+                            </p>
+                            {analyzeCrashData()}
+                        </div>
                     </div>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-2xl font-semibold mb-4">Breakdown of Offences by LGA</h2>
-                    <Select value={selectedLGA} onValueChange={setSelectedLGA}>
-                        <SelectTrigger className="w-full mb-4">
-                            <SelectValue placeholder="Select LGA" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {crimeData.map(item => (
-                                <SelectItem key={item.LGA} value={item.LGA}>{item.LGA}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <div ref={chartRef} className="w-full aspect-[4/3]">
-                        <ChartContainer className="w-full h-full" config={chartConfig}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={pieChartData}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        label={renderCustomizedLabel}
-                                        outerRadius="80%"
-                                        fill="#8884d8"
-                                        dataKey="value"
-                                    >
-                                        {pieChartData.map((_, index) => (
+                )}
+
+                {activeTab === 'crime' && (
+                    <div>
+                        <div className="mb-6 flex space-x-4">
+                            <Select value={selectedPostcode} onValueChange={handlePostcodeChange}>
+                                <SelectTrigger className="w-[200px]">
+                                    <SelectValue placeholder="Select postcode" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {postcodes.map(postcode => (
+                                        <SelectItem key={postcode} value={postcode}>{postcode}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <h2 className="text-2xl font-semibold mb-4">Top 5 Risks in {selectedPostcode}</h2>
+                            <ResponsiveContainer width="100%" height={400}>
+                                <BarChart data={top5Risks}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="Offence_Division" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="Incidents_Recorded">
+                                        {top5Risks.map((_, index) => (
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                         ))}
-                                    </Pie>
-                                    <ChartTooltip content={<ChartTooltipContent />} />
-                                    <Legend />
-                                </PieChart>
+                                    </Bar>
+                                </BarChart>
                             </ResponsiveContainer>
-                        </ChartContainer>
+                            {safetyIndex !== undefined && (
+                                <div className="mt-4 p-4 bg-blue-100 rounded-md">
+                                    <p className="font-semibold">Safety Index for {selectedPostcode}: {safetyIndex.toFixed(2)}</p>
+                                </div>
+                            )}
+                            {analyzeCrimeData()}
+                            {suggestedVideos.length > 0 && (
+                                <div className="mt-4">
+                                    <h3 className="text-lg font-semibold mb-2">Suggested Videos:</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                        {suggestedVideos.map((video, index)  => (
+                                            <div key={index} className="bg-gray-100 p-4 rounded-lg">
+                                                <img
+                                                    src={`https://img.youtube.com/vi/${getVideoId(video)}/0.jpg`}
+                                                    alt={`Video thumbnail ${index + 1}`}
+                                                    className="w-full h-32 object-cover rounded-md mb-2"
+                                                />
+                                                <Button
+                                                    onClick={() => handleVideoSelect(video)}
+                                                    className="w-full flex items-center justify-center"
+                                                >
+                                                    <Play className="mr-2" size={16} />
+                                                    Play Video {index + 1}
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            {selectedVideo && !videoError && (
+                                <div className="mt-4">
+                                    <h3 className="text-lg font-semibold mb-2">Selected Video:</h3>
+                                    <iframe
+                                        width="100%"
+                                        height="315"
+                                        src={`https://www.youtube.com/embed/${getVideoId(selectedVideo)}`}
+                                        title="YouTube video player"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        onError={handleVideoError}
+                                    ></iframe>
+                                </div>
+                            )}
+                            {videoError && (
+                                <div className="mt-4 p-4 bg-yellow-100 rounded-md flex items-center">
+                                    <AlertCircle className="text-yellow-500 mr-2" />
+                                    <p>{videoErrorMessage}</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
-        </div>
         </div>
     );
 }
