@@ -4,6 +4,7 @@ import { Icons } from '@/components/Icons'
 import { ToiletData, OpenSpaceData, ParkingData, FilterState } from '@/utils/types'
 import { ToiletPopup, OpenSpacePopup, ParkingPopup } from './Popups'
 import { filterToilets, filterOpenSpaces, filterParkingSpaces } from '@/utils/utils'
+import { FaToilet } from 'react-icons/fa'
 
 interface MapViewProps {
     toilets: ToiletData[]
@@ -40,8 +41,8 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                             onItemSelect(toilet)
                         }}
                     >
-                        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                            <Icons.MapPin className="w-8 h-8 text-white" />
+                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:bg-primary/90 transition-colors">
+                            <FaToilet className="w-6 h-6 text-primary-foreground" />
                         </div>
                     </Marker>
                 ))}

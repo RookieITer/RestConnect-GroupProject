@@ -97,21 +97,20 @@ export default function Statistics() {
 
     const processedCrashData = crashData
         .filter(item => item.Suburb === selectedSuburb)
-        .reduce<Record<string, { SPEED_ZONE: string; [key: string]: number | string }>>((acc, item) => {
-            const key = `${item.SPEED_ZONE}-${item.flag}`;
-            if (!acc[key]) {
-                acc[key] = { SPEED_ZONE: item.SPEED_ZONE, [item.flag]: item.crash_count };
-            } else {
-                acc[key][item.flag] = (acc[key][item.flag] as number || 0) + item.crash_count;
+        .reduce<Record<string, { SPEED_ZONE: number; [key: string]: number }>>((acc, item) => {
+            const speedZone = parseInt(item.SPEED_ZONE);
+            if (!acc[speedZone]) {
+                acc[speedZone] = { SPEED_ZONE: speedZone };
             }
+            acc[speedZone][item.flag] = (acc[speedZone][item.flag] || 0) + item.crash_count;
             return acc;
         }, {});
 
-    const crashChartData = Object.values(processedCrashData);
+    const crashChartData = Object.values(processedCrashData).sort((a, b) => a.SPEED_ZONE - b.SPEED_ZONE);
 
     const transportModes = Array.from(new Set(crashData.map(item => item.flag)));
     const safestMode = transportModes.reduce((safest, mode) => {
-        const totalCrashes = crashChartData.reduce((sum, item) => sum + (item[mode] as number || 0), 0);
+        const totalCrashes = crashChartData.reduce((sum, item) => sum + (item[mode] || 0), 0);
         return totalCrashes < (safest.crashes || Infinity) ? { mode, crashes: totalCrashes } : safest;
     }, { mode: '', crashes: Infinity });
 
@@ -153,12 +152,12 @@ export default function Statistics() {
 
     const analyzeCrashData = () => {
         const totalCrashes = crashChartData.reduce((sum, item) =>
-            sum + transportModes.reduce((modeSum, mode) => modeSum + (item[mode] as number || 0), 0), 0);
+            sum + transportModes.reduce((modeSum, mode) => modeSum + (item[mode] || 0), 0), 0);
 
         const highestSpeedZone = crashChartData.reduce((highest, item) => {
-            const zoneTotal = transportModes.reduce((sum, mode) => sum + (item[mode] as number || 0), 0);
+            const zoneTotal = transportModes.reduce((sum, mode) => sum + (item[mode] || 0), 0);
             return zoneTotal > highest.total ? { zone: item.SPEED_ZONE, total: zoneTotal } : highest;
-        }, { zone: '', total: 0 });
+        }, { zone: 0, total: 0 });
 
         return (
             <div className="mt-6 p-4 bg-gray-100 rounded-lg">
@@ -220,14 +219,29 @@ export default function Statistics() {
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h2 className="text-2xl font-semibold mb-4">Crash Data by Speed Zone and Transport Mode</h2>
                             <ResponsiveContainer width="100%" height={400}>
-                                <LineChart data={crashChartData}>
+                                <LineChart
+                                    data={crashChartData}
+                                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                                >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="SPEED_ZONE" />
-                                    <YAxis />
+                                    <XAxis
+                                        dataKey="SPEED_ZONE"
+                                        type="number"
+                                        domain={[0, 100]}
+                                        ticks={[0, 20, 40, 60, 80, 100]}
+                                        label={{ value: 'Speed Zone (km/h)', position: 'insideBottom', offset: -40 }}
+                                    />
+                                    <YAxis label={{ value: 'Number of Crashes', angle: -90, position: 'insideLeft', offset: 10 }} />
                                     <Tooltip />
-                                    <Legend />
+                                    <Legend verticalAlign="top" height={36} />
                                     {transportModes.map((mode, index) => (
-                                        <Line key={mode} type="monotone" dataKey={mode} stroke={COLORS[index % COLORS.length]} />
+                                        <Line
+                                            key={mode}
+                                            type="monotone"
+                                            dataKey={mode}
+                                            stroke={COLORS[index % COLORS.length]}
+                                            dot={false}
+                                        />
                                     ))}
                                 </LineChart>
                             </ResponsiveContainer>
