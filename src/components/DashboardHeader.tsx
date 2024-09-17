@@ -67,7 +67,7 @@ export const DashboardHeader: React.FC = () => {
             >
                 <Link to="/">
                     <img
-                        src="/Rest&connect.svg"
+                        src="/Rest&connect_new3.svg"
                         alt="RestConnect Logo"
                         className="h-25"
                     />
