@@ -542,12 +542,12 @@ export const CanIParkHere: React.FC = () => {
                         {
                           trigger: 'Tips on taking photos',
                           value: 'accessible',
-                          content: 'When taking photos of the signs, please try to keep the sign square within your photo.<br />We are working on some functionality to help with this too.'
+                          content: 'When taking photos of the signs, please try to keep the sign square within your photo. We are working on some functionality to help with this too.'
                         },
                         {
                           trigger: 'Tips for mobile devices',
                           value: 'styling',
-                          content: 'On mobile devices, you may be prompted to allow the website to have access to your camera.  Please allow this for the best experience.<br/>Having this option available allows the system to prompt you to take a photo directly from the application.'
+                          content: 'On mobile devices, you may be prompted to allow the website to have access to your camera.  Please allow this for the best experience. Having this option available allows the system to prompt you to take a photo directly from the application.'
                         }
                       ]}
                     />
