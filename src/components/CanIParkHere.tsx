@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
+import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 
@@ -39,7 +39,7 @@ const tabtheme = createTheme({
             backgroundColor: { value: '#f1f1f1' },
           },
           _disabled: {
-            color: { value: 'gray' },
+            color: { value: '#dddddd' },
             backgroundColor: { value: 'transparent' },
           },
         },
@@ -63,7 +63,12 @@ export const CanIParkHere: React.FC = () => {
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
-    const [tab, setTab] = useState('0');
+    const [tab, setTab] = useState('1');
+
+    const [disabledTab1, setDisabledTab1] = useState(false);
+    const [disabledTab2, setDisabledTab2] = useState(true);
+    const [disabledTab3, setDisabledTab3] = useState(true);
+
 
     // placeholders FOR TESTING ONLY
     // don't name variables this way!
@@ -93,37 +98,13 @@ export const CanIParkHere: React.FC = () => {
                 // Start here option with text
                 //-------------------------------------------------------------
 
-                { label: 'Start Here', value: '0', 
-                    content: ( 
-                      <>
-                        In this screen, you can upload a photo of a parking sign (and/or take a photo if your device allows).  
-                        We'll then provide you with further information about the details on the sign.
-                        <br />
-                        This can help you avoid parking fines.
-                        <br /><br />
-                        Note: the advice here is provided mainly for drivers of cars, vans and trucks.
-                        <br /><br />
-                        <Button onClick={() => setTab('1')} variation="primary" width={"16em"}>Let's get started...</Button>&nbsp;
-                        <br />
-                        <Message
-                          variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
-                          fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"20px 0px 0px 0px"}>
-                          Tips:
-                          <ul  className="list-disc pl-5">
-                            <li>When taking photos, please keep the sign straight in the photo.  We're adding some functionality to help with this too!</li>
-                            <li>On mobile devices, you'll normally see an option to take a photo.  Please allow access to the camera when prompted by your browser.</li>
-                          </ul>
-                        </Message>
-
-                        </>
-                )},
 
                 //-------------------------------------------------------------
                 // Tab 1
                 // File selection tab
                 //-------------------------------------------------------------
 
-                { label: 'Select Photo', value: '1', 
+                { label: 'Select Photo', value: '1', isDisabled: disabledTab1,
                 content: ( 
                   <>
                   <div className='percaaa'>
@@ -163,7 +144,7 @@ export const CanIParkHere: React.FC = () => {
                 // File preview tab
                 //-------------------------------------------------------------
 
-                { label: 'Check Photo', value: '2', 
+                { label: 'Check Photo', value: '2', isDisabled: disabledTab2,  
                     content: ( 
                     <>
                       <div className='perc5aaa0'>
@@ -277,7 +258,7 @@ export const CanIParkHere: React.FC = () => {
                 // Results tab
                 //-------------------------------------------------------------
 
-                { label: 'Sign Details', value: '3', 
+                { label: 'Sign Details', value: '3', isDisabled: disabledTab3, 
                     content: ( 
                   <>
                   <div className='percaaa50'>
@@ -343,7 +324,23 @@ export const CanIParkHere: React.FC = () => {
                     {currentTime}
                   </div>
                   </>
-                )}
+                )},
+
+                { label: 'Help', value: '0',  
+                  content: ( 
+                    <>
+                      In this screen, you can upload a photo of a parking sign (and/or take a photo if your device allows).  
+                      We'll then provide you with further information about the details on the sign.
+                      <br />
+                      This can help you avoid parking fines.
+                      <br /><br />
+                      Note: the advice here is provided mainly for drivers of cars, vans and trucks.
+                      <br /><br />
+                      <Button onClick={() => setTab('1')} variation="primary" width={"16em"}>Let's get started...</Button>&nbsp;
+                      <br />
+                      </>
+              )}
+
             ]}
             />
             </ThemeProvider>
@@ -389,6 +386,7 @@ export const CanIParkHere: React.FC = () => {
 
         // Move to next tab after the file is processed
         setTab('2');
+        setDisabledTab2(false);
         setHasFile(true);
       } catch (error) {
         console.error("Error reading file:", error);
@@ -406,6 +404,9 @@ export const CanIParkHere: React.FC = () => {
         setUploadMessage('');
         setErrorMessage('');
         setTab('1')                      // move to first tab
+        setDisabledTab1(false);
+        setDisabledTab2(true);
+        setDisabledTab3(true);
 
         setImgSrc('');
 
@@ -442,6 +443,7 @@ export const CanIParkHere: React.FC = () => {
 
           // move to next tab
           setTab('2')
+          setDisabledTab2(false);
           setHasFile(true);
         }
     };
@@ -472,7 +474,8 @@ export const CanIParkHere: React.FC = () => {
             if (!response.ok) {
                 const errorText = await response.text();
                 setTab('3')                      // move to next tab
-              throw new Error(`Network response was not ok: ${response.statusText}, ${errorText}`);
+                setDisabledTab2(false);
+                throw new Error(`Network response was not ok: ${response.statusText}, ${errorText}`);
             }
     
             // display the data that has been returned from the server
@@ -490,10 +493,12 @@ export const CanIParkHere: React.FC = () => {
                 setUploadMessage(bodytext.message);
                 setCurrentTime(bodytext.currenttime);
                 setTab('3')                      // move to next tab
-            } else {
+                setDisabledTab3(false);
+              } else {
                 setTab('3')                      // move to next tab
                 setErrorMessage('Unable to interpret that sign.');
-            }
+                setDisabledTab3(false);
+              }
 
             // display a warning message if needed (no standing, permit etc)
             if (bodytext && bodytext.warningmessage) {
@@ -505,6 +510,7 @@ export const CanIParkHere: React.FC = () => {
         } catch (error) {
           // move to tab 3 and clear messages
           setTab('3')                      
+          setDisabledTab3(false);
           setUploading(false);
 
           setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
@@ -527,6 +533,26 @@ export const CanIParkHere: React.FC = () => {
 
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
                     <ControlledTabDisplay />
+
+                    <br />
+                    Tips:<br />
+
+                    <Accordion
+                      items={[
+                        {
+                          trigger: 'Tips on taking photos',
+                          value: 'accessible',
+                          content: 'When taking photos of the signs, please try to keep the sign square within your photo.<br />We are working on some functionality to help with this too.'
+                        },
+                        {
+                          trigger: 'Tips for mobile devices',
+                          value: 'styling',
+                          content: 'On mobile devices, you may be prompted to allow the website to have access to your camera.  Please allow this for the best experience.<br/>Having this option available allows the system to prompt you to take a photo directly from the application.'
+                        }
+                      ]}
+                    />
+
+
                 </Card>
             </div>
           </main>
