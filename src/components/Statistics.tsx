@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Heading } from '@aws-amplify/ui-react';
 import { useNavigate } from 'react-router-dom';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, Play } from 'lucide-react';
@@ -271,19 +271,31 @@ export default function Statistics() {
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h2 className="text-2xl font-semibold mb-4">Top 5 Risks in {selectedPostcode}</h2>
                             <ResponsiveContainer width="100%" height={400}>
-                                <BarChart data={top5Risks}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Offence_Division" />
-                                    <YAxis />
+                                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={top5Risks}>
+                                    <PolarGrid />
+                                    <PolarAngleAxis dataKey="Offence_Division" />
+                                    <PolarRadiusAxis angle={30} domain={[0, 'auto']} />
+                                    {top5Risks.map((entry, index) => (
+                                        <Radar
+                                            key={entry.Offence_Division}
+                                            name={entry.Offence_Division}
+                                            dataKey="Incidents_Recorded"
+                                            stroke={COLORS[index % COLORS.length]}
+                                            fill={COLORS[index % COLORS.length]}
+                                            fillOpacity={0.6}
+                                        />
+                                    ))}
                                     <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="Incidents_Recorded">
-                                        {top5Risks.map((_, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
+                                </RadarChart>
                             </ResponsiveContainer>
+                            <div className="mt-4 flex flex-wrap justify-center">
+                                {top5Risks.map((risk, index) => (
+                                    <div key={risk.Offence_Division} className="flex items-center mr-4 mb-2">
+                                        <div className="w-4 h-4 mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                                        <span>{risk.Offence_Division}</span>
+                                    </div>
+                                ))}
+                            </div>
                             {safetyIndex !== undefined && (
                                 <div className="mt-4 p-4 bg-blue-100 rounded-md">
                                     <p className="font-semibold">Safety Index for {selectedPostcode}: {safetyIndex.toFixed(2)}</p>
