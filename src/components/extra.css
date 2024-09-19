@@ -1,3 +1,15 @@
+@media only screen and (max-width: 400px) {
+  .btnmax {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .btnmax {
+    width: 16em;
+  }
+}
+
 
 @media only screen and (max-width: 768px) {
   .perc50 {

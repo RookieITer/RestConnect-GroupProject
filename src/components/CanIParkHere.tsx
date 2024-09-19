@@ -2,6 +2,8 @@ import React, { useState, useRef  } from 'react';
 import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
+import '/src/components/extra.css';                 // for own styling
+
 
 // determine file types to be processed.  Limit these types jpg, png, gif, bmp at this time
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/gif'];
@@ -176,8 +178,8 @@ export const CanIParkHere: React.FC = () => {
                         <>
                           {!uploading &&
                             <>
-                            <Button isDisabled={uploading} onClick={HandleImageSubmit} variation="primary" width={"16em"}>Upload and Check Sign</Button>&nbsp;
-                            <Button isDisabled={uploading} onClick={handleClearFiles} width={"16em"}>Select a new image</Button>
+                            <Button className = 'btnmax' isDisabled={uploading} onClick={HandleImageSubmit} variation="primary">Upload and Check Sign</Button>&nbsp;
+                            <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles}>Select a new image</Button>
                             </>
                           }
                         </>
@@ -297,7 +299,7 @@ export const CanIParkHere: React.FC = () => {
 
                     {hasFile && 
                       <>
-                        <Button isDisabled={uploading} onClick={handleClearFiles}  variation="primary" width={"16em"}>Select a new image</Button>
+                        <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles}  variation="primary">Select a new image</Button>
                       </>
                     }
 
