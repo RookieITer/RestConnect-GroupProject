@@ -324,22 +324,7 @@ export const CanIParkHere: React.FC = () => {
                     {currentTime}
                   </div>
                   </>
-                )},
-
-                { label: 'Help', value: '0',  
-                  content: ( 
-                    <>
-                      In this screen, you can upload a photo of a parking sign (and/or take a photo if your device allows).  
-                      We'll then provide you with further information about the details on the sign.
-                      <br />
-                      This can help you avoid parking fines.
-                      <br /><br />
-                      Note: the advice here is provided mainly for drivers of cars, vans and trucks.
-                      <br /><br />
-                      <Button onClick={() => setTab('1')} variation="primary" width={"16em"}>Let's get started...</Button>&nbsp;
-                      <br />
-                      </>
-              )}
+                )}
 
             ]}
             />
@@ -535,7 +520,8 @@ export const CanIParkHere: React.FC = () => {
                     <ControlledTabDisplay />
 
                     <br />
-                    Tips:<br />
+                    <Heading level={4}>Tips</Heading>
+                    <br />
 
                     <Accordion
                       items={[
