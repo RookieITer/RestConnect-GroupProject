@@ -7,10 +7,11 @@ import CanIParkHere from '@/components/CanIParkHere';
 import Statistics from "@/components/Statistics";
 import ExternalLinkPage from '@/components/ExternalLinkPage';
 import NotFound from '@/components/NotFound';
+import Footer from '@/components/Footer';
 
 const Dashboard: React.FC = () => {
     return (
-        <div className="flex flex-col h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white">
             <DashboardHeader />
             <div className="flex-1 overflow-auto">
                 <Routes>
@@ -24,6 +25,7 @@ const Dashboard: React.FC = () => {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
+            <Footer />
         </div>
     );
 };
