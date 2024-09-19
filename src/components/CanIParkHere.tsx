@@ -6,6 +6,37 @@ import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 // determine file types to be processed.  Limit these types jpg, png, gif, bmp at this time
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/gif'];
 
+
+//-----------------------------------------------------------------------------
+// theming to use where needed for react elements
+//-----------------------------------------------------------------------------
+
+// theme to bypass the default theme used for the accordion menu.
+const acctheme = createTheme({
+  name: 'Accordion-theme',
+  tokens: {
+    components: {
+      accordion: {
+        backgroundColor: '#ffffff',
+        item: {
+          trigger: {
+            color: '#333',
+            backgroundColor: '#555555',
+            _hover: {
+              color: '#333333',
+              backgroundColor: '#fafafa',
+            },
+          },
+          content: {
+            color: '#999999'
+          },
+        },
+      },
+    },
+  },
+});
+
+
 // theme to bypass the default theme used for the drop zone.
 const dztheme = createTheme({
   name: 'dropzone-theme',
@@ -48,6 +79,7 @@ const tabtheme = createTheme({
   },
 });
 
+
 //-------------------------------------------------------------------------
 // Main export routine for this screen
 //-------------------------------------------------------------------------
@@ -59,25 +91,15 @@ export const CanIParkHere: React.FC = () => {
     const [uploadMessage, setUploadMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
-    const [currentTime, setCurrentTime] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
     const [tab, setTab] = useState('1');
 
+    // controls display of each tab
     const [disabledTab1, setDisabledTab1] = useState(false);
     const [disabledTab2, setDisabledTab2] = useState(true);
     const [disabledTab3, setDisabledTab3] = useState(true);
-
-
-    // placeholders FOR TESTING ONLY
-    // don't name variables this way!
-    const [var3, setVar3] = useState('');
-
-    // diplays the loader that displays while the file is being processed
-    const  ShowLoader= () => {
-        return <Loader variation="linear" />;
-    };
 
 
     //-------------------------------------------------------------------------
@@ -94,12 +116,6 @@ export const CanIParkHere: React.FC = () => {
             items={[
 
                 //-------------------------------------------------------------
-                // Tab 0
-                // Start here option with text
-                //-------------------------------------------------------------
-
-
-                //-------------------------------------------------------------
                 // Tab 1
                 // File selection tab
                 //-------------------------------------------------------------
@@ -107,34 +123,32 @@ export const CanIParkHere: React.FC = () => {
                 { label: 'Select Photo', value: '1', isDisabled: disabledTab1,
                 content: ( 
                   <>
-                  <div className='percaaa'>
-                      <ThemeProvider theme={dztheme}>
-                          <DropZone 
-                            acceptedFileTypes={['image/*']}
-                            onDropComplete={({ acceptedFiles }) => {setFiles(acceptedFiles); }}
-                            onDrop={clearMessagesAndLoad}
-                            >
+                    <div className='percaaa'>
+                        <ThemeProvider theme={dztheme}>
+                            <DropZone 
+                              acceptedFileTypes={['image/*']}
+                              onDropComplete={({ acceptedFiles }) => {setFiles(acceptedFiles); }}
+                              onDrop={clearMessagesAndLoad}
+                              >
 
-                          Please select an image by clicking the browse option below...
+                            Please select an image by clicking the browse option below...
 
-                          <br/>
-                          <br/>
-                          <Button width="10em" onClick={() => hiddenInput.current?.click()}>Browse</Button>
-                          <VisuallyHidden>
-                              <input
-                              type="file"
-                              tabIndex={-1}
-                              ref={hiddenInput}
-                              onChange={onFilePickerChange}
-                              multiple={false}
-                              accept={acceptedFileTypes.join(',')}
-                              />
-                          </VisuallyHidden>
-                          </DropZone>
-                      </ThemeProvider>
-
-                  </div>
-    
+                            <br/>
+                            <br/>
+                            <Button width="10em" onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                            <VisuallyHidden>
+                                <input
+                                type="file"
+                                tabIndex={-1}
+                                ref={hiddenInput}
+                                onChange={onFilePickerChange}
+                                multiple={false}
+                                accept={acceptedFileTypes.join(',')}
+                                />
+                            </VisuallyHidden>
+                            </DropZone>
+                        </ThemeProvider>
+                    </div>
                   </>
                 )},
 
@@ -202,13 +216,12 @@ export const CanIParkHere: React.FC = () => {
                                 lineHeight={"1.5em"}
                                 margin={"20px 0px 0px 0px"}>
                                 Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
-                                within the photo (we're working on some functionality to help with this in a future release!).  If you need to take the photo again, click on 'Select a new image'.
+                                within the photo.  If you need to take the photo again, click on 'Select a new image'.
                               </Message>
                           </>
                           }
 
                           <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
-
                             <Flex
                               direction="row"
                               justifyContent="flex-start"
@@ -319,31 +332,16 @@ export const CanIParkHere: React.FC = () => {
                           </Message>
                       </>
                     }
-
-                    {var3}<br />
-                    {currentTime}
                   </div>
                   </>
                 )}
-
             ]}
             />
             </ThemeProvider>
         );
     };
     
-
     
-    // file reader for the file drop function beow
-    // (designed to run async)
-    const readFileAsDataURL = (file: File): Promise<string | ArrayBuffer | null> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    };
 
     //-------------------------------------------------------------------------
     // alternate version for upload function
@@ -353,7 +351,7 @@ export const CanIParkHere: React.FC = () => {
       setUploadMessage('');
       setErrorMessage('');
       setUploading(false);
-      setVar3('');
+      //setVar3('');
   
       if (files.length !== 0) 
         {
@@ -362,12 +360,13 @@ export const CanIParkHere: React.FC = () => {
 
       const file = files[0];
       try {
-        const result = await readFileAsDataURL(file); // Wait for the file to be read
+        // wait for content and read as url type format (needed for image)
+        const result = await readFileAsDataURL(file); 
 
+        // check type - some oddities with the above and mnay cause errors otherwise
         if (typeof result === 'string') {
           setImgSrc(result); 
         }
-
 
         // Move to next tab after the file is processed
         setTab('2');
@@ -378,6 +377,7 @@ export const CanIParkHere: React.FC = () => {
         setErrorMessage('Failed to read the file.');
       }
     };
+
 
     //-------------------------------------------------------------------------
     // clears the file selection and contents and resets messages
@@ -402,42 +402,12 @@ export const CanIParkHere: React.FC = () => {
           return;
         }
     };
-
   
-    //-------------------------------------------------------------------------
-    // handles the browse button and os file selection
-    // note the file drop is done by the drop zone control itself
-    //-------------------------------------------------------------------------
-
-    const onFilePickerChange = (event: { target: { files: any; }; }) => {
-        setUploadMessage('');
-        setErrorMessage('');
-        setWarningMessage('');
-
-        const file = event.target.files?.[0];
-        if (file) {
-          // Create a FileReader to read the file as a data URL
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (reader.result) {
-              // Set the data URL to state
-              setImgSrc(reader.result as string);
-            }
-          };
-          reader.readAsDataURL(file);
-
-          // move to next tab
-          setTab('2')
-          setDisabledTab2(false);
-          setHasFile(true);
-        }
-    };
-
-
 
     //-------------------------------------------------------------------------
     // routine to handle the actual upload and api invocation
     //-------------------------------------------------------------------------
+
     const HandleImageSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         setUploadMessage('');
@@ -466,9 +436,7 @@ export const CanIParkHere: React.FC = () => {
             // display the data that has been returned from the server
             const jsonResponse = await response.json();
             const data = jsonResponse.body; 
-
-            //setVar3(data)
-  
+ 
             // clear the uploading status, regardless of outcome
             setUploading(false);
 
@@ -476,7 +444,6 @@ export const CanIParkHere: React.FC = () => {
 
             if (bodytext && bodytext.message) {
                 setUploadMessage(bodytext.message);
-                setCurrentTime(bodytext.currenttime);
                 setTab('3')                      // move to next tab
                 setDisabledTab3(false);
               } else {
@@ -501,8 +468,59 @@ export const CanIParkHere: React.FC = () => {
           setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
         }
       };
-    
+
+
+    //-------------------------------------------------------------------------
+    // handles the browse button and os file selection
+    // note the file drop is done by the drop zone control itself
+    //-------------------------------------------------------------------------
+
+    const onFilePickerChange = (event: { target: { files: any; }; }) => {
+      setUploadMessage('');
+      setErrorMessage('');
+      setWarningMessage('');
+
+      const file = event.target.files?.[0];
+      if (file) {
+        // create filereader to get image data as URL type format
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result) {
+            // set the image source based on the content from above
+            setImgSrc(reader.result as string);
+          }
+        };
+        reader.readAsDataURL(file);
+
+        // move to next tab
+        setTab('2')
+        setDisabledTab2(false);
+        setHasFile(true);
+      }
+    };
+
+
+    // file reader for the file drop function beow
+    // (designed to run async)
+
+    const readFileAsDataURL = (file: File): Promise<string | ArrayBuffer | null> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    };
+
+
+    // diplays the loader that displays while the file is being processed
+
+    const  ShowLoader= () => {
+      return <Loader variation="linear" />;
+    };
+
       
+
     //-------------------------------------------------------------------------
     // the basic HTML structure.  
     // Note the tabs have their own routine as above
@@ -523,21 +541,27 @@ export const CanIParkHere: React.FC = () => {
                     <Heading level={4}>Tips</Heading>
                     <br />
 
-                    <Accordion
-                      items={[
-                        {
-                          trigger: 'Tips on taking photos',
-                          value: 'accessible',
-                          content: 'When taking photos of the signs, please try to keep the sign square within your photo. We are working on some functionality to help with this too.'
-                        },
-                        {
-                          trigger: 'Tips for mobile devices',
-                          value: 'styling',
-                          content: 'On mobile devices, you may be prompted to allow the website to have access to your camera.  Please allow this for the best experience. Having this option available allows the system to prompt you to take a photo directly from the application.'
-                        }
-                      ]}
-                    />
-
+                    <ThemeProvider theme={acctheme}>
+                      <Accordion 
+                        items={[
+                          {
+                            trigger: 'Tips on taking photos',
+                            value: 'styling1',
+                            content: 'When taking photos of the signs, please try to keep the sign square within your photo. We are working on some functionality to help with this too.'
+                          },
+                          {
+                            trigger: 'Tips for mobile devices',
+                            value: 'styling2',
+                            content: 'On mobile devices, you may be prompted to allow the website to have access to your camera. Please allow this for the best experience. Having this option available allows the system to prompt you to take a photo directly from the application.'
+                          },
+                          {
+                            trigger: 'What type of vehicles does this cover?',
+                            value: 'styling3',
+                            content: 'Only signs relating to cars and vans are covered.  Some signs (such as No Standing and Clearway) may be applicable to other vehicles.'
+                          }
+                        ]}
+                      />
+                    </ThemeProvider>
 
                 </Card>
             </div>
