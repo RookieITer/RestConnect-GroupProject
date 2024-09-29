@@ -90,9 +90,12 @@ export const CanIParkHere: React.FC = () => {
     const [files, setFiles] = useState([] as File[]); 
     const [hasFile, setHasFile] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [messageHeading, setMessageHeading] = useState('');
     const [uploadMessage, setUploadMessage] = useState('');
+    const [warningHeading, setWarningHeading] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
+    //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
@@ -307,7 +310,7 @@ export const CanIParkHere: React.FC = () => {
 
                     {uploadMessage && 
                       <>
-                        <Message hasIcon={true} isDismissible={false} colorTheme="success" heading="Here's what we can tell you about this sign:">
+                        <Message hasIcon={true} isDismissible={false} colorTheme="success" heading={messageHeading}>
                           <>
                             <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: uploadMessage }} />
                           </>
@@ -318,7 +321,7 @@ export const CanIParkHere: React.FC = () => {
                   
                   {warningMessage && 
                       <>
-                        <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading="Warning - Please Note:">
+                        <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading={warningHeading}>
                           <>
                             <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: warningMessage }} />
                           </>
@@ -442,23 +445,86 @@ export const CanIParkHere: React.FC = () => {
             // clear the uploading status, regardless of outcome
             setUploading(false);
 
-            const bodytext = JSON.parse(data)
+            const bodytext = JSON.parse(data);
+            var oktopark = false;
+            var notoktopark = false;
+            var park_message = "";
+            var warn_message = "";
 
-            if (bodytext && bodytext.message) {
-                setUploadMessage(bodytext.message);
+            // check all the returned items
+            if (bodytext && bodytext.items) {
+              //setDebug1(bodytext.items[0].direction);
+              for (let idx = 0; idx < bodytext.items.length; idx++) 
+              {
                 setTab('3')                      // move to next tab
                 setDisabledTab3(false);
-              } else {
-                setTab('3')                      // move to next tab
-                setErrorMessage('Unable to interpret that sign.');
-                setDisabledTab3(false);
+                
+                if (bodytext.items[idx].isnow === true)
+                {
+                  if  (bodytext.items[idx].noparking === false)
+                  {
+                    oktopark = true;
+                    setMessageHeading("Yes, you can park here:");
+                    park_message += "For up to " + bodytext.items[idx].hours + " hours";
+                    park_message += "<br />Up until " + bodytext.items[idx].totime;
+
+                    if  (bodytext.items[idx].metered === true)
+                    {
+                      park_message += "<br />Parking here requires you to pay for parking";
+                    }
+                    else
+                    {
+                      park_message += "<br />Parking here is free - no payment is required";
+                    }
+
+                    setUploadMessage(park_message);
+                    oktopark = true;
+                  }
+                  else
+                  {
+                    notoktopark = true;
+                    warn_message += "There is a no parking or no standing zone indicated on this sign";
+                    if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
+                    {
+                      warn_message += "<br />You cannot park to the ";
+                      warn_message += bodytext.items[idx].direction.toLowerCase();
+                      warn_message += " hand side of the sign";
+
+                    }
+
+                    setWarningHeading("Warning about this parking spot");
+                    setWarningMessage(warn_message);
+                  }
+                }
               }
 
-            // display a warning message if needed (no standing, permit etc)
-            if (bodytext && bodytext.warningmessage) {
-              setWarningMessage(bodytext.warningmessage);
-              setErrorMessage('');
+            } else {
+              //
             }
+
+            if (notoktopark === false && oktopark === false)
+            {
+              setMessageHeading("Yes, you can park here");
+              setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
+            }
+
+
+
+//              if (bodytext && bodytext.message) {
+ //               setUploadMessage(bodytext.message);
+ //               setTab('3')                      // move to next tab
+  //              setDisabledTab3(false);
+  //            } else {
+  //              setTab('3')                      // move to next tab
+  //              setErrorMessage('Unable to interpret that sign.');
+  //              setDisabledTab3(false);
+  //            }
+
+            // display a warning message if needed (no standing, permit etc)
+//            if (bodytext && bodytext.warningmessage) {
+//              setWarningMessage(bodytext.warningmessage);
+//              setErrorMessage('');
+//            }
 
         // if error with API call
         } catch (error) {
