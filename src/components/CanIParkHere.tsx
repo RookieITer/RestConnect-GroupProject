@@ -614,18 +614,6 @@ export const CanIParkHere: React.FC = () => {
     };
 
 
-    // file reader for the file drop function beow
-    // (designed to run async)
-
-    const readFileAsDataURL = (file: File): Promise<string | ArrayBuffer | null> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    };
-
 
     // diplays the loader that displays while the file is being processed
 
