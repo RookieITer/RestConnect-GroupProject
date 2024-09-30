@@ -3,12 +3,20 @@
     width: 100%;
     margin: 0px 0px 6px 0px;
   }
+  .listmax {
+    width: 100%;
+    margin: 3px 0px 3px 0px;
+  }
 }
 
 @media only screen and (min-width: 400px) {
   .btnmax {
     width: 16em;
     margin: 0px 2px 0px 2px;
+  }
+  .listmax {
+    width: 50em;
+    margin: 6px 0px 3px 0px;
   }
 }
 

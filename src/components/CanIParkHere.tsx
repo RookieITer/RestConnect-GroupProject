@@ -26,11 +26,11 @@ const acctheme = createTheme({
             backgroundColor: '#555555',
             _hover: {
               color: '#333333',
-              backgroundColor: '#fafafa',
+              backgroundColor: '#f5f5f5',
             },
           },
           content: {
-            color: '#999999'
+            color: '#6666cc'
           },
         },
       },
@@ -253,23 +253,6 @@ export const CanIParkHere: React.FC = () => {
                           </>
                         }
 
-                        {!uploading && hasFile &&
-                            <>
-                              <Message
-                                variation="filled"
-                                colorTheme ="info"
-                                heading=""
-                                isDismissible={true}
-                                backgroundColor={"#f5faff"}
-                                color={"#666666"}
-                                fontSize={"0.95em"}
-                                lineHeight={"1.5em"}
-                                margin={"20px 0px 0px 0px"}>
-                                Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
-                                within the photo.  If you need to take the photo again, click on 'Start Over'.
-                              </Message>
-                          </>
-                          }
 
                           <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
                             <Flex
@@ -330,7 +313,7 @@ export const CanIParkHere: React.FC = () => {
                         <Message
                             variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
                             fontSize={"0.95em"} lineHeight={"1.5em"} isDismissible={true} margin={"10px 0px 0px 0px"}>
-                            No image file selected.  Please click the 'Select Photo' tab above for options..
+                            No image file selected.  Please click the 'Select Photo' tab above for options.
                         </Message>
                       </>
                     }
@@ -369,13 +352,11 @@ export const CanIParkHere: React.FC = () => {
                             {
                               trigger: 'All Sign Information',
                               value: 'sign2',
-                              content: <Message variation="plain" colorTheme="neutral">{signContent}</Message>
-                            },
-                            {
-                              trigger: 'All Sign Information2',
-                              value: 'sign3',
-                              content: <Message variation="plain" colorTheme="neutral">aaa<br />bbb</Message>
-                            },
+                              content: 
+                                <Message variation="plain" colorTheme="neutral">
+                                  <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: signContent }} />
+                                </Message>
+                            }
                           ]}
                           />
                         </ThemeProvider>
@@ -402,10 +383,52 @@ export const CanIParkHere: React.FC = () => {
                     }
                   </div>
                   </>
-                )}
-            ]}
+                )},
+
+                //-------------------------------------------------------------
+                // Tab 4
+                // Help tab
+                //-------------------------------------------------------------
+
+                { label: 'Help', value: '4', isDisabled: false,
+                  content: ( 
+                    <>
+                      <div className='listmax'>
+                        <ThemeProvider theme={acctheme}>
+                          <Accordion 
+                            items={[
+                              {
+                                trigger: "'Check Photo' Options",
+                                value: 'checkphoto1',
+                                content: 
+                                  "Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  " +
+                                  "Please ensure the photo of the sign is square/straight within the photo.  " +
+                                  "If you need to take the photo again, click on 'Start Over'."
+                              },
+                              {
+                                trigger: 'Tips on taking photos',
+                                value: 'styling1',
+                                content: 'When taking photos of the signs, please try to keep the sign square within your photo. We are working on some functionality to help with this too.'
+                              },
+                              {
+                                trigger: 'Tips for mobile devices',
+                                value: 'styling2',
+                                content: 'On mobile devices, you may be prompted to allow the website to have access to your camera. Please allow this for the best experience. Having this option available allows the system to prompt you to take a photo directly from the application.'
+                              },
+                              {
+                                trigger: 'What type of vehicles does this cover?',
+                                value: 'styling3',
+                                content: 'Only signs relating to cars and vans are covered.  Some signs (such as No Standing and Clearway) may be applicable to other vehicles.'
+                              }
+                            ]}
+                          />
+                        </ThemeProvider>
+                      </div>
+                    </>
+                  )},
+              ]}
             />
-            </ThemeProvider>
+          </ThemeProvider>
         );
     };
     
@@ -629,33 +652,6 @@ export const CanIParkHere: React.FC = () => {
 
                 <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
                     <ControlledTabDisplay />
-
-                    <br />
-                    <Heading level={4}>Tips</Heading>
-                    <br />
-
-                    <ThemeProvider theme={acctheme}>
-                      <Accordion 
-                        items={[
-                          {
-                            trigger: 'Tips on taking photos',
-                            value: 'styling1',
-                            content: 'When taking photos of the signs, please try to keep the sign square within your photo. We are working on some functionality to help with this too.'
-                          },
-                          {
-                            trigger: 'Tips for mobile devices',
-                            value: 'styling2',
-                            content: 'On mobile devices, you may be prompted to allow the website to have access to your camera. Please allow this for the best experience. Having this option available allows the system to prompt you to take a photo directly from the application.'
-                          },
-                          {
-                            trigger: 'What type of vehicles does this cover?',
-                            value: 'styling3',
-                            content: 'Only signs relating to cars and vans are covered.  Some signs (such as No Standing and Clearway) may be applicable to other vehicles.'
-                          }
-                        ]}
-                      />
-                    </ThemeProvider>
-
                 </Card>
             </div>
           </main>
