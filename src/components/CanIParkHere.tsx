@@ -5,6 +5,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
 import sign from './sign.png';
 
+// ----------------------------------------------------------------------------
+// TODO:
+// Tidy up display logic of sign details - code smell.
+// Refine precedence of no parking types vs being outside time
+// rebuild sign details if toggle buttons changed and sign details showing
+// refine full sign details display - exclude missing fields
+// ----------------------------------------------------------------------------
+
 // determine file types to be processed.  Limit these types jpg, png, gif, bmp at this time
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/gif'];
 
@@ -117,9 +125,7 @@ export const CanIParkHere: React.FC = () => {
     const [signContent, setSignContent] = useState('');
     const [selectedDirection, setSelectedDirection] = useState('');
     const [isCommercial, setIsCommercial] = useState(false);
-    const [isCommercial2, setIsCommercial2] = useState('NO');
     const [isDisabled, setIsDisabled] = useState(false);
-    //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
@@ -207,8 +213,6 @@ export const CanIParkHere: React.FC = () => {
                             Disabled permit is displayed</ToggleButton>&nbsp;
                           <Divider size="small" orientation="horizontal" margin={'30px 0px 20px 0px'} />
                       </ThemeProvider>
-                      {isCommercial}
-                      {isCommercial2}
                     </div>
                   </>
                 )},
@@ -664,27 +668,11 @@ export const CanIParkHere: React.FC = () => {
               setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
             }
 
-
-
-
-//              if (bodytext && bodytext.message) {
- //               setUploadMessage(bodytext.message);
- //               setTab('3')                      // move to next tab
-  //              setDisabledTab3(false);
-  //            } else {
-  //              setTab('3')                      // move to next tab
-  //              setErrorMessage('Unable to interpret that sign.');
-  //              setDisabledTab3(false);
-  //            }
-
-            // display a warning message if needed (no standing, permit etc)
-//            if (bodytext && bodytext.warningmessage) {
-//              setWarningMessage(bodytext.warningmessage);
-//              setErrorMessage('');
-//            }
-
+        //---------------------------------------------------------------------
         // if error with API call
-        } catch (error) {
+        //---------------------------------------------------------------------
+
+      } catch (error) {
           // move to tab 3 and clear messages
           setTab('3')                      
           setDisabledTab3(false);
@@ -698,14 +686,7 @@ export const CanIParkHere: React.FC = () => {
     // routines to handle toggling of values of toggle buttons      
     const toggleVehicleType = () => {
       setIsCommercial(prev => !prev); 
-      setIsCommercial2(prev => (prev === "YES" ? "NO" : "YES")); 
-
-      if (isCommercial === true)
-        setIsCommercial2("YES");
-      else
-        setIsCommercial2("NO");
-
-      return isCommercial;
+      return true;
     }
 
     const toggleDisabledType = () => {
