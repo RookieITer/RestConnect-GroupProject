@@ -418,43 +418,6 @@ export const CanIParkHere: React.FC = () => {
         );
     };
     
-    
-
-    //-------------------------------------------------------------------------
-    // alternate version for upload function
-    //-------------------------------------------------------------------------
-
-    const clearMessagesAndLoad = async () => {
-      setUploadMessage('');
-      setErrorMessage('');
-      setUploading(false);
-      //setVar3('');
-  
-      if (files.length !== 0) 
-        {
-          setFiles([]); 
-        }
-
-      const file = files[0];
-      try {
-        // wait for content and read as url type format (needed for image)
-        const result = await readFileAsDataURL(file); 
-
-        // check type - some oddities with the above and mnay cause errors otherwise
-        if (typeof result === 'string') {
-          setImgSrc(result); 
-        }
-
-        // Move to next tab after the file is processed
-        setTab('2');
-        setDisabledTab2(false);
-        setHasFile(true);
-      } catch (error) {
-        console.error("Error reading file:", error);
-        setErrorMessage('Failed to read the file.');
-      }
-    };
-
 
     //-------------------------------------------------------------------------
     // clears the file selection and contents and resets messages
