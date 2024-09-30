@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { ToggleButton, ToggleButtonGroup, Badge, Heading, Image, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
+import { ToggleButton, ToggleButtonGroup, Heading, Image, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
@@ -30,7 +30,7 @@ const acctheme = createTheme({
             },
           },
           content: {
-            color: '#6666cc'
+            color: '#000099'
           },
         },
       },
@@ -75,10 +75,10 @@ const tabtheme = createTheme({
     components: {
       tabs: {
         item: {
-          color: { value: '#666666' },
+          color: { value: '#999999' },
           paddingHorizontal: { value: '9px' },
           paddingVertical: { value: '9px' },
-          fontSize: { value: '0.9em' },
+          fontSize: { value: '0.95em' },
           fontWeight: { value: '500' },
           _hover: {
             color: { value: '#66bbbb' },
@@ -87,7 +87,7 @@ const tabtheme = createTheme({
             color: { value: '{colors.blue.60}' },
           },
           _active: {
-            color: { value: '#666666' },
+            color: { value: '#888888' },
             backgroundColor: { value: '#f1f1f1' },
           },
           _disabled: {
@@ -116,6 +116,9 @@ export const CanIParkHere: React.FC = () => {
     const [warningMessage, setWarningMessage] = useState('');
     const [signContent, setSignContent] = useState('');
     const [selectedDirection, setSelectedDirection] = useState('');
+    const [isCommercial, setIsCommercial] = useState(false);
+    const [isCommercial2, setIsCommercial2] = useState('NO');
+    const [isDisabled, setIsDisabled] = useState(false);
     //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -154,7 +157,7 @@ export const CanIParkHere: React.FC = () => {
                     <div className="fineprint">Click the buttons to select or de-select options</div>
                     <ThemeProvider theme={toggleTheme}>
                           <ToggleButtonGroup 
-                            value= {selectedDirection}
+                            value = {selectedDirection}
                             isExclusive
                             onChange={(value) => setSelectedDirection(value as string)}
                           >                            
@@ -193,11 +196,19 @@ export const CanIParkHere: React.FC = () => {
 
                       <ThemeProvider theme={toggleTheme}>
                           <div className="fineprint">Click the buttons to select or un-select options</div>
-                          <ToggleButton height={"3em"} fontWeight={"500"} className = 'btnmax'>Vehicle is a truck or van</ToggleButton>
-                          <ToggleButton height={"3em"} fontWeight={"500"} className = 'btnmax'>Disabled permit is displayed</ToggleButton>&nbsp;
+                          <ToggleButton isPressed={isCommercial}
+                            onClick= {toggleVehicleType} // Use an arrow function here
+                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            Vehicle is a truck or van
+                          </ToggleButton>
+                          <ToggleButton  isPressed={isDisabled}
+                            onClick={toggleDisabledType}
+                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            Disabled permit is displayed</ToggleButton>&nbsp;
                           <Divider size="small" orientation="horizontal" margin={'30px 0px 20px 0px'} />
                       </ThemeProvider>
-
+                      {isCommercial}
+                      {isCommercial2}
                     </div>
                   </>
                 )},
@@ -336,34 +347,18 @@ export const CanIParkHere: React.FC = () => {
 
                     <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
 
-                    {uploadMessage && 
+                    {(uploadMessage) && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="success" heading={messageHeading}>
                           <>
                             <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: uploadMessage }} />
                           </>
-                          <Badge maxWidth={"25em"} textAlign={"center"} border="1px" borderColor={"#333333"} variation="info">Parking here is free</Badge>
                         </Message>
                         <br />
-
-                        <ThemeProvider theme={acctheme}>
-                         <Accordion 
-                          items={[
-                            {
-                              trigger: 'All Sign Information',
-                              value: 'sign2',
-                              content: 
-                                <Message variation="plain" colorTheme="neutral">
-                                  <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: signContent }} />
-                                </Message>
-                            }
-                          ]}
-                          />
-                        </ThemeProvider>
                       </>
                     }
-                  
-                  {warningMessage && 
+
+                    {warningMessage && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading={warningHeading}>
                           <>
@@ -381,6 +376,26 @@ export const CanIParkHere: React.FC = () => {
                           </Message>
                       </>
                     }
+
+                    {(uploadMessage || warningMessage) && 
+                      <>
+                        <ThemeProvider theme={acctheme}>
+                         <Accordion 
+                          items={[
+                            {
+                              trigger: 'All Sign Information',
+                              value: 'sign2',
+                              content: 
+                                <Message variation="plain" colorTheme="neutral">
+                                  <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: signContent }} />
+                                </Message>
+                            }
+                          ]}
+                          />
+                        </ThemeProvider>
+                      </>
+                    }
+                  
                   </div>
                   </>
                 )},
@@ -503,7 +518,6 @@ export const CanIParkHere: React.FC = () => {
 
             // check all the returned items
             if (bodytext && bodytext.items) {
-              //setDebug1(bodytext.items[0].direction);
               for (let idx = 0; idx < bodytext.items.length; idx++) 
               {
                 setTab('3')                      // move to next tab
@@ -511,51 +525,134 @@ export const CanIParkHere: React.FC = () => {
       
                 // build up all sign info list for full display option
                 all_sign_info += "Sign Type: " + bodytext.items[idx].category
+                all_sign_info += ", Direction: " + bodytext.items[idx].direction
+                all_sign_info += ", From Time: " + bodytext.items[idx].fromtime
+                all_sign_info += ", To Time: " + bodytext.items[idx].totime
+                all_sign_info += ", Days (Numbers): " + bodytext.items[idx].days
                 all_sign_info += "<br />"
 
-                if (bodytext.items[idx].isnow === true)
+                //-------------------------------------------------------------
+                // regular parking
+                //-------------------------------------------------------------
+
+                if ((bodytext.items[idx].isnow === true) && 
+                    ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                    || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
+                    && bodytext.items[idx].category == 'PARKING' &&
+                    !oktopark
+                   )
                 {
-                  if  (bodytext.items[idx].noparking === false)
-                  {
-                    oktopark = true;
-                    setMessageHeading("Yes, you can park here:");
-                    setSignContent("Hi");
-                    park_message += "For up to " + bodytext.items[idx].hours + " hours";
-                    park_message += "<br />Up until " + bodytext.items[idx].totime;
+                  oktopark = true;
+                  setMessageHeading("Yes, you can park here:");
+                  park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
 
-                    if  (bodytext.items[idx].metered === true)
-                    {
-                      park_message += "<br />Parking here requires you to pay for parking";
-                    }
-                    else
-                    {
-                      park_message += "<br />Parking here is free - no payment is required";
-                    }
+                  if  (bodytext.items[idx].totime !== '')
+                    park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
 
-                    setUploadMessage(park_message);
-                    oktopark = true;
-                  }
+                  if  (bodytext.items[idx].metered === true)
+                    park_message += "<li>Parking here requires you to pay for parking</li>";
                   else
-                  {
-                    notoktopark = true;
-                    warn_message = "There is a no parking or no standing zone indicated on this sign";
-                    if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
-                    {
-                      warn_message += "<br />You cannot park to the ";
-                      warn_message += bodytext.items[idx].direction.toLowerCase();
-                      warn_message += " hand side of the sign";
+                    park_message += "<li>Parking here is free - no payment is required</li>";
 
-                    }
-
-                    setWarningHeading("Warning about this parking spot");
-                    setWarningMessage(warn_message);
-                  }
+                  // show the sign info
+                  setUploadMessage(park_message);
+                  oktopark = true;
                 }
+
+                //-------------------------------------------------------------
+                // LOADING ZONE
+                //-------------------------------------------------------------
+
+                if ((bodytext.items[idx].isnow === true) && 
+                ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                    || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
+                    && bodytext.items[idx].category == 'LOADING' && isCommercial === true &&
+                    !oktopark
+                   )
+                {
+                  oktopark = true;
+                  setMessageHeading("Yes, you can park here (Loading Zone Parking):");
+                  park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
+
+                  if  (bodytext.items[idx].totime !== '')
+                    park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
+                  park_message += "<li>Note - you are able to park here as this is a loading zone and you have a commercial vehicle</li>";
+  
+                  // show the sign info
+                  setUploadMessage(park_message);
+                  oktopark = true;
+                }
+
+                //-------------------------------------------------------------
+                // DISABLED ZONE
+                //-------------------------------------------------------------
+
+                if ((bodytext.items[idx].isnow === true) && 
+                  ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                    || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
+                    && bodytext.items[idx].category == 'DISABLED' && isDisabled &&
+                    !oktopark
+                   )
+                {
+                  oktopark = true;
+                  setMessageHeading("Yes, you can park here (Disabled Parking Spot):");
+                  park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
+
+                  if  (bodytext.items[idx].totime !== '')
+                    park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
+
+                  park_message += "<li>Note - you are able to park here as you are displaying a disabled parking permit</li>";
+  
+                  // show the sign info
+                  setUploadMessage(park_message);
+                  oktopark = true;
+                }
+
+                if ((bodytext.items[idx].isnow === true) && 
+                   ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                    || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
+                    && bodytext.items[idx].category == 'NOPARKING' &&
+                    !notoktopark
+                   )
+                {
+                  notoktopark = true;
+                  warn_message = "There is a no parking or no standing zone indicated on this sign";
+                  if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
+                  {
+                    warn_message += "<br />You cannot park to the ";
+                    warn_message += bodytext.items[idx].direction.toLowerCase();
+                    warn_message += " hand side of the sign";
+
+                  }
+
+                  setWarningHeading("You Cannot Park Here");
+                  setWarningMessage(warn_message);
+                }
+
+                if ((bodytext.items[idx].isnow === true) && 
+                  ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                    || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
+                    && bodytext.items[idx].category == 'TOW' &&
+                    !notoktopark
+                   )
+                {
+                  notoktopark = true;
+                  warn_message = "There is a clearway or tow-away zone indicated on this sign";
+                  if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
+                  {
+                    warn_message += "<br />You cannot park to the ";
+                    warn_message += bodytext.items[idx].direction.toLowerCase();
+                    warn_message += " hand side of the sign";
+                  }
+
+                  setWarningHeading("You Cannot Park Here - Tow Away Zone");
+                  setWarningMessage(warn_message);
+                }
+
               }
 
               // display our full list
               setSignContent(all_sign_info);
-           
             
             } else {
               //
@@ -596,6 +693,25 @@ export const CanIParkHere: React.FC = () => {
           setErrorMessage('Unable to interpret that sign.  Please try again with a new photo of the sign.');
         }
       };
+
+
+    // routines to handle toggling of values of toggle buttons      
+    const toggleVehicleType = () => {
+      setIsCommercial(prev => !prev); 
+      setIsCommercial2(prev => (prev === "YES" ? "NO" : "YES")); 
+
+      if (isCommercial === true)
+        setIsCommercial2("YES");
+      else
+        setIsCommercial2("NO");
+
+      return isCommercial;
+    }
+
+    const toggleDisabledType = () => {
+      setIsDisabled(prev => !prev); 
+      return true;
+    }
 
 
     //-------------------------------------------------------------------------
