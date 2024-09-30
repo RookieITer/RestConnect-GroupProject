@@ -150,7 +150,7 @@ export const CanIParkHere: React.FC = () => {
                 content: ( 
                   <>
                     <div className='percaaa'>
-                    <div className="pseudoheading">Which direction are you from the sign?</div>
+                    <div className="pseudoheading">Which side of the sign is the vehicle on?</div>
                     <div className="fineprint">Click the buttons to select or de-select options</div>
                     <ThemeProvider theme={toggleTheme}>
                           <ToggleButtonGroup 
@@ -171,7 +171,7 @@ export const CanIParkHere: React.FC = () => {
                             <ToggleButton height={"6em"} width={"6em"}  fontWeight={"500"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
-                      <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
+                      <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'} />
 
                       <div className="pseudoheading">Select Your Photo</div>
                       <div className="fineprint">Mobile devices will prompt you to take a photo</div>
@@ -226,8 +226,8 @@ export const CanIParkHere: React.FC = () => {
                         <>
                           {!uploading &&
                             <>
-                            <Button className = 'btnmax' isDisabled={uploading} onClick={HandleImageSubmit} variation="primary">Upload and Check Sign</Button>&nbsp;
-                            <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles}>Select a new image</Button>
+                            <Button className = 'btnmax' isDisabled={uploading} onClick={HandleImageSubmit} height={"3em"} fontWeight={"500"} variation="primary">Upload and Check Sign</Button>
+                            <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles} height={"3em"} fontWeight={"500"} >Start Over</Button>
                             </>
                           }
                         </>
@@ -266,7 +266,7 @@ export const CanIParkHere: React.FC = () => {
                                 lineHeight={"1.5em"}
                                 margin={"20px 0px 0px 0px"}>
                                 Please review your photo and click 'Upload and Check Sign' to see more information about this sign.  Please ensure the photo of the sign is square/straight 
-                                within the photo.  If you need to take the photo again, click on 'Select a new image'.
+                                within the photo.  If you need to take the photo again, click on 'Start Over'.
                               </Message>
                           </>
                           }
@@ -347,7 +347,7 @@ export const CanIParkHere: React.FC = () => {
 
                     {hasFile && 
                       <>
-                        <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles}  variation="primary">Select a new image</Button>
+                        <Button className = 'btnmax' isDisabled={uploading} onClick={handleClearFiles} height={"3em"} fontWeight={"500"} variation="primary">Start Over</Button>
                       </>
                     }
 

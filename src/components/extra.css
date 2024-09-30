@@ -8,6 +8,7 @@
 @media only screen and (min-width: 400px) {
   .btnmax {
     width: 16em;
+    margin: 0px 2px 0px 2px;
   }
 }
 
