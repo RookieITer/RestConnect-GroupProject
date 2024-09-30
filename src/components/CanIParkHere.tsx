@@ -43,20 +43,20 @@ const toggleTheme = createTheme({
   name: 'Toggle-theme',
   tokens: {
     components: {
-      togglebutton: {
-        borderColor: { value: '{colors.blue.90}' },
-        color: { value: '{colors.blue.90}' },
-        _hover: {
+    togglebutton: {
+      borderColor: { value: '{colors.blue.90}' },
+      color: { value: '{colors.blue.90}' },
+      _hover: {
           backgroundColor: { value: '{colors.green.10}' },
         },
-        _focus: {
+      _focus: {
           color: { value: '#666666' },
         },
-        _active: {
-          backgroundColor: { value: '{colors.green.20}' },
-        },
-        _pressed: {
-          backgroundColor: { value: '{colors.green.20}' },
+      _active: {
+          backgroundColor: { value: '{colors.green.40}' },
+          },
+      _pressed: {
+          backgroundColor: { value: '{colors.green.10}' },
           color: { value: '#666666' },
           _hover: {
             backgroundColor: { value: '{colors.green.10}' },
@@ -115,7 +115,7 @@ export const CanIParkHere: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
     const [signContent, setSignContent] = useState('');
-    const [selectedDirection, setSelectedDirection] = useState(null);
+    const [selectedDirection, setSelectedDirection] = useState('');
     //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -158,7 +158,7 @@ export const CanIParkHere: React.FC = () => {
                             isExclusive
                             onChange={(value) => setSelectedDirection(value as string)}
                           >                            
-                            <ToggleButton height={"6em"} width={"6em"} value="Left">Left</ToggleButton>
+                            <ToggleButton height={"6em"} width={"6em"} fontWeight={"500"} value="Left">Left</ToggleButton>
                             &nbsp;&nbsp;&nbsp;
                             <Image
                               alt="A Parking Sign"
@@ -168,14 +168,14 @@ export const CanIParkHere: React.FC = () => {
                               opacity="100%"
                             />
                             &nbsp;&nbsp;&nbsp;
-                            <ToggleButton height={"6em"} width={"6em"} value="Right">Right</ToggleButton>
+                            <ToggleButton height={"6em"} width={"6em"}  fontWeight={"500"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
                       <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
 
                       <div className="pseudoheading">Select Your Photo</div>
                       <div className="fineprint">Mobile devices will prompt you to take a photo</div>
-                      <Button className = 'btnmax' isDisabled = {(selectedDirection == null)}  variation="primary"onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                      <Button className = 'btnmax'  height={"4em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  variation="primary"onClick={() => hiddenInput.current?.click()}>Browse</Button>
                       <VisuallyHidden>
                           <input
                           type="file"
@@ -187,14 +187,14 @@ export const CanIParkHere: React.FC = () => {
                           />
                       </VisuallyHidden>
 
-                      <Divider size="small" orientation="horizontal" margin={'40px 0px 20px 0px'} />
+                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
 
                       <div className="pseudoheading">Other Vehicle Options</div>
 
                       <ThemeProvider theme={toggleTheme}>
                           <div className="fineprint">Click the buttons to select or un-select options</div>
-                          <ToggleButton height={"4em"} className = 'btnmax'>Vehicle is a truck or van</ToggleButton>&nbsp;
-                          <ToggleButton height={"4em"} className = 'btnmax'>Disabled permit is displayed</ToggleButton>&nbsp;
+                          <ToggleButton height={"3em"} fontWeight={"500"} className = 'btnmax'>Vehicle is a truck or van</ToggleButton>
+                          <ToggleButton height={"3em"} fontWeight={"500"} className = 'btnmax'>Disabled permit is displayed</ToggleButton>&nbsp;
                           <Divider size="small" orientation="horizontal" margin={'30px 0px 20px 0px'} />
                       </ThemeProvider>
 
