@@ -1,5 +1,5 @@
 import React, { useState, useRef  } from 'react';
-import { ToggleButton, ToggleButtonGroup, Badge, Heading, Image, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
+import { ToggleButton, ToggleButtonGroup, Badge, Heading, Image, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
