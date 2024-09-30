@@ -1,9 +1,9 @@
 import React, { useState, useRef  } from 'react';
-import { Heading, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
+import { ToggleButton, ToggleButtonGroup, Badge, Heading, Image, Loader, Card, Button, Message, ThemeProvider, createTheme, Accordion, DropZone, VisuallyHidden, Tabs, Flex, View, Divider} from '@aws-amplify/ui-react'; 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
-
+import sign from './sign.png';
 
 // determine file types to be processed.  Limit these types jpg, png, gif, bmp at this time
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/bmp', 'image/gif'];
@@ -38,6 +38,34 @@ const acctheme = createTheme({
   },
 });
 
+// theme to bypass the default theme used for the accordion menu.
+const toggleTheme = createTheme({
+  name: 'Toggle-theme',
+  tokens: {
+    components: {
+      togglebutton: {
+        borderColor: { value: '{colors.blue.90}' },
+        color: { value: '{colors.blue.90}' },
+        _hover: {
+          backgroundColor: { value: '{colors.green.10}' },
+        },
+        _focus: {
+          color: { value: '#666666' },
+        },
+        _active: {
+          backgroundColor: { value: '{colors.green.20}' },
+        },
+        _pressed: {
+          backgroundColor: { value: '{colors.green.20}' },
+          color: { value: '#666666' },
+          _hover: {
+            backgroundColor: { value: '{colors.green.10}' },
+          },
+        },
+      },
+    },
+  },
+});
 
 // theme to bypass the default theme used for the drop zone.
 const dztheme = createTheme({
@@ -95,6 +123,8 @@ export const CanIParkHere: React.FC = () => {
     const [warningHeading, setWarningHeading] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
+    const [signContent, setSignContent] = useState('');
+    const [selectedDirection, setSelectedDirection] = useState('');
     //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -129,30 +159,54 @@ export const CanIParkHere: React.FC = () => {
                 content: ( 
                   <>
                     <div className='percaaa'>
-                        <ThemeProvider theme={dztheme}>
-                            <DropZone 
-                              acceptedFileTypes={['image/*']}
-                              onDropComplete={({ acceptedFiles }) => {setFiles(acceptedFiles); }}
-                              onDrop={clearMessagesAndLoad}
-                              >
+                    <div className="pseudoheading">Which direction are you from the sign?</div>
+                    <div className="fineprint">Click the buttons to select or de-select options</div>
+                    <ThemeProvider theme={toggleTheme}>
+                          <ToggleButtonGroup 
+                            value= {selectedDirection}
+                            isExclusive
+                            onChange={(value) => setSelectedDirection(value as string)}
+                          >                            
+                            <ToggleButton height={"6em"} width={"6em"} value="Left">Left</ToggleButton>
+                            &nbsp;&nbsp;&nbsp;
+                            <Image
+                              alt="A Parking Sign"
+                              src={sign}
+                              objectFit="initial"
+                              backgroundColor="initial"
+                              opacity="100%"
+                            />
+                            &nbsp;&nbsp;&nbsp;
+                            <ToggleButton height={"6em"} width={"6em"} value="Right">Right</ToggleButton>
+                          </ToggleButtonGroup>
+                      </ThemeProvider>
+                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
 
-                            Please select an image by clicking the browse option below...
+                      <div className="pseudoheading">Select Your Image</div>
+                      <div className="fineprint">Mobile devices will prompt you to take a photo</div>
+                      <Button className = 'btnmax' isDisabled = {(selectedDirection == null)}  variation="primary"onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                      <VisuallyHidden>
+                          <input
+                          type="file"
+                          tabIndex={-1}
+                          ref={hiddenInput}
+                          onChange={onFilePickerChange}
+                          multiple={false}
+                          accept={acceptedFileTypes.join(',')}
+                          />
+                      </VisuallyHidden>
 
-                            <br/>
-                            <br/>
-                            <Button width="10em" onClick={() => hiddenInput.current?.click()}>Browse</Button>
-                            <VisuallyHidden>
-                                <input
-                                type="file"
-                                tabIndex={-1}
-                                ref={hiddenInput}
-                                onChange={onFilePickerChange}
-                                multiple={false}
-                                accept={acceptedFileTypes.join(',')}
-                                />
-                            </VisuallyHidden>
-                            </DropZone>
-                        </ThemeProvider>
+                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
+
+                      <div className="pseudoheading">Other Vehicle Options</div>
+
+                      <ThemeProvider theme={toggleTheme}>
+                          <div className="fineprint">Click the buttons to select or un-select options</div>
+                          <ToggleButton height={"4em"} className = 'btnmax'>Vehicle is a truck or van</ToggleButton>&nbsp;
+                          <ToggleButton height={"4em"} className = 'btnmax'>Disabled permit is displayed</ToggleButton>&nbsp;
+                          <Divider size="small" orientation="horizontal" margin={'30px 0px 20px 0px'} />
+                      </ThemeProvider>
+
                     </div>
                   </>
                 )},
@@ -314,8 +368,26 @@ export const CanIParkHere: React.FC = () => {
                           <>
                             <ul className="list-disc pl-5" dangerouslySetInnerHTML={{ __html: uploadMessage }} />
                           </>
+                          <Badge maxWidth={"25em"} textAlign={"center"} border="1px" borderColor={"#333333"} variation="info">Parking here is free</Badge>
                         </Message>
                         <br />
+
+                        <ThemeProvider theme={acctheme}>
+                         <Accordion 
+                          items={[
+                            {
+                              trigger: 'All Sign Information',
+                              value: 'sign2',
+                              content: <Message variation="plain" colorTheme="neutral">{signContent}</Message>
+                            },
+                            {
+                              trigger: 'All Sign Information2',
+                              value: 'sign3',
+                              content: <Message variation="plain" colorTheme="neutral">aaa<br />bbb</Message>
+                            },
+                          ]}
+                          />
+                        </ThemeProvider>
                       </>
                     }
                   
@@ -450,6 +522,7 @@ export const CanIParkHere: React.FC = () => {
             var notoktopark = false;
             var park_message = "";
             var warn_message = "";
+            var all_sign_info = "";
 
             // check all the returned items
             if (bodytext && bodytext.items) {
@@ -458,13 +531,18 @@ export const CanIParkHere: React.FC = () => {
               {
                 setTab('3')                      // move to next tab
                 setDisabledTab3(false);
-                
+      
+                // build up all sign info list for full display option
+                all_sign_info += "Sign Type: " + bodytext.items[idx].category
+                all_sign_info += "<br />"
+
                 if (bodytext.items[idx].isnow === true)
                 {
                   if  (bodytext.items[idx].noparking === false)
                   {
                     oktopark = true;
                     setMessageHeading("Yes, you can park here:");
+                    setSignContent("Hi");
                     park_message += "For up to " + bodytext.items[idx].hours + " hours";
                     park_message += "<br />Up until " + bodytext.items[idx].totime;
 
@@ -483,7 +561,7 @@ export const CanIParkHere: React.FC = () => {
                   else
                   {
                     notoktopark = true;
-                    warn_message += "There is a no parking or no standing zone indicated on this sign";
+                    warn_message = "There is a no parking or no standing zone indicated on this sign";
                     if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
                     {
                       warn_message += "<br />You cannot park to the ";
@@ -498,6 +576,10 @@ export const CanIParkHere: React.FC = () => {
                 }
               }
 
+              // display our full list
+              setSignContent(all_sign_info);
+           
+            
             } else {
               //
             }
@@ -507,6 +589,7 @@ export const CanIParkHere: React.FC = () => {
               setMessageHeading("Yes, you can park here");
               setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
             }
+
 
 
 
