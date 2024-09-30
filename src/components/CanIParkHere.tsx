@@ -67,19 +67,6 @@ const toggleTheme = createTheme({
   },
 });
 
-// theme to bypass the default theme used for the drop zone.
-const dztheme = createTheme({
-  name: 'dropzone-theme',
-  tokens: {
-    components: {
-      dropzone: {
-        backgroundColor: '#f9fdff',
-        borderColor: '{colors.primary.80}',
-      },
-    },
-  },
-});
-
 
 // custom theme for tabs bar to provide better feedback.
 const tabtheme = createTheme({
