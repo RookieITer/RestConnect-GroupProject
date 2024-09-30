@@ -56,10 +56,10 @@ const toggleTheme = createTheme({
           backgroundColor: { value: '{colors.red.10}' },
           },
       _pressed: {
-          backgroundColor: { value: '{colors.green.10}' },
+          backgroundColor: { value: '{colors.green.20}' },
           color: { value: '#666666' },
           _hover: {
-            backgroundColor: { value: '{colors.green.10}' },
+            backgroundColor: { value: '{colors.green.20}' },
           },
         },
       },
