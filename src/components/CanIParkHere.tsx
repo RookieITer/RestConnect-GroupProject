@@ -76,6 +76,10 @@ const tabtheme = createTheme({
       tabs: {
         item: {
           color: { value: '#666666' },
+          paddingHorizontal: { value: '9px' },
+          paddingVertical: { value: '9px' },
+          fontSize: { value: '0.9em' },
+          fontWeight: { value: '500' },
           _hover: {
             color: { value: '#66bbbb' },
           },
@@ -111,7 +115,7 @@ export const CanIParkHere: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [warningMessage, setWarningMessage] = useState('');
     const [signContent, setSignContent] = useState('');
-    const [selectedDirection, setSelectedDirection] = useState('');
+    const [selectedDirection, setSelectedDirection] = useState(null);
     //const [debug1, setDebug1] = useState('');
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
@@ -167,9 +171,9 @@ export const CanIParkHere: React.FC = () => {
                             <ToggleButton height={"6em"} width={"6em"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
-                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
+                      <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
 
-                      <div className="pseudoheading">Select Your Image</div>
+                      <div className="pseudoheading">Select Your Photo</div>
                       <div className="fineprint">Mobile devices will prompt you to take a photo</div>
                       <Button className = 'btnmax' isDisabled = {(selectedDirection == null)}  variation="primary"onClick={() => hiddenInput.current?.click()}>Browse</Button>
                       <VisuallyHidden>
@@ -183,7 +187,7 @@ export const CanIParkHere: React.FC = () => {
                           />
                       </VisuallyHidden>
 
-                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
+                      <Divider size="small" orientation="horizontal" margin={'40px 0px 20px 0px'} />
 
                       <div className="pseudoheading">Other Vehicle Options</div>
 
@@ -619,7 +623,7 @@ export const CanIParkHere: React.FC = () => {
           <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
             <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
               <div>
-                <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"}>
+                <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"} padding={"0px 0px 3px 15px"}>
                     <Heading level={3}>Can I Park Here?</Heading>
                 </Card>
 

@@ -25,5 +25,12 @@
 .pseudoheading {
   font-size: 1.10em;
   font-weight: 500;
+  color: #666666;
   padding: 0px 0px 0px 0px;
+}
+
+.pageheading {
+  font-size: 1.20em;
+  font-weight: 600;
+  padding: 6px 0px 6px 0px;
 }
