@@ -47,13 +47,13 @@ const toggleTheme = createTheme({
       borderColor: { value: '{colors.blue.90}' },
       color: { value: '{colors.blue.90}' },
       _hover: {
-          backgroundColor: { value: '{colors.green.10}' },
+          backgroundColor: { value: '{colors.white}' },
         },
       _focus: {
           color: { value: '#666666' },
         },
       _active: {
-          backgroundColor: { value: '{colors.green.40}' },
+          backgroundColor: { value: '{colors.red.10}' },
           },
       _pressed: {
           backgroundColor: { value: '{colors.green.10}' },
