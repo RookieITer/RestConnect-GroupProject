@@ -78,7 +78,7 @@ export const DashboardMainContent: React.FC = () => {
                 >
                     <motion.div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8 p-6 rounded-lg" variants={itemVariants}>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
-                            Find your perfect unwinding spot between gigs
+                            Gig worker life made easy
                         </h1>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
                             <b>Need a break?</b>&nbsp;
@@ -113,7 +113,7 @@ export const DashboardMainContent: React.FC = () => {
                         RestConnect Your On-the-Road Companion
                     </motion.h2>
                     <motion.p className="text-base md:text-lg text-gray-700 mb-6 text-center" variants={itemVariants}>
-                        Navigate Rest Stops Confidently with Our Smart Tools!
+                        Navigate Confidently with Our Smart Tools!
                     </motion.p>
                     <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={containerVariants}>
                         {[
