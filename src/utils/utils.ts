@@ -15,12 +15,10 @@ export const filterToilets = (toilet: ToiletData, filters: FilterState['toiletFi
   )
 }
 
-export const filterOpenSpaces = (space: OpenSpaceData, filters: FilterState['openSpaceFilters'], locationType: FilterState['locationType']) => {
-  if (locationType === 'all') return true
+export const filterOpenSpaces = (space: OpenSpaceData, filters: FilterState['openSpaceFilters']) => {
   const isMelbourne = space.LGA.toLowerCase().includes('melbourne')
   return (isMelbourne && filters.melbourne) || (!isMelbourne && filters.others)
 }
-
 
 export const handleCopyLocation = (location: string) => {
   return new Promise<void>((resolve, reject) => {

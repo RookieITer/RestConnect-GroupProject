@@ -30,7 +30,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 mapboxAccessToken="pk.eyJ1IjoibW9uYXNoYXVyYWUiLCJhIjoiY2pyMGJqbzV2MDk3dTQ0bndqaHA4d3hzeSJ9.TDvqYvsmY1DHhE8N8_UbFg"
             >
-                {(filter.locationType === 'all' || filter.locationType === 'toilets') && toilets.filter(toilet => filterToilets(toilet, filter.toiletFilters)).map((toilet) => (
+                {filter.locationTypes.includes('toilets') && toilets.filter(toilet => filterToilets(toilet, filter.toiletFilters)).map((toilet) => (
                     <Marker
                         key={`toilet-${toilet.Toilet_ID}-${toilet.lat}-${toilet.lon}`}
                         latitude={toilet.lat}
@@ -46,7 +46,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                         </div>
                     </Marker>
                 ))}
-                {(filter.locationType === 'all' || filter.locationType === 'openSpaces') && openSpaces.filter(space => filterOpenSpaces(space, filter.openSpaceFilters, filter.locationType)).map((space) => (
+                {filter.locationTypes.includes('openSpaces') && openSpaces.filter(space => filterOpenSpaces(space, filter.openSpaceFilters)).map((space) => (
                     <Marker
                         key={`space-${space.PARK_NAME}-${space.latitude}-${space.longitude}`}
                         latitude={space.latitude}
@@ -62,7 +62,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                         </div>
                     </Marker>
                 ))}
-                {(filter.locationType === 'all' || filter.locationType === 'parking') && parkingSpaces.map((space) => (
+                {filter.locationTypes.includes('parking') && parkingSpaces.map((space) => (
                     <Marker
                         key={`parking-${space.segment_id}-${space.geo_point}`}
                         latitude={parseFloat(space.geo_point.split(',')[0])}

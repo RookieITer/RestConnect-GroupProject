@@ -35,8 +35,10 @@ export interface ApiResponse {
     body: string
 }
 
+export type LocationType = 'toilets' | 'openSpaces' | 'parking'
+
 export interface FilterState {
-    locationType: 'all' | 'toilets' | 'openSpaces' | 'parking'
+    locationTypes: LocationType[]
     toiletFilters: {
         male: boolean
         female: boolean
@@ -47,3 +49,14 @@ export interface FilterState {
         others: boolean
     }
 }
+
+export interface LocationTypeOption {
+    value: LocationType
+    label: string
+}
+
+export const locationTypeOptions: LocationTypeOption[] = [
+    { value: 'toilets', label: 'Toilets' },
+    { value: 'openSpaces', label: 'Open Spaces' },
+    { value: 'parking', label: 'Parking' }
+]

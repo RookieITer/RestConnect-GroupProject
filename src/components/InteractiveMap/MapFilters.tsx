@@ -1,74 +1,108 @@
 import React from 'react'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { FilterState } from '@/utils/types'
-import './extra.css'
-import { Button } from '@aws-amplify/ui-react'
+import { FilterState, LocationType } from '@/utils/types'
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react"
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { LocationTypeFilter } from './LocationTypeFilter'
+import { Selection } from "@nextui-org/react"
 
 interface MapFiltersProps {
     filter: FilterState
-    onFilterChange: (key: string) => void
-    onLocationTypeChange: (value: FilterState['locationType']) => void
+    onFilterChange: (category: string, options: string[]) => void
+    onLocationTypeChange: (types: LocationType[]) => void
 }
 
 export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, onLocationTypeChange }) => {
+    const toiletOptions = [
+        { key: 'male', label: 'Male' },
+        { key: 'female', label: 'Female' },
+        { key: 'changeFacilities', label: 'Change Facilities' },
+    ]
+
+    const openSpaceOptions = [
+        { key: 'melbourne', label: 'Melbourne' },
+        { key: 'others', label: 'Others' },
+    ]
+
+    const handleSubcategoryChange = (category: string, keys: Selection) => {
+        onFilterChange(category, Array.from(keys) as string[])
+    }
+
+    const dropdownStyles = {
+        backgroundColor: 'white',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+    }
+
     return (
         <div className="mb-4 flex flex-wrap gap-4">
-            <Select onValueChange={onLocationTypeChange}>
-                <SelectTrigger className="w-[180px] bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm">
-                    <SelectValue placeholder="Select location type" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="toilets">Toilets</SelectItem>
-                    <SelectItem value="openSpaces">Open Spaces</SelectItem>
-                    <SelectItem value="parking">Parking</SelectItem>
-                </SelectContent>
-            </Select>
+            <LocationTypeFilter
+                selectedTypes={filter.locationTypes}
+                onChange={onLocationTypeChange}
+            />
 
-            {filter.locationType === 'toilets' && (
-                <div className="flex flex-wrap gap-4">
-                    {Object.entries(filter.toiletFilters).map(([key, value]) => (
-                        <div key={key} className="flex items-center space-x-2">
-                            <Checkbox
-                                id={key}
-                                checked={value}
-                                onCheckedChange={() => onFilterChange(key)}
-                            />
-                            <Label htmlFor={key}>
-                                {key === 'changeFacilities' ? 'Change Facilities' : key.charAt(0).toUpperCase() + key.slice(1)}
-                            </Label>
-                        </div>
-                    ))}
-                </div>
+            {filter.locationTypes.includes('toilets') && (
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button
+                            variant="flat"
+                            className="capitalize bg-black text-white"
+                            endContent={<ChevronDownIcon className="h-4 w-4 text-white" />}
+                        >
+                            Toilet Facilities
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        aria-label="Toilet Facilities"
+                        selectionMode="multiple"
+                        selectedKeys={new Set(Object.entries(filter.toiletFilters)
+                            .filter(([, value]) => value)
+                            .map(([key]) => key))}
+                        onSelectionChange={(keys) => handleSubcategoryChange('toiletFilters', keys)}
+                        className="bg-black text-white"
+                        style={dropdownStyles}
+                    >
+                        {toiletOptions.map((option) => (
+                            <DropdownItem key={option.key} className="bg-black hover:bg-black text-white">
+                                {option.label}
+                            </DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
             )}
 
-            {filter.locationType === 'openSpaces' && (
-                <div className="flex flex-wrap gap-4">
-                    {Object.entries(filter.openSpaceFilters).map(([key, value]) => (
-                        <div key={key} className="flex items-center space-x-2">
-                            <Checkbox
-                                id={key}
-                                checked={value}
-                                onCheckedChange={() => onFilterChange(key)}
-                            />
-                            <Label htmlFor={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
-                        </div>
-                    ))}
-                </div>
+            {filter.locationTypes.includes('openSpaces') && (
+                <Dropdown>
+                    <DropdownTrigger>
+                        <Button
+                            variant="flat"
+                            className="capitalize bg-green-400"
+                            endContent={<ChevronDownIcon className="h-4 w-4" />}
+                        >
+                            Open Spaces
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        aria-label="Open Spaces"
+                        selectionMode="multiple"
+                        selectedKeys={new Set(Object.entries(filter.openSpaceFilters)
+                            .filter(([, value]) => value)
+                            .map(([key]) => key))}
+                        onSelectionChange={(keys) => handleSubcategoryChange('openSpaceFilters', keys)}
+                        className="bg-green-400"
+                        style={dropdownStyles}
+                    >
+                        {openSpaceOptions.map((option) => (
+                            <DropdownItem key={option.key} className="bg-green-400 hover:bg-green-400">
+                                {option.label}
+                            </DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
             )}
 
-            {filter.locationType === 'parking' && (
-                <div className='rowformat'>
-                    <Button variation="primary" size="small" onClick={() => window.location.href='CanIParkHere'}>Need help with a parking sign? Click Here</Button>
-                </div>
+            {filter.locationTypes.includes('parking') && (
+                <Button onClick={() => window.location.href='CanIParkHere'} className="bg-yellow-300">
+                    Need help with a parking sign? Click Here
+                </Button>
             )}
         </div>
     )
