@@ -16,6 +16,8 @@ const handleGetDirections = (lat: number, lon: number) => {
 
 export const ToiletPopup: React.FC<PopupProps> = ({ item, onClose }) => {
     const toilet = item as ToiletData
+    const hasChangeFacilities = toilet.wheelchair.toLowerCase() === 'yes' || toilet.baby_facil.toLowerCase() === 'yes'
+
     return (
         <Popup
             latitude={toilet.lat}
@@ -35,8 +37,13 @@ export const ToiletPopup: React.FC<PopupProps> = ({ item, onClose }) => {
                 <h3 className="font-bold mb-2 pr-8 text-gray-800">{toilet.Location}</h3>
                 <p className="text-gray-700">Male: {toilet.male}</p>
                 <p className="text-gray-700">Female: {toilet.female}</p>
-                <p className="text-gray-700">Wheelchair: {toilet.wheelchair}</p>
-                <p className="text-gray-700">Baby Facilities: {toilet.baby_facil}</p>
+                <p className="text-gray-700">Change Facilities: {hasChangeFacilities ? 'Yes' : 'No'}</p>
+                {hasChangeFacilities && (
+                    <div className="text-sm text-gray-600 ml-4">
+                        {toilet.wheelchair.toLowerCase() === 'yes' && <p>- Wheelchair accessible</p>}
+                        {toilet.baby_facil.toLowerCase() === 'yes' && <p>- Baby changing facilities</p>}
+                    </div>
+                )}
                 <Button
                     onClick={() => handleCopyLocation(toilet.Location)}
                     className="mt-2 w-full bg-pink-500 hover:bg-pink-600 text-white"
@@ -120,9 +127,7 @@ export const ParkingPopup: React.FC<PopupProps> = ({ item, onClose }) => {
                     <Icons.X className="w-6 h-6" />
                 </button>
                 <h3 className="font-bold mb-2 pr-8 text-gray-800">{parking.onstreet}</h3>
-                <p className="text-gray-700">Type: {parking.str_type}</p>
                 <p className="text-gray-700">Restriction: {parking.restriction_display}</p>
-                <p className="text-gray-700">Day: {parking.day_of_week}</p>
                 <p className="text-gray-700">Time: {parking.time_restrictions_start} - {parking.time_restrictions_finish}</p>
                 <Button
                     onClick={() => handleCopyLocation(parking.onstreet)}

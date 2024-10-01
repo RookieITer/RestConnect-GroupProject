@@ -3,7 +3,7 @@ import Map, { Marker } from 'react-map-gl'
 import { Icons } from '@/components/Icons'
 import { ToiletData, OpenSpaceData, ParkingData, FilterState } from '@/utils/types'
 import { ToiletPopup, OpenSpacePopup, ParkingPopup } from './Popups'
-import { filterToilets, filterOpenSpaces, filterParkingSpaces } from '@/utils/utils'
+import { filterToilets, filterOpenSpaces } from '@/utils/utils'
 import { FaToilet } from 'react-icons/fa'
 
 interface MapViewProps {
@@ -62,7 +62,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
                         </div>
                     </Marker>
                 ))}
-                {(filter.locationType === 'all' || filter.locationType === 'parking') && parkingSpaces.filter(space => filterParkingSpaces(space, filter.parkingFilters)).map((space) => (
+                {(filter.locationType === 'all' || filter.locationType === 'parking') && parkingSpaces.map((space) => (
                     <Marker
                         key={`parking-${space.segment_id}-${space.geo_point}`}
                         latitude={parseFloat(space.geo_point.split(',')[0])}

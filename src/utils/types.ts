@@ -40,17 +40,10 @@ export interface FilterState {
     toiletFilters: {
         male: boolean
         female: boolean
-        wheelchair: boolean
-        babyFacilities: boolean
+        changeFacilities: boolean
     }
     openSpaceFilters: {
         melbourne: boolean
         others: boolean
-    }
-    parkingFilters: {
-        councilMajor: boolean
-        councilMinor: boolean
-        weekday: boolean
-        weekend: boolean
     }
 }

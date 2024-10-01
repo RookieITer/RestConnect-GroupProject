@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Heading } from '@aws-amplify/ui-react'; 
+import { Heading } from '@aws-amplify/ui-react'
 
 import { ToiletData, OpenSpaceData, ParkingData, FilterState } from '@/utils/types'
 import { fetchToilets, fetchOpenSpaces, fetchParkingData } from '@/utils/api'
@@ -21,18 +21,11 @@ export const InteractiveMap: React.FC = () => {
         toiletFilters: {
             male: false,
             female: false,
-            wheelchair: false,
-            babyFacilities: false
+            changeFacilities: false
         },
         openSpaceFilters: {
             melbourne: true,
             others: true
-        },
-        parkingFilters: {
-            councilMajor: true,
-            councilMinor: true,
-            weekday: true,
-            weekend: true
         }
     })
 
@@ -76,22 +69,27 @@ export const InteractiveMap: React.FC = () => {
         }
     }, [openSpaces.length])
 
-    const handleFilterChange = useCallback((key: keyof FilterState['toiletFilters'] | keyof FilterState['openSpaceFilters'] | keyof FilterState['parkingFilters']) => {
-        setFilter(prev => ({
-            ...prev,
-            toiletFilters: key in prev.toiletFilters ? {
-                ...prev.toiletFilters,
-                [key]: !prev.toiletFilters[key as keyof FilterState['toiletFilters']]
-            } : prev.toiletFilters,
-            openSpaceFilters: key in prev.openSpaceFilters ? {
-                ...prev.openSpaceFilters,
-                [key]: !prev.openSpaceFilters[key as keyof FilterState['openSpaceFilters']]
-            } : prev.openSpaceFilters,
-            parkingFilters: key in prev.parkingFilters ? {
-                ...prev.parkingFilters,
-                [key]: !prev.parkingFilters[key as keyof FilterState['parkingFilters']]
-            } : prev.parkingFilters
-        }))
+    const handleFilterChange = useCallback((key: string) => {
+        setFilter(prev => {
+            if (key in prev.toiletFilters) {
+                return {
+                    ...prev,
+                    toiletFilters: {
+                        ...prev.toiletFilters,
+                        [key]: !prev.toiletFilters[key as keyof FilterState['toiletFilters']]
+                    }
+                }
+            } else if (key in prev.openSpaceFilters) {
+                return {
+                    ...prev,
+                    openSpaceFilters: {
+                        ...prev.openSpaceFilters,
+                        [key]: !prev.openSpaceFilters[key as keyof FilterState['openSpaceFilters']]
+                    }
+                }
+            }
+            return prev
+        })
     }, [])
 
     const handleLocationTypeChange = useCallback((value: FilterState['locationType']) => {
@@ -107,32 +105,30 @@ export const InteractiveMap: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
-        <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
-
-            <Heading level={3}>Find the nearest rest areas and amenities</Heading><br />
-            {error && (
-                <Alert variant="destructive" className="mb-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                </Alert>
-            )}
-            <MapFilters
-                filter={filter}
-                onFilterChange={handleFilterChange}
-                onLocationTypeChange={handleLocationTypeChange}
-            />
-
-            <MapView
-                toilets={toilets}
-                openSpaces={openSpaces}
-                parkingSpaces={parkingSpaces}
-                filter={filter}
-                selectedItem={selectedItem}
-                onItemSelect={setSelectedItem}
-                isLoadingOpenSpaces={isLoadingOpenSpaces}
-            />
-        </div>
+            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+                <Heading level={3}>Find the nearest rest areas and amenities</Heading><br />
+                {error && (
+                    <Alert variant="destructive" className="mb-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                )}
+                <MapFilters
+                    filter={filter}
+                    onFilterChange={handleFilterChange}
+                    onLocationTypeChange={handleLocationTypeChange}
+                />
+                <MapView
+                    toilets={toilets}
+                    openSpaces={openSpaces}
+                    parkingSpaces={parkingSpaces}
+                    filter={filter}
+                    selectedItem={selectedItem}
+                    onItemSelect={setSelectedItem}
+                    isLoadingOpenSpaces={isLoadingOpenSpaces}
+                />
+            </div>
         </div>
     )
 }
