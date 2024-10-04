@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { Heading } from '@aws-amplify/ui-react'
 import { useNavigate } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis } from 'recharts'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, Play } from 'lucide-react'
@@ -29,6 +29,23 @@ interface CrimeData {
 }
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE']
+
+const CustomizedPointer = ({ cx, cy, midAngle, outerRadius, safety_index }: { cx: number, cy: number, midAngle: number, outerRadius: number, safety_index: number }) => {
+    const RADIAN = Math.PI / 180;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const mx = cx + (outerRadius + 15) * cos;
+    const my = cy + (outerRadius + 15) * sin;
+    return (
+        <g>
+            <circle cx={mx} cy={my} r={4} fill="#666" stroke="none" />
+            <path d={`M${cx},${cy}L${mx},${my}`} strokeWidth={2} stroke="#666" fill="none" />
+            <text x={mx + (cos >= 0 ? 1 : -1) * 12} y={my} textAnchor={cos >= 0 ? 'start' : 'end'} dominantBaseline="central">
+                {safety_index.toFixed(2)}
+            </text>
+        </g>
+    );
+};
 
 export default function Statistics() {
     const [crashData, setCrashData] = useState<CrashData[]>([])
@@ -119,7 +136,7 @@ export default function Statistics() {
         .sort((a, b) => b.Incidents_Recorded - a.Incidents_Recorded)
         .slice(0, 5)
 
-    const safetyIndex = selectedPostcodeData[0]?.Safety_Index
+    const safetyIndex = selectedPostcodeData[0]?.Safety_Index || 0
     const suggestedVideos = selectedPostcodeData
         .map(item => item.Suggested_Video)
         .filter((video, index, self) => video && self.indexOf(video) === index) as string[]
@@ -177,28 +194,27 @@ export default function Statistics() {
         return (
             <div className="mt-6 p-4 bg-gray-100 rounded-lg">
                 <h3 className="text-lg font-semibold mb-2">Crime Data Analysis</h3>
-                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded incidents across the top 5 risk categories.</p>
-                <p>The most prevalent type of offense is {highestRisk.Offence_Division}, with {highestRisk.Incidents_Recorded} recorded incidents.</p>
-                <p>The overall safety index for this area is {safetyIndex?.toFixed(2)}, where a higher index indicates a safer area.</p>
-                <p>Based on this data, residents and visitors should be particularly vigilant about {highestRisk.Offence_Division.toLowerCase()} in this area. However, it's important to note that this data represents reported incidents and may not capture all aspects of safety in the area.</p>
+                <p>The overall restconnect risk score for this area is {safetyIndex.toFixed(2)}, where a higher score
+                    indicates a
+                    safer area.</p>
+                <p className="font-semibold text-red-500">The most prevalent type of offense is {highestRisk?.Offence_Division},
+                    with {highestRisk?.Incidents_Recorded} recorded incidents.</p>
+                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded
+                    incidents across the top 5 risk categories.</p>
+                <p>Based on this data, residents and visitors should be particularly vigilant
+                    about {highestRisk?.Offence_Division.toLowerCase()} in this area. However, it's important to note
+                    that this data represents reported incidents and may not capture all aspects of safety in the
+                    area.</p>
             </div>
         )
     }
 
-    const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ name: string; value: number }> }) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="bg-white p-4 border rounded shadow-lg">
-                    {top5Risks.map((risk, index) => (
-                        <div key={risk.Offence_Division} className="mb-2">
-                            <span style={{ color: COLORS[index % COLORS.length] }}>{risk.Offence_Division}</span>
-                            : {risk.Incidents_Recorded}
-                        </div>
-                    ))}
-                </div>
-            )
-        }
-        return null
+    const getColorInterpretation = (value: number) => {
+        if (value >= 4) return 'Low Risk'
+        if (value >= 3) return 'Moderately Low Risk'
+        if (value >= 2) return 'Moderate Risk'
+        if (value >= 1) return 'Moderately High Risk'
+        return 'High Risk'
     }
 
     if (loading) {
@@ -285,44 +301,56 @@ export default function Statistics() {
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-2xl font-semibold mb-4">Top 5 Risks in {selectedPostcode}</h2>
-                            <ResponsiveContainer width="100%" height={400}>
-                                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={top5Risks}>
-                                    <PolarGrid />
-                                    <PolarAngleAxis dataKey="Offence_Division" />
-                                    <PolarRadiusAxis angle={30} domain={[0, 'auto']} />
-                                    {top5Risks.map((entry, index) => (
-                                        <Radar
-                                            key={entry.Offence_Division}
-                                            name={entry.Offence_Division}
-                                            dataKey="Incidents_Recorded"
-                                            stroke={COLORS[index % COLORS.length]}
-                                            fill={COLORS[index % COLORS.length]}
-                                            fillOpacity={0.6}
-                                        />
-                                    ))}
-                                    <Tooltip content={<CustomTooltip />} />
-                                </RadarChart>
+                            <h2 className="text-2xl font-semibold mb-4">Crime Risk Score for {selectedPostcode}</h2>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <RadialBarChart
+                                    innerRadius="60%"
+                                    outerRadius="100%"
+                                    data={[{name: 'Safety Index', value: safetyIndex}]}
+                                    startAngle={180}
+                                    endAngle={0}
+                                    barSize={30}
+                                >
+                                    <defs>
+                                        <linearGradient id="safetyGradient" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stopColor="#F44336"/>
+                                            <stop offset="60%" stopColor="#FFC107"/>
+                                            <stop offset="100%" stopColor="#4CAF50"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <PolarAngleAxis
+                                        type="number"
+                                        domain={[0, 5]}
+                                        angleAxisId={0}
+                                        tick={false}
+                                    />
+                                    <RadialBar
+                                        background
+                                        dataKey="value"
+                                        cornerRadius={30}
+                                        fill="url(#safetyGradient)"
+                                    />
+                                    <CustomizedPointer
+                                        cx={150}
+                                        cy={150}
+                                        midAngle={90 - (safetyIndex / 5) * 180}
+                                        outerRadius={100}
+                                        safety_index={safetyIndex}
+                                    />
+                                </RadialBarChart>
                             </ResponsiveContainer>
-                            <div className="mt-4 flex flex-wrap justify-center">
-                                {top5Risks.map((risk, index) => (
-                                    <div key={risk.Offence_Division} className="flex items-center mr-4 mb-2">
-                                        <div className="w-4 h-4 mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                                        <span>{risk.Offence_Division}</span>
-                                    </div>
-                                ))}
+                            <div className="mt-4 text-center">
+                                <p className="text-lg font-semibold">Rest Connect Risk Score: {safetyIndex.toFixed(2)}</p>
+                                <p className="text-sm text-gray-600">
+                                    Interpretation: {getColorInterpretation(safetyIndex)}
+                                </p>
                             </div>
-                            {safetyIndex !== undefined && (
-                                <div className="mt-4 p-4 bg-blue-100 rounded-md">
-                                    <p className="font-semibold">Safety Index for {selectedPostcode}: {safetyIndex.toFixed(2)}</p>
-                                </div>
-                            )}
                             {analyzeCrimeData()}
                             {suggestedVideos.length > 0 && (
                                 <div className="mt-4">
                                     <h3 className="text-lg font-semibold mb-2">Suggested Videos:</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                        {suggestedVideos.map((video, index)  => (
+                                        {suggestedVideos.map((video, index) => (
                                             <div key={index} className="bg-gray-100 p-4 rounded-lg">
                                                 <img
                                                     src={`https://img.youtube.com/vi/${getVideoId(video)}/0.jpg`}
@@ -333,7 +361,7 @@ export default function Statistics() {
                                                     onClick={() => handleVideoSelect(video)}
                                                     className="w-full flex items-center justify-center"
                                                 >
-                                                    <Play className="mr-2" size={16} />
+                                                    <Play className="mr-2" size={16}/>
                                                     Play Video {index + 1}
                                                 </Button>
                                             </div>
@@ -358,7 +386,7 @@ export default function Statistics() {
                             )}
                             {videoError && (
                                 <div className="mt-4 p-4 bg-yellow-100 rounded-md flex items-center">
-                                    <AlertCircle className="text-yellow-500 mr-2" />
+                                    <AlertCircle className="text-yellow-500 mr-2"/>
                                     <p>{videoErrorMessage}</p>
                                 </div>
                             )}
