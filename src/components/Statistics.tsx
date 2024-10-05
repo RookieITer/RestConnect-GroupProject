@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis } from 'recharts'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle, Play } from 'lucide-react'
+import { AlertCircle, Play, Bike, Car, User } from 'lucide-react'
 
 interface CrashData {
     Suburb: string
@@ -217,6 +217,19 @@ export default function Statistics() {
         return 'High Risk'
     }
 
+    const SafestModeIcon = () => {
+        switch (safestMode.mode.toLowerCase()) {
+            case 'bicyclist':
+                return <Bike size={64} className="text-green-500" />;
+            case 'driver':
+                return <Car size={64} className="text-blue-500" />;
+            case 'passenger':
+                return <User size={64} className="text-purple-500" />;
+            default:
+                return null;
+        }
+    };
+
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
     }
@@ -250,22 +263,34 @@ export default function Statistics() {
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h2 className="text-2xl font-semibold mb-4">Crash Data by Speed Zone and Transport Mode</h2>
+                            <div className="flex flex-col items-center mb-6">
+                                <SafestModeIcon />
+                                <p className="mt-2 text-center">
+                                    Safest transport mode in {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
+                                </p>
+                            </div>
+                            {analyzeCrashData()}
                             <ResponsiveContainer width="100%" height={400}>
                                 <LineChart
                                     data={crashChartData}
-                                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                                    margin={{top: 20, right: 30, left: 20, bottom: 60}}
                                 >
-                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis
                                         dataKey="SPEED_ZONE"
                                         type="number"
                                         domain={[0, 100]}
                                         ticks={[0, 20, 40, 60, 80, 100]}
-                                        label={{ value: 'Speed Zone (km/h)', position: 'insideBottom', offset: -40 }}
+                                        label={{value: 'Speed Zone (km/h)', position: 'insideBottom', offset: -40}}
                                     />
-                                    <YAxis label={{ value: 'Number of Crashes', angle: -90, position: 'insideLeft', offset: 10 }} />
-                                    <Tooltip />
-                                    <Legend verticalAlign="top" height={36} />
+                                    <YAxis label={{
+                                        value: 'Number of Crashes',
+                                        angle: -90,
+                                        position: 'insideLeft',
+                                        offset: 10
+                                    }}/>
+                                    <Tooltip/>
+                                    <Legend verticalAlign="top" height={36}/>
                                     {transportModes.map((mode, index) => (
                                         <Line
                                             key={mode}
@@ -277,10 +302,6 @@ export default function Statistics() {
                                     ))}
                                 </LineChart>
                             </ResponsiveContainer>
-                            <p className="mt-4">
-                                Safest transport mode in {selectedSuburb}: <strong>{safestMode.mode}</strong>
-                            </p>
-                            {analyzeCrashData()}
                         </div>
                     </div>
                 )}
