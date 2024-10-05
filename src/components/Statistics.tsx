@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { Heading } from '@aws-amplify/ui-react'
 import { useNavigate } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis } from 'recharts'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, Play, Bike, Car, User } from 'lucide-react'
@@ -271,36 +271,32 @@ export default function Statistics() {
                             </div>
                             {analyzeCrashData()}
                             <ResponsiveContainer width="100%" height={400}>
-                                <LineChart
+                                <BarChart
                                     data={crashChartData}
                                     margin={{top: 20, right: 30, left: 20, bottom: 60}}
+                                    layout="vertical"
                                 >
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis
-                                        dataKey="SPEED_ZONE"
                                         type="number"
-                                        domain={[0, 100]}
-                                        ticks={[0, 20, 40, 60, 80, 100]}
-                                        label={{value: 'Speed Zone (km/h)', position: 'insideBottom', offset: -40}}
+                                        label={{value: 'Number of Accidents', position: 'insideBottom', offset: -10}}
                                     />
-                                    <YAxis label={{
-                                        value: 'Number of Crashes',
-                                        angle: -90,
-                                        position: 'insideLeft',
-                                        offset: 10
-                                    }}/>
+                                    <YAxis
+                                        dataKey="SPEED_ZONE"
+                                        type="category"
+                                        label={{value: 'Speed Zone (km/h)', angle: -90, position: 'insideLeft', offset: 10}}
+                                    />
                                     <Tooltip/>
                                     <Legend verticalAlign="top" height={36}/>
                                     {transportModes.map((mode, index) => (
-                                        <Line
+                                        <Bar
                                             key={mode}
-                                            type="monotone"
                                             dataKey={mode}
-                                            stroke={COLORS[index % COLORS.length]}
-                                            dot={false}
+                                            stackId="a"
+                                            fill={COLORS[index % COLORS.length]}
                                         />
                                     ))}
-                                </LineChart>
+                                </BarChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
