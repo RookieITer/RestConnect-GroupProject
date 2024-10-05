@@ -523,9 +523,9 @@ export const CanIParkHere: React.FC = () => {
             var park_message = "";
             var warn_message = "";
             var all_sign_info = "";
-            var has_loading = false;
-            var has_noparking = false;
-            var has_disabled = false;
+//            var has_loading = false;
+//            var has_noparking = false;
+//            var has_disabled = false;
             var has_time_restriction = false;
 
             var direction_and_time_ok = false;
@@ -573,14 +573,14 @@ export const CanIParkHere: React.FC = () => {
                   has_time_restriction = true;
 
                 // used later to determine if being outside times is ok
-                if (bodytext.items[idx].category == 'LOADING')
-                  has_loading = true;
+//                if (bodytext.items[idx].category == 'LOADING')
+//                  has_loading = true;
                 
-                if (bodytext.items[idx].category == 'DISABLED')
-                  has_disabled = true;
+//                if (bodytext.items[idx].category == 'DISABLED')
+//                  has_disabled = true;
 
-                if (bodytext.items[idx].category == 'NOPARKING')
-                  has_noparking = true;
+//               if (bodytext.items[idx].category == 'NOPARKING')
+//                  has_noparking = true;
 
                 //-------------------------------------------------------------
                 // regular parking
