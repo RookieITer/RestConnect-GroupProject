@@ -5,7 +5,8 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Button, Divider } from '@aws-amplify/ui-react';
 import { Link } from 'react-router-dom';
-import { Map, ClipboardList, Image, AlertTriangle, Newspaper } from 'lucide-react';
+import { Map, ClipboardList, Image, Newspaper } from 'lucide-react';
+import {FaHandHoldingMedical} from "react-icons/fa6";
 
 export const DashboardMainContent: React.FC = () => {
     const controls1 = useAnimation();
@@ -77,14 +78,13 @@ export const DashboardMainContent: React.FC = () => {
                     variants={containerVariants}
                 >
                     <motion.div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8 p-6 rounded-lg" variants={itemVariants}>
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-green-400 leading-tight">
                             Gig worker life made easy
                         </h1>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
-                            <b>Need a break?</b>&nbsp;
-                            Explore Melbourne's rest spots, amenities, and simplified parking information to ensure peace of mind with RestConnect.
+                            <b>Master Your Gig Journey!</b>&nbsp;
+                            Explore Melbourne's rest spots, amenities, and simplified parking information, along with essential resources from our Support Hub, to ensure peace of mind with RestConnect.
                             <br /><br />
-                            Avoid parking fines, all while finding the perfect spot to recharge!
                         </p>
                         <Link to="/interactive-map">
                             <Button variation="primary">Locate the nearest rest area and amenities</Button>
@@ -120,7 +120,7 @@ export const DashboardMainContent: React.FC = () => {
                             { icon: Map, title: "Explore Rest Areas Map", description: "Our interactive map helps users easily locate dignified rest areas with essential amenities.", link: "/interactive-map", linkText: "Explore the Map" },
                             { icon: ClipboardList, title: "Evaluate Safety Risks Nearby", description: "Our tool provides safety evaluations of Local Government Areas, analyzing crime and accident data.", link: "/statistics", linkText: "Evaluate your Area's Risk" },
                             { icon: Image, title: "Parking Sign Identifier Tool", description: "Our \"Can I Park Here?\" feature uses photo recognition to analyse uploaded parking signs for you.", link: "/caniparkhere", linkText: "Confirm Your Parking" },
-                            { icon: AlertTriangle, title: "Iteration 3 Feature", description: "Coming soon!", link: "", linkText: "" }
+                            { icon: FaHandHoldingMedical, title: "Discover the Support Hub", description: "Our support hub offers essential information on vital resources, including healthcare, legal advice, and more", link: "/supporthub", linkText: "Explore the Hub" }
                         ].map((item, index) => (
                             <motion.div key={index} className="bg-white p-6 rounded-lg shadow-md" variants={itemVariants}>
                                 <item.icon className="w-12 h-12 mb-4 text-blue-500" />
@@ -151,9 +151,7 @@ export const DashboardMainContent: React.FC = () => {
                         </div>
                     </motion.div>
                     <motion.p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed max-w-2xl mx-auto" variants={itemVariants}>
-                        As a member of the gig community, you're well-acquainted with the various challenges of the job.
-                        Click on any of the buttons below for assistance with different challenges, or
-                        check out the articles via the 'Learn More' links to see the major issues affecting the gig community in Melbourne, and how RestConnect addresses them.
+                        As part of the gig community, you face unique challenges. Explore the 'Learn More' links to discover key issues, and press the associated buttons to see how RestConnect can support you.
                     </motion.p>
 
                     <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" variants={containerVariants}>
