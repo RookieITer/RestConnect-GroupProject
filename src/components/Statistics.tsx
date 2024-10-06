@@ -194,10 +194,17 @@ export default function Statistics() {
         return (
             <div className="mt-6 p-4 bg-gray-100 rounded-lg">
                 <h3 className="text-lg font-semibold mb-2">Crime Data Analysis</h3>
-                <p>The overall restconnect risk score for this area is {safetyIndex.toFixed(2)}, where a higher score indicates a safer area.</p>
-                <p className="font-semibold text-red-500">The most prevalent type of offense is {highestRisk?.Offence_Division}, with {highestRisk?.Incidents_Recorded} recorded incidents.</p>
-                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded incidents across the top 5 risk categories.</p>
-                <p>Based on this data, residents and visitors should be particularly vigilant about {highestRisk?.Offence_Division.toLowerCase()} in this area. However, it's important to note that this data represents reported incidents and may not capture all aspects of safety in the area.</p>
+                <p>The overall restconnect risk score for this area is {safetyIndex.toFixed(2)}, where a higher score
+                    indicates a
+                    safer area.</p>
+                <p className="font-semibold text-red-500">The most prevalent type of offense is {highestRisk?.Offence_Division},
+                    with {highestRisk?.Incidents_Recorded} recorded incidents.</p>
+                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded
+                    incidents across the top 5 risk categories.</p>
+                <p>Based on this data, residents and visitors should be particularly vigilant
+                    about {highestRisk?.Offence_Division.toLowerCase()} in this area. However, it's important to note
+                    that this data represents reported incidents and may not capture all aspects of safety in the
+                    area.</p>
             </div>
         )
     }
@@ -230,10 +237,10 @@ export default function Statistics() {
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
             <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
-                <Heading level={3} className="text-center mb-4">Know your risks</Heading>
-                <p className="text-gray-600 mb-6 text-center">Stay informed and rest easy with these insights on crime and accident data</p>
+                <Heading level={3}>Know your risks</Heading>
+                <p className="text-gray-600 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
 
-                <div className="mb-6 flex justify-center space-x-4">
+                <div className="mb-6 flex space-x-4">
                     <Button variant={activeTab === 'crime' ? 'default' : 'outline'} onClick={() => setActiveTab('crime')}>Crime Insight</Button>
                     <Button variant={activeTab === 'accident' ? 'default' : 'outline'} onClick={() => setActiveTab('accident')}>Accident Data</Button>
                     <Button variant="outline" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
@@ -241,7 +248,7 @@ export default function Statistics() {
 
                 {activeTab === 'accident' && (
                     <div>
-                        <div className="mb-6 flex justify-center">
+                        <div className="mb-6 flex space-x-4">
                             <Select value={selectedSuburb} onValueChange={handleSuburbChange}>
                                 <SelectTrigger className="w-[200px]">
                                     <SelectValue placeholder="Select suburb" />
@@ -255,7 +262,7 @@ export default function Statistics() {
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-2xl font-semibold mb-4 text-center">Crash Data by Speed Zone and Transport Mode</h2>
+                            <h2 className="text-2xl font-semibold mb-4">Crash Data by Speed Zone and Transport Mode</h2>
                             <div className="flex flex-col items-center mb-6">
                                 <SafestModeIcon />
                                 <p className="mt-2 text-center">
@@ -297,7 +304,7 @@ export default function Statistics() {
 
                 {activeTab === 'crime' && (
                     <div>
-                        <div className="mb-6 flex justify-center">
+                        <div className="mb-6 flex space-x-4">
                             <Select value={selectedPostcode} onValueChange={handlePostcodeChange}>
                                 <SelectTrigger className="w-[200px]">
                                     <SelectValue placeholder="Select postcode" />
@@ -311,7 +318,7 @@ export default function Statistics() {
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-2xl font-semibold mb-4 text-center">Crime Risk Score for {selectedPostcode}</h2>
+                            <h2 className="text-2xl font-semibold mb-4">Crime Risk Score for {selectedPostcode}</h2>
                             <ResponsiveContainer width="100%" height={300}>
                                 <RadialBarChart
                                     innerRadius="60%"
@@ -358,7 +365,7 @@ export default function Statistics() {
                             {analyzeCrimeData()}
                             {suggestedVideos.length > 0 && (
                                 <div className="mt-4">
-                                    <h3 className="text-lg font-semibold mb-2 text-center">Suggested Videos:</h3>
+                                    <h3 className="text-lg font-semibold mb-2">Suggested Videos:</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                         {suggestedVideos.map((video, index) => (
                                             <div key={index} className="bg-gray-100 p-4 rounded-lg">
@@ -381,7 +388,7 @@ export default function Statistics() {
                             )}
                             {selectedVideo && !videoError && (
                                 <div className="mt-4">
-                                    <h3 className="text-lg font-semibold mb-2 text-center">Selected Video:</h3>
+                                    <h3 className="text-lg font-semibold mb-2">Selected Video:</h3>
                                     <iframe
                                         width="100%"
                                         height="315"
