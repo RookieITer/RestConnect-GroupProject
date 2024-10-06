@@ -23,13 +23,17 @@ export const Footer: React.FC = () => {
                         <h3 className="text-md font-semibold mb-4">Quick Links</h3>
                         <ul className="text-sm">
                             <li className="mb-2"><Link to="/" className="hover:text-blue-500">Home</Link></li>
-                            <li className="mb-2"><Link to="/interactive-map" className="hover:text-blue-500">Find Amenities</Link></li>
-                            <li className="mb-2"><Link to="/statistics" className="hover:text-blue-500">Know Your Risks</Link></li>
-                            <li className="mb-2"><Link to="/caniparkhere" className="hover:text-blue-500">Can I Park Here?</Link></li>
+                            <li className="mb-2"><Link to="/interactive-map" className="hover:text-blue-500">Find
+                                Amenities</Link></li>
+                            <li className="mb-2"><Link to="/statistics" className="hover:text-blue-500">Know Your
+                                Risks</Link></li>
+                            <li className="mb-2"><Link to="/caniparkhere" className="hover:text-blue-500">Can I Park
+                                Here?</Link></li>
+                            <li className="mb-2"><Link to="/supporthub" className="hover:text-blue-500">Support Hub</Link></li>
                         </ul>
                     </div>
                     <div className="w-full md:w-1/4 mb-6 md:mb-0">
-                        <h3 className="text-md font-semibold mb-4">Contact Us</h3>
+                    <h3 className="text-md font-semibold mb-4">Contact Us</h3>
                         <p className="text-sm mb-2">Email: info@restconnect.com</p>
                         <p className="text-sm">Phone: (03) 1234 5678</p>
                     </div>
