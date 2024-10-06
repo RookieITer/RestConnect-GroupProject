@@ -126,6 +126,7 @@ export const CanIParkHere: React.FC = () => {
     const [selectedDirection, setSelectedDirection] = useState('');
     const [isCommercial, setIsCommercial] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
+    const [parkingOk, setParkingOk] = useState(false);
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
@@ -139,7 +140,7 @@ export const CanIParkHere: React.FC = () => {
 
     //-------------------------------------------------------------------------
     // TABS DISPLAY
-    // this has all the active  html content used for the
+    // this has all the actual html content used for the tab display
     // on this function.  It has it's own function here so we can 
     // programatically control the active tab
     //-------------------------------------------------------------------------
@@ -333,7 +334,7 @@ export const CanIParkHere: React.FC = () => {
                       </>
                     }
 
-                    {(hasFile && !(uploadMessage || warningMessage)) && 
+                    {(hasFile && !(uploadMessage || warningMessage || signContent)) && 
                       <>
                         <Message
                             variation="filled" colorTheme ="info" backgroundColor={"#f5faff"} color={"#666666"}
@@ -351,6 +352,7 @@ export const CanIParkHere: React.FC = () => {
 
                     <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
 
+                    {/* display the main parking information message */}
                     {(uploadMessage) && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="success" heading={messageHeading}>
@@ -362,6 +364,7 @@ export const CanIParkHere: React.FC = () => {
                       </>
                     }
 
+                    {/* display the warning for no parking, clearway etc */}
                     {warningMessage && 
                       <>
                         <Message hasIcon={true} isDismissible={false} colorTheme="warning" heading={warningHeading}>
@@ -381,7 +384,8 @@ export const CanIParkHere: React.FC = () => {
                       </>
                     }
 
-                    {(uploadMessage || warningMessage) && 
+                    {/* display the list of all sign content */}
+                    {(uploadMessage || warningMessage || signContent) && 
                       <>
                         <ThemeProvider theme={acctheme}>
                          <Accordion 
@@ -450,7 +454,305 @@ export const CanIParkHere: React.FC = () => {
           </ThemeProvider>
         );
     };
+    //-------------------------------------------------------------------------
+    // END TABS DISPLAY
+    //-------------------------------------------------------------------------
     
+
+    //-------------------------------------------------------------------------
+    // ALL HELPER FUNCTIONS...
+    //-------------------------------------------------------------------------
+
+
+    //-------------------------------------------------------------------------
+    // takes the raw response info and builds up the 'full' list of sign
+    // information to be shown
+    //-------------------------------------------------------------------------
+
+    const displayAllSignInfo = (rawResponse: { items: string | any[]; }) => {
+      // check all the returned items
+
+      var allSignInfo = "";
+
+      if (rawResponse && rawResponse.items) {
+        for (let idx = 0; idx < rawResponse.items.length; idx++) 
+        {
+          setTab('3')                      // enable and move to the results tab
+          setDisabledTab3(false);
+
+          // build up all sign info list for full display option
+          allSignInfo += rawResponse.items[idx].friendlydesc
+          allSignInfo += "<br />"
+        }
+
+        // display our full list
+        setSignContent(allSignInfo);
+      }
+    }
+
+
+
+    //-------------------------------------------------------------------------
+    // determines if we outside of all possible dates/times indicated
+    // used only if there were no matching signs
+    //-------------------------------------------------------------------------
+
+    const displayIfOutsideTimes = (rawResponse: { items: string | any[]; }) => {
+
+      var is_outside  = true;
+      var direction_ok = false;
+      var time_ok = false;
+
+      if (rawResponse && rawResponse.items) {
+        for (let idx = 0; idx < rawResponse.items.length; idx++) 
+        {
+          // check whether direction and date/time ok
+          if (rawResponse.items[idx].isnow === true)
+            time_ok = true; 
+
+          if  ((rawResponse.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                || rawResponse.items[idx].direction.toUpperCase() == 'BOTH')
+            direction_ok = true; 
+
+          if (time_ok && direction_ok)
+          {
+            is_outside = false;
+          }
+          else
+            continue;   // loop around
+        }
+      }
+
+      return is_outside;
+    }
+
+    //-------------------------------------------------------------------------
+    // determines if there is actually anything indicated for direction
+    //-------------------------------------------------------------------------
+
+    const displayIfHasCorrectDirection = (rawResponse: { items: string | any[]; }) => {
+
+      var direction_ok = false;
+
+      if (rawResponse && rawResponse.items) {
+        for (let idx = 0; idx < rawResponse.items.length; idx++) 
+        {
+          if  ((rawResponse.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()))
+            direction_ok = true; 
+          if  ((rawResponse.items[idx].direction.toUpperCase() == 'BOTH'))
+            direction_ok = true; 
+          if  ((rawResponse.items[idx].direction.toUpperCase() == ''))
+            direction_ok = true; 
+        }
+      }
+
+      return direction_ok;
+    }
+
+
+
+    //-------------------------------------------------------------------------
+    // takes the raw response info and determines which (if any)
+    // of the sign information presented matches the current selections
+    //-------------------------------------------------------------------------
+
+    const displayCurrentSignInfo = (rawResponse: { items: string | any[]; }) => {
+      // check all the returned items
+
+      // oktopark flag - set by precedence on the first acceptable
+      // option from the sign that we find
+      var oktopark = false;
+      var notoktopark = false;
+
+      var park_message = "";
+      var warn_message = "";
+      //var has_time_restriction = false;
+
+      var direction_and_time_ok = false;
+      var direction_ok = false;
+      var time_ok = false;
+
+      setParkingOk(false);
+
+      if (rawResponse && rawResponse.items) {
+        for (let idx = 0; idx < rawResponse.items.length; idx++) 
+        {
+          direction_and_time_ok = false;
+          direction_ok = false;
+          time_ok = false;
+
+          // if we've found a spot (or a restriction matching the time)
+          // then just loop back around so we continue to gather sign info above
+          if (oktopark || notoktopark)
+            continue;
+
+          // check whether direction and date/time ok
+          // (we'll use this throughout below)
+          if (rawResponse.items[idx].isnow === true)
+            time_ok = true; 
+
+          if  ((rawResponse.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
+                || rawResponse.items[idx].direction.toUpperCase() == 'BOTH')
+            direction_ok = true; 
+
+          if  (rawResponse.items[idx].direction.toUpperCase() == '' &&  rawResponse.items[idx].category == 'NOPARKING')
+            direction_ok = true; 
+
+          if (time_ok && direction_ok)
+            direction_and_time_ok = true;
+          else
+          {
+            direction_and_time_ok = false;
+            continue;   // loop around
+          }
+
+
+          //-------------------------------------------------------------
+          // regular parking
+          //-------------------------------------------------------------
+
+          if (direction_and_time_ok && rawResponse.items[idx].category == 'PARKING')
+            {
+              oktopark = true;
+              setParkingOk(true);
+              setMessageHeading("Yes, you can park here:");
+              park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
+
+              if  (rawResponse.items[idx].totime !== '')
+                park_message += "<li>Up until " + rawResponse.items[idx].totime + "</li>";
+
+              if  (rawResponse.items[idx].metered === true)
+                park_message += "<li>Parking here requires you to pay for parking</li>";
+              else
+                park_message += "<li>Parking here is free - no payment is required</li>";
+
+              park_message += "<li>Direction: " + rawResponse.items[idx].direction + "</li>";
+              // show the sign info
+              setUploadMessage(park_message);
+              continue;
+            }
+
+          //-------------------------------------------------------------
+          // LOADING ZONE
+          //-------------------------------------------------------------
+
+          if (rawResponse.items[idx].category == 'LOADING')
+          {
+            // commercial vehicle within times
+            if (time_ok && isCommercial === true)
+            {
+              oktopark = true;
+              setParkingOk(true);
+              setMessageHeading("Yes, you can park here (Loading Zone Parking):");
+              park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
+
+              if  (rawResponse.items[idx].totime !== '')
+                park_message += "<li>Up until " + rawResponse.items[idx].totime + "</li>";
+
+              park_message += "<li>Note - you are able to park here as this is a loading zone and you have a commercial vehicle</li>";
+              setUploadMessage(park_message);
+              continue;
+            }
+
+            // other vehicle outside of times
+            if (!time_ok)
+              {
+                oktopark = true;
+                setParkingOk(true);
+                setMessageHeading("Yes, you can park here:");
+                park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
+
+                if  (rawResponse.items[idx].totime !== '')
+                  park_message += "<li>Up until " +rawResponse.items[idx].totime + "</li>";
+
+                park_message += "<li>Note - this is indicated as a loading zone but appoears to be outside of the specified times</li>";
+                setUploadMessage(park_message);
+                continue;
+              }
+          }
+
+          //-------------------------------------------------------------
+          // DISABLED ZONE
+          //-------------------------------------------------------------
+
+          if (direction_and_time_ok && rawResponse.items[idx].category == 'DISABLED')
+          {
+            if (isDisabled)
+            {
+              oktopark = true;
+              setParkingOk(true);
+              setMessageHeading("Yes, you can park here (Disabled Parking Spot):");
+              park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
+
+              if  (rawResponse.items[idx].totime !== '')
+                park_message += "<li>Up until " + rawResponse.items[idx].totime + "</li>";
+
+              park_message += "<li>Note - you are able to park here as you are displaying a disabled parking permit</li>";
+
+              // show the sign info
+              setUploadMessage(park_message);
+              continue;
+            }
+            else
+            {
+              oktopark = false;
+              setParkingOk(false);
+              setWarningHeading("No, you cannot park here (Disabled Parking Spot):");
+              warn_message += "Note - you cannot park here unless you are displaying a disabled parking permit";
+
+              // show the sign info
+              setWarningMessage(warn_message);
+              continue;
+            }
+          }
+
+
+          //-------------------------------------------------------------
+          // NO PARKING OR NO STANDING ZONE
+          //-------------------------------------------------------------
+
+          if (direction_and_time_ok && rawResponse.items[idx].category == 'NOPARKING')
+          {
+            notoktopark = true;
+            warn_message = "There is a no parking or no standing zone indicated on this sign";
+
+            // display direction information only if relevant
+            if (rawResponse.items[idx].direction == 'LEFT' || rawResponse.items[idx].direction == 'RIGHT')
+            {
+              warn_message += "<br />You cannot park to the ";
+              warn_message += rawResponse.items[idx].direction.toLowerCase();
+              warn_message += " hand side of the sign";
+            }
+
+            setWarningHeading("You Cannot Park Here");
+            setWarningMessage(warn_message);
+            continue;
+          }
+  
+          //-------------------------------------------------------------
+          // TOW AWAY OR CLEARWAY
+          //-------------------------------------------------------------
+
+          if (direction_and_time_ok  && rawResponse.items[idx].category == 'TOW')
+            {
+              notoktopark = true;
+              warn_message = "There is a clearway or tow-away zone indicated on this sign";
+              if (rawResponse.items[idx].direction == 'LEFT' || rawResponse.items[idx].direction == 'RIGHT')
+              {
+                warn_message += "<br />You cannot park to the ";
+                warn_message += rawResponse.items[idx].direction.toLowerCase();
+                warn_message += " hand side of the sign";
+              }
+
+              setWarningHeading("You Cannot Park Here - Tow Away Zone");
+              setWarningMessage(warn_message);
+              continue;
+            }
+
+        }
+      }
+    }
+
 
     //-------------------------------------------------------------------------
     // clears the file selection and contents and resets messages
@@ -509,223 +811,43 @@ export const CanIParkHere: React.FC = () => {
             // display the data that has been returned from the server
             const jsonResponse = await response.json();
             const data = jsonResponse.body; 
+            const bodytext = JSON.parse(data);
  
             // clear the uploading status, regardless of outcome
             setUploading(false);
 
-            const bodytext = JSON.parse(data);
+            // determine and display the full sign information list
+            displayAllSignInfo(bodytext);
 
-            // oktopark flag - set by precedence on the first acceptable
-            // option from the sign that we find
-            var oktopark = false;
-            var notoktopark = false;
+            // determine and display information for any matching signs
+            displayCurrentSignInfo(bodytext);
 
-            var park_message = "";
-            var warn_message = "";
-            var all_sign_info = "";
-//            var has_loading = false;
-//            var has_noparking = false;
-//            var has_disabled = false;
-            var has_time_restriction = false;
-
-            var direction_and_time_ok = false;
-            var direction_ok = false;
-            var time_ok = false;
-
-            // var to store whether there's any parking info on this side of the sign
-            // used to determine later on whether outside indicated times and ok
-            var has_any_parking_info = false;
-
-            // check all the returned items
-            if (bodytext && bodytext.items) {
-              for (let idx = 0; idx < bodytext.items.length; idx++) 
+            //
+            if (displayIfOutsideTimes(bodytext) && warningMessage === '')
+            {
+              if (displayIfHasCorrectDirection(bodytext))
               {
-                setTab('3')                      // move to next tab
-                setDisabledTab3(false);
-      
-                // build up all sign info list for full display option
-                all_sign_info += bodytext.items[idx].friendlydesc
-                all_sign_info += "<br />"
-
-                // if we've found a spot (or a restriction matching the time)
-                // then just loop back around so we continue to gather sign info above
-                if (oktopark || notoktopark)
-                  continue;
-
-                // check whether direction and date/time ok
-                // (we'll use this throughout below)
-                if (bodytext.items[idx].isnow === true)
-                  time_ok = true; 
-                if  ((bodytext.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
-                      || bodytext.items[idx].direction.toUpperCase() == 'BOTH')
-                  direction_ok = true; 
-
-                if (time_ok && direction_ok)
-                  direction_and_time_ok = true;
-                else
-                  // loop around.  we've captured the sign info above but
-                  // further processing only required for things that match
-                  continue;
-
-
-                // some general categorisation 
-                if (bodytext.items[idx].hours != '0')
-                  has_time_restriction = true;
-
-                // used later to determine if being outside times is ok
-//                if (bodytext.items[idx].category == 'LOADING')
-//                  has_loading = true;
-                
-//                if (bodytext.items[idx].category == 'DISABLED')
-//                  has_disabled = true;
-
-//               if (bodytext.items[idx].category == 'NOPARKING')
-//                  has_noparking = true;
-
-                //-------------------------------------------------------------
-                // regular parking
-                //-------------------------------------------------------------
-
-                if (direction_and_time_ok && bodytext.items[idx].category == 'PARKING')
-                {
-                  oktopark = true;
-                  has_any_parking_info = true;
-                  setMessageHeading("Yes, you can park here:");
-                  park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
-
-                  if  (bodytext.items[idx].totime !== '')
-                    park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
-
-                  if  (bodytext.items[idx].metered === true)
-                    park_message += "<li>Parking here requires you to pay for parking</li>";
-                  else
-                    park_message += "<li>Parking here is free - no payment is required</li>";
-
-                  // show the sign info
-                  setUploadMessage(park_message);
-                  continue;
-                }
-
-                //-------------------------------------------------------------
-                // LOADING ZONE
-                //-------------------------------------------------------------
-
-                if (direction_and_time_ok && bodytext.items[idx].category == 'LOADING')
-                {
-                  
-                  // commercial vehicle within times
-                  if (time_ok && isCommercial === true)
-                  {
-                    oktopark = true;
-                    setMessageHeading("Yes, you can park here (Loading Zone Parking):");
-                    park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
-  
-                    if  (bodytext.items[idx].totime !== '')
-                      park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
-
-                    park_message += "<li>Note - you are able to park here as this is a loading zone and you have a commercial vehicle</li>";
-                    setUploadMessage(park_message);
-                    continue;
-                  }
-
-                  // other vehicle outside of times
-                  if (!time_ok && !isCommercial)
-                    {
-                      oktopark = true;
-                      setMessageHeading("Yes, you can park here:");
-                      park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
-    
-                      if  (bodytext.items[idx].totime !== '')
-                        park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
-
-                      park_message += "<li>Note - this is indicated as a loading zone but appoears to be outside of the specified times</li>";
-                      setUploadMessage(park_message);
-                      continue;
-                    }
-                }
-
-                //-------------------------------------------------------------
-                // DISABLED ZONE
-                //-------------------------------------------------------------
-
-                if (direction_and_time_ok && bodytext.items[idx].category == 'DISABLED' && isDisabled)
-                {
-                  oktopark = true;
-                  setMessageHeading("Yes, you can park here (Disabled Parking Spot):");
-                  park_message += "<li>For up to " + bodytext.items[idx].hours + " hours</li>";
-
-                  if  (bodytext.items[idx].totime !== '')
-                    park_message += "<li>Up until " + bodytext.items[idx].totime + "</li>";
-
-                  park_message += "<li>Note - you are able to park here as you are displaying a disabled parking permit</li>";
-  
-                  // show the sign info
-                  setUploadMessage(park_message);
-                  continue;
-                }
-
-                if (direction_and_time_ok && bodytext.items[idx].category == 'NOPARKING')
-                {
-                  notoktopark = true;
-                  warn_message = "There is a no parking or no standing zone indicated on this sign";
-                  if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
-                  {
-                    warn_message += "<br />You cannot park to the ";
-                    warn_message += bodytext.items[idx].direction.toLowerCase();
-                    warn_message += " hand side of the sign";
-                  }
-
-                  setWarningHeading("You Cannot Park Here");
-                  setWarningMessage(warn_message);
-                  continue;
-                }
-
-                if (direction_and_time_ok  && bodytext.items[idx].category == 'TOW')
-                {
-                  notoktopark = true;
-                  warn_message = "There is a clearway or tow-away zone indicated on this sign";
-                  if (bodytext.items[idx].direction == 'LEFT' || bodytext.items[idx].direction == 'RIGHT')
-                  {
-                    warn_message += "<br />You cannot park to the ";
-                    warn_message += bodytext.items[idx].direction.toLowerCase();
-                    warn_message += " hand side of the sign";
-                  }
-
-                  setWarningHeading("You Cannot Park Here - Tow Away Zone");
-                  setWarningMessage(warn_message);
-                  continue;
-                }
+                setMessageHeading("Yes, you can park here");
+                setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
               }
-
-              // display our full list
-              setSignContent(all_sign_info);
+              else
+              {
+                setWarningHeading("No, you cannot park here");
+                setWarningMessage("The day and time are currently outside of any restrictions indicated on the sign, but there are no options shown for the direction your vehicle is from the sign.");
+              }
             }
 
-            // possible options we might encounter 
-            if (!notoktopark && !oktopark && has_any_parking_info === true && has_time_restriction === true)
+            if (!parkingOk && uploadMessage == '' && warningMessage == '')
             {
-              setMessageHeading("Yes, you can park here");
-              setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
-            }
-
-            if (notoktopark === false && oktopark === false 
-              && has_any_parking_info === true && !has_time_restriction)
-            {
-              setMessageHeading("Yes, you can park here ...");
-              setUploadMessage("...The day and time are currently outside of any restrictions indicated on the sign.");
-            }
-
-            if (notoktopark === true && oktopark === false 
-              && !has_any_parking_info === true && !has_time_restriction)
-            {
-              setMessageHeading("No you cannot park here");
-              setUploadMessage("There are no options on the available signs that would allow parking at any time");
+              alert(parkingOk);
+              setWarningHeading("No, you can't park here.");
+              setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
             }
 
 
-            //---------------------------------------------------------------------
-        // if error with API call
-        //---------------------------------------------------------------------
+      //---------------------------------------------------------------------
+      // if error with API call
+      //---------------------------------------------------------------------
 
       } catch (error) {
           // move to tab 3 and clear messages
