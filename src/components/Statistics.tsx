@@ -219,11 +219,11 @@ export default function Statistics() {
 
     const SafestModeIcon = () => {
         switch (safestMode.mode.toLowerCase()) {
-            case 'bicyclist':
+            case 'cycling':
                 return <Bike size={64} className="text-green-500" />;
-            case 'driver':
+            case 'driving':
                 return <Car size={64} className="text-blue-500" />;
-            case 'passenger':
+            case 'walking':
                 return <User size={64} className="text-purple-500" />;
             default:
                 return null;

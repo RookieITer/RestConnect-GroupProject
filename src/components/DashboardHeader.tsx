@@ -14,6 +14,7 @@ export const DashboardHeader: React.FC = () => {
         { name: 'Find the Nearest Amenities', path: '/interactive-map' },
         { name: 'Know your risks', path: '/statistics' },
         { name: 'Can I Park Here?', path: '/CanIParkHere' },
+        { name: 'Support Hub', path: '/supportHub' },
     ];
 
     return (
