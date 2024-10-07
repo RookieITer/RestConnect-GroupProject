@@ -10,8 +10,6 @@ import noparkingsign from '../assets/noparking.png';
 
 // ----------------------------------------------------------------------------
 // TODO:
-// Tidy up display logic of sign details - code smell.
-// Refine precedence of no parking types vs being outside time
 // rebuild sign details if toggle buttons changed and sign details showing
 // refine full sign details display - exclude missing fields
 // ----------------------------------------------------------------------------
