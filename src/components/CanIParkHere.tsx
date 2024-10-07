@@ -3,7 +3,7 @@ import { ToggleButton, ToggleButtonGroup, Heading, Image, Loader, Card, Button, 
 import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
-import sign from './sign.png';
+import sign from './sign.png'
 import clearwaysign from './clearway.png';
 import nostandingsign from './nostanding.png';
 import noparkingsign from './noparking.png';
