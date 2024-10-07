@@ -4,6 +4,9 @@ import '@aws-amplify/ui-react/styles.css';          // amplify react styling
 import 'mapbox-gl/dist/mapbox-gl.css';              // for mapbox
 import '/src/components/extra.css';                 // for own styling
 import sign from './sign.png';
+import clearwaysign from './clearway.png';
+import nostandingsign from './nostanding.png';
+import noparkingsign from './noparking.png';
 
 // ----------------------------------------------------------------------------
 // TODO:
@@ -126,7 +129,8 @@ export const CanIParkHere: React.FC = () => {
     const [selectedDirection, setSelectedDirection] = useState('');
     const [isCommercial, setIsCommercial] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [parkingOk, setParkingOk] = useState(false);
+//    const [parkingOk, setParkingOk] = useState(false);
+    const [parkingNotOk, setParkingNotOk] = useState(false);
     const hiddenInput = React.useRef<HTMLInputElement | null>(null);
     const [imgSrc, setImgSrc] = useState('')
     const imgRef = useRef<HTMLImageElement>(null)
@@ -385,13 +389,59 @@ export const CanIParkHere: React.FC = () => {
                     }
 
                     {/* display the list of all sign content */}
+                    {parkingNotOk && 
+                      <>
+                        <ThemeProvider theme={acctheme}>
+                         <Accordion 
+                          items={[
+                            {
+                              trigger: 'No Parking/No Standing and Clearway Information',
+                              value: 'npsigns',
+                              content: 
+                                <Message variation="plain" colorTheme="neutral">
+                                  <b>No Standing Sign:</b>
+                                  You cannot stop at all in a no standing zone at the times indicated (or if no times are indicated, you cannot stop there at any time).
+                                  <Image
+                                    alt="A Parking Sign"
+                                    src={nostandingsign}
+                                    width={"100px"}
+                                    backgroundColor="initial"
+                                    opacity="100%"
+                                  /><br />
+                                  <b>No Parking Sign:</b>
+                                  You cannot park, but you may stop briefly in a no parking zone if you remain with the vehicle.  For example you can stop to pick up or drop off passengers.  
+                                  <Image
+                                    alt="A Parking Sign"
+                                    src={noparkingsign}
+                                    width={"100px"}
+                                    backgroundColor="initial"
+                                    opacity="100%"
+                                  /><br />
+                                  <b>Clearway Sign:</b>
+                                  You cannot stop or park at all in a clearway zone at the times indicated (or if no times are indicated, you cannot stop or park there at any time).  <b>As well as receiving a fine, your vehicle will be towed away.</b>
+                                  <Image
+                                    alt="A Parking Sign"
+                                    src={clearwaysign}
+                                    width={"100px"}
+                                    backgroundColor="initial"
+                                    opacity="100%"
+                                  /><br />
+
+                                </Message>
+                            }
+                          ]}
+                          />
+                        </ThemeProvider>
+                      </>
+                    }
+                                        {/* display the list of all sign content */}
                     {(uploadMessage || warningMessage || signContent) && 
                       <>
                         <ThemeProvider theme={acctheme}>
                          <Accordion 
                           items={[
                             {
-                              trigger: 'All Sign Information',
+                              trigger: 'Information - all signs in photo',
                               value: 'sign2',
                               content: 
                                 <Message variation="plain" colorTheme="neutral">
@@ -573,6 +623,12 @@ export const CanIParkHere: React.FC = () => {
       var time_ok = false;
 
       setParkingOk(false);
+      setParkingNotOk(false);
+
+      // display warning by default
+      setWarningHeading("No, you can't park here.");
+      setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
+
 
       if (rawResponse && rawResponse.items) {
         for (let idx = 0; idx < rawResponse.items.length; idx++) 
@@ -629,6 +685,7 @@ export const CanIParkHere: React.FC = () => {
               park_message += "<li>Direction: " + rawResponse.items[idx].direction + "</li>";
               // show the sign info
               setUploadMessage(park_message);
+              setWarningMessage('');
               continue;
             }
 
@@ -651,10 +708,21 @@ export const CanIParkHere: React.FC = () => {
 
               park_message += "<li>Note - you are able to park here as this is a loading zone and you have a commercial vehicle</li>";
               setUploadMessage(park_message);
+              setWarningMessage('');
               continue;
             }
 
-            // other vehicle outside of times
+            // commercial vehicle within times
+            if (time_ok && isCommercial === false)
+              {
+                oktopark = false;
+                setParkingOk(false);
+                setWarningHeading("No, you cannot park here");
+                park_message += "<li>Note - this is a loading zone.  You cannot park here unless you are driving a commercial vehicle</li>";
+                setWarningMessage(park_message);
+              }
+
+              // other vehicle outside of times
             if (!time_ok)
               {
                 oktopark = true;
@@ -667,6 +735,7 @@ export const CanIParkHere: React.FC = () => {
 
                 park_message += "<li>Note - this is indicated as a loading zone but appoears to be outside of the specified times</li>";
                 setUploadMessage(park_message);
+                setWarningMessage('');
                 continue;
               }
           }
@@ -691,6 +760,7 @@ export const CanIParkHere: React.FC = () => {
 
               // show the sign info
               setUploadMessage(park_message);
+              setWarningMessage('');
               continue;
             }
             else
@@ -713,7 +783,10 @@ export const CanIParkHere: React.FC = () => {
 
           if (direction_and_time_ok && rawResponse.items[idx].category == 'NOPARKING')
           {
+
             notoktopark = true;
+            setParkingNotOk(true);
+
             warn_message = "There is a no parking or no standing zone indicated on this sign";
 
             // display direction information only if relevant
@@ -724,6 +797,7 @@ export const CanIParkHere: React.FC = () => {
               warn_message += " hand side of the sign";
             }
 
+            warn_message += "<br /><br />See 'No Parking/No Standing and Clearway Information' below for more details.";
             setWarningHeading("You Cannot Park Here");
             setWarningMessage(warn_message);
             continue;
@@ -744,6 +818,7 @@ export const CanIParkHere: React.FC = () => {
                 warn_message += " hand side of the sign";
               }
 
+              warn_message += "<br /><br />See 'No Parking/No Standing and Clearway Information' below for more details.";
               setWarningHeading("You Cannot Park Here - Tow Away Zone");
               setWarningMessage(warn_message);
               continue;
@@ -767,6 +842,9 @@ export const CanIParkHere: React.FC = () => {
         setDisabledTab1(false);
         setDisabledTab2(true);
         setDisabledTab3(true);
+
+        setParkingOk(false);
+        setParkingNotOk(false);
 
         setImgSrc('');
 
@@ -833,16 +911,16 @@ export const CanIParkHere: React.FC = () => {
               else
               {
                 setWarningHeading("No, you cannot park here");
-                setWarningMessage("The day and time are currently outside of any restrictions indicated on the sign, but there are no options shown for the direction your vehicle is from the sign.");
+                setWarningMessage("There are no options shown for the direction your vehicle is from the sign.");
               }
             }
 
-            if (!parkingOk && uploadMessage == '' && warningMessage == '')
-            {
-              alert(parkingOk);
-              setWarningHeading("No, you can't park here.");
-              setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
-            }
+//            if ((parkingOk === false && parkingNotOk === false))
+//            {
+//              alert(parkingOk);
+//              setWarningHeading("No, you can't park here.");
+//              setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
+//            }
 
 
       //---------------------------------------------------------------------
