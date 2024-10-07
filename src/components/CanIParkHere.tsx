@@ -622,7 +622,7 @@ export const CanIParkHere: React.FC = () => {
       var direction_ok = false;
       var time_ok = false;
 
-      setParkingOk(false);
+//      setParkingOk(false);
       setParkingNotOk(false);
 
       // display warning by default
@@ -670,7 +670,7 @@ export const CanIParkHere: React.FC = () => {
           if (direction_and_time_ok && rawResponse.items[idx].category == 'PARKING')
             {
               oktopark = true;
-              setParkingOk(true);
+//              setParkingOk(true);
               setMessageHeading("Yes, you can park here:");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -699,7 +699,7 @@ export const CanIParkHere: React.FC = () => {
             if (time_ok && isCommercial === true)
             {
               oktopark = true;
-              setParkingOk(true);
+//              setParkingOk(true);
               setMessageHeading("Yes, you can park here (Loading Zone Parking):");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -716,7 +716,7 @@ export const CanIParkHere: React.FC = () => {
             if (time_ok && isCommercial === false)
               {
                 oktopark = false;
-                setParkingOk(false);
+//                setParkingOk(false);
                 setWarningHeading("No, you cannot park here");
                 park_message += "<li>Note - this is a loading zone.  You cannot park here unless you are driving a commercial vehicle</li>";
                 setWarningMessage(park_message);
@@ -726,7 +726,7 @@ export const CanIParkHere: React.FC = () => {
             if (!time_ok)
               {
                 oktopark = true;
-                setParkingOk(true);
+//                setParkingOk(true);
                 setMessageHeading("Yes, you can park here:");
                 park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -749,7 +749,7 @@ export const CanIParkHere: React.FC = () => {
             if (isDisabled)
             {
               oktopark = true;
-              setParkingOk(true);
+//              setParkingOk(true);
               setMessageHeading("Yes, you can park here (Disabled Parking Spot):");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -766,7 +766,7 @@ export const CanIParkHere: React.FC = () => {
             else
             {
               oktopark = false;
-              setParkingOk(false);
+  //            setParkingOk(false);
               setWarningHeading("No, you cannot park here (Disabled Parking Spot):");
               warn_message += "Note - you cannot park here unless you are displaying a disabled parking permit";
 
@@ -843,7 +843,7 @@ export const CanIParkHere: React.FC = () => {
         setDisabledTab2(true);
         setDisabledTab3(true);
 
-        setParkingOk(false);
+//        setParkingOk(false);
         setParkingNotOk(false);
 
         setImgSrc('');
