@@ -551,18 +551,19 @@ export const CanIParkHere: React.FC = () => {
       var direction_ok = false;
       var time_ok = false;
 
+
       if (rawResponse && rawResponse.items) {
         for (let idx = 0; idx < rawResponse.items.length; idx++) 
         {
           // check whether direction and date/time ok
-          if (rawResponse.items[idx].isnow === true)
+          if (rawResponse.items[idx].isnow === true && direction_ok && rawResponse.items[idx].category == 'PARKING')
             time_ok = true; 
 
           if  ((rawResponse.items[idx].direction.toUpperCase() == selectedDirection.toUpperCase()) 
                 || rawResponse.items[idx].direction.toUpperCase() == 'BOTH')
             direction_ok = true; 
 
-          if (time_ok && direction_ok)
+          if (time_ok === true && direction_ok && rawResponse.items[idx].category == 'PARKING')
           {
             is_outside = false;
           }
@@ -611,6 +612,7 @@ export const CanIParkHere: React.FC = () => {
       // option from the sign that we find
       var oktopark = false;
       var notoktopark = false;
+      var gotmatch = false;
 
       var park_message = "";
       var warn_message = "";
@@ -622,11 +624,6 @@ export const CanIParkHere: React.FC = () => {
 
 //      setParkingOk(false);
       setParkingNotOk(false);
-
-      // display warning by default
-      setWarningHeading("No, you can't park here.");
-      setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
-
 
       if (rawResponse && rawResponse.items) {
         for (let idx = 0; idx < rawResponse.items.length; idx++) 
@@ -668,7 +665,8 @@ export const CanIParkHere: React.FC = () => {
           if (direction_and_time_ok && rawResponse.items[idx].category == 'PARKING')
             {
               oktopark = true;
-//              setParkingOk(true);
+              gotmatch = true;
+              //              setParkingOk(true);
               setMessageHeading("Yes, you can park here:");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -680,7 +678,8 @@ export const CanIParkHere: React.FC = () => {
               else
                 park_message += "<li>Parking here is free - no payment is required</li>";
 
-              park_message += "<li>Direction: " + rawResponse.items[idx].direction + "</li>";
+              //park_message += "<li>Direction: " + rawResponse.items[idx].direction + "</li>";
+              
               // show the sign info
               setUploadMessage(park_message);
               setWarningMessage('');
@@ -697,6 +696,7 @@ export const CanIParkHere: React.FC = () => {
             if (time_ok && isCommercial === true)
             {
               oktopark = true;
+              gotmatch = true;
 //              setParkingOk(true);
               setMessageHeading("Yes, you can park here (Loading Zone Parking):");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
@@ -714,7 +714,8 @@ export const CanIParkHere: React.FC = () => {
             if (time_ok && isCommercial === false)
               {
                 oktopark = false;
-//                setParkingOk(false);
+                gotmatch = true;
+                //                setParkingOk(false);
                 setWarningHeading("No, you cannot park here");
                 park_message += "<li>Note - this is a loading zone.  You cannot park here unless you are driving a commercial vehicle</li>";
                 setWarningMessage(park_message);
@@ -724,7 +725,8 @@ export const CanIParkHere: React.FC = () => {
             if (!time_ok)
               {
                 oktopark = true;
-//                setParkingOk(true);
+                gotmatch = true;
+                //                setParkingOk(true);
                 setMessageHeading("Yes, you can park here:");
                 park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
 
@@ -747,6 +749,7 @@ export const CanIParkHere: React.FC = () => {
             if (isDisabled)
             {
               oktopark = true;
+              gotmatch = true;
 //              setParkingOk(true);
               setMessageHeading("Yes, you can park here (Disabled Parking Spot):");
               park_message += "<li>For up to " + rawResponse.items[idx].hours + " hours</li>";
@@ -764,6 +767,7 @@ export const CanIParkHere: React.FC = () => {
             else
             {
               oktopark = false;
+              gotmatch = true;
   //            setParkingOk(false);
               setWarningHeading("No, you cannot park here (Disabled Parking Spot):");
               warn_message += "Note - you cannot park here unless you are displaying a disabled parking permit";
@@ -783,6 +787,7 @@ export const CanIParkHere: React.FC = () => {
           {
 
             notoktopark = true;
+            gotmatch = true;
             setParkingNotOk(true);
 
             warn_message = "There is a no parking or no standing zone indicated on this sign";
@@ -808,6 +813,7 @@ export const CanIParkHere: React.FC = () => {
           if (direction_and_time_ok  && rawResponse.items[idx].category == 'TOW')
             {
               notoktopark = true;
+              gotmatch = true;
               warn_message = "There is a clearway or tow-away zone indicated on this sign";
               if (rawResponse.items[idx].direction == 'LEFT' || rawResponse.items[idx].direction == 'RIGHT')
               {
@@ -823,6 +829,22 @@ export const CanIParkHere: React.FC = () => {
             }
 
         }
+
+        if (displayIfOutsideTimes(rawResponse) && gotmatch === false && displayIfHasCorrectDirection(rawResponse))
+        {
+          gotmatch = true;
+          setMessageHeading("Yes, you can park here");
+          setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
+        }
+
+        if (gotmatch === false)
+        {
+          // display warning by default
+          setWarningHeading("No, you can't park here.");
+          setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
+
+        }
+
       }
     }
 
@@ -888,7 +910,7 @@ export const CanIParkHere: React.FC = () => {
             const jsonResponse = await response.json();
             const data = jsonResponse.body; 
             const bodytext = JSON.parse(data);
- 
+
             // clear the uploading status, regardless of outcome
             setUploading(false);
 
@@ -897,28 +919,6 @@ export const CanIParkHere: React.FC = () => {
 
             // determine and display information for any matching signs
             displayCurrentSignInfo(bodytext);
-
-            //
-            if (displayIfOutsideTimes(bodytext) && warningMessage === '')
-            {
-              if (displayIfHasCorrectDirection(bodytext))
-              {
-                setMessageHeading("Yes, you can park here");
-                setUploadMessage("The day and time are currently outside of any restrictions indicated on the sign.");
-              }
-              else
-              {
-                setWarningHeading("No, you cannot park here");
-                setWarningMessage("There are no options shown for the direction your vehicle is from the sign.");
-              }
-            }
-
-//            if ((parkingOk === false && parkingNotOk === false))
-//            {
-//              alert(parkingOk);
-//              setWarningHeading("No, you can't park here.");
-//              setWarningMessage("From what we can tell from this sign, there are no options available for you to park in this spot at this time.");
-//            }
 
 
       //---------------------------------------------------------------------
