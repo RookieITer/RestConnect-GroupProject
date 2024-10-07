@@ -9,7 +9,7 @@ import Statistics from "@/components/Statistics";
 import ExternalLinkPage from '@/components/ExternalLinkPage';
 import NotFound from '@/components/NotFound';
 import Footer from '@/components/Footer';
-import SupportHub from "@/components/SupportHub.tsx";
+import SupportHub from "@/components/SupportHub/SupportHub.tsx";
 
 const Dashboard: React.FC = () => {
     return (
