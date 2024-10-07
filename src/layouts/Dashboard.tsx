@@ -4,6 +4,7 @@ import { DashboardMainContent } from '@/components/DashboardMainContent';
 import { Routes, Route } from 'react-router-dom';
 import { InteractiveMap } from '@/components/InteractiveMap/InteractiveMap';
 import CanIParkHere from '@/components/CanIParkHere';
+import Privacy from '@/components/Privacy';
 import Statistics from "@/components/Statistics";
 import ExternalLinkPage from '@/components/ExternalLinkPage';
 import NotFound from '@/components/NotFound';
@@ -20,6 +21,7 @@ const Dashboard: React.FC = () => {
                     <Route path="interactive-map" element={<InteractiveMap />} />
                     <Route path="statistics" element={<Statistics />} />
                     <Route path="caniparkhere" element={<CanIParkHere/>} />
+                    <Route path="privacy" element={<Privacy/>} />
                     <Route path="supporthub" element={<SupportHub/>} />
                     <Route path="rest-areas-and-amenities" element={<ExternalLinkPage url="https://www.abc.net.au/news/2023-09-10/delivery-riders-gig-worker-hub-melbourne-refuge/102829374" title="Rest Areas and Amenities" />} />
                     <Route path="safe-rest-areas" element={<ExternalLinkPage url="https://www.cbdnews.com.au/a-safe-place-for-gig-workers-launches-in-the-cbd/" title="Safe Rest Areas" />} />

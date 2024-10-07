@@ -33,6 +33,7 @@ export const Footer: React.FC = () => {
                         </ul>
                     </div>
                     <div className="w-full md:w-1/4 mb-6 md:mb-0">
+                    <Link to="/privacy" className="hover:text-blue-500">Privacy Policy</Link><br /><br />
                     <h3 className="text-md font-semibold mb-4">Contact Us</h3>
                         <p className="text-sm mb-2">Email: info@restconnect.com</p>
                         <p className="text-sm">Phone: (03) 1234 5678</p>
