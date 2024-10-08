@@ -111,6 +111,11 @@ export default function Component() {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
     const categories = Array.from(new Set(supportServices.map(service => service.Category)))
+        .sort((a, b) => {
+            if (a === "OTHER") return 1
+            if (b === "OTHER") return -1
+            return a.localeCompare(b)
+        })
 
     const toggleCategory = (category: string) => {
         setSelectedCategory(selectedCategory === category ? null : category)
