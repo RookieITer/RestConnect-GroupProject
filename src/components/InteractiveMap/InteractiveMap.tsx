@@ -104,7 +104,7 @@ export const InteractiveMap: React.FC = () => {
                                 <p className="text-sm text-center">
                                     Current Location has: Moderate Risk.
                                     <a href="/statistics" className="text-primary hover:underline ml-1 text-red-400 font-bold">
-                                        Know your risks
+                                        Click here to Know your risks
                                     </a>
                                 </p>
                             </CardContent>
