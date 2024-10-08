@@ -81,7 +81,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
                         </Button>
                     </DropdownTrigger>
                     <DropdownMenu
-                        aria-label="Open Spaces"
+                        aria-label="Rest Spot"
                         selectionMode="multiple"
                         selectedKeys={new Set(Object.entries(filter.openSpaceFilters)
                             .filter(([, value]) => value)

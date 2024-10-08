@@ -279,7 +279,7 @@ export default function Statistics() {
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis
                                         type="number"
-                                        label={{value: 'Number of Accidents', position: 'insideBottom', offset: -10}}
+                                        label={{value: '(Number of Accidents 2020-2023)', position: 'insideBottom', offset: -10}}
                                     />
                                     <YAxis
                                         dataKey="SPEED_ZONE"
