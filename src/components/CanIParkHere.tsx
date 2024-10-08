@@ -195,7 +195,7 @@ export const CanIParkHere: React.FC = () => {
                             onClick={toggleDisabledType}
                             height={"3em"} className = 'btnmax'>
                             Disabled permit is displayed</ToggleButton>&nbsp;
-                          <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
+                          <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'} />
                       </ThemeProvider>
 
                       <Button className = 'btnmax'  height={"3em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
