@@ -199,7 +199,7 @@ export const CanIParkHere: React.FC = () => {
                       </ThemeProvider>
 
                       <Button className = 'btnmax'  height={"4em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
-                        variation="primary"onClick={() => hiddenInput.current?.click()}>Select Photo</Button>
+                        variation="primary" onClick={() => hiddenInput.current?.click()}>Select Photo</Button>
                       <VisuallyHidden>
                           <input
                           type="file"
