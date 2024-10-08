@@ -143,8 +143,9 @@ export default function Component() {
                         <Button
                             key={category}
                             onClick={() => toggleCategory(category)}
-                            variant={selectedCategory === category ? "default" : "outline"}
-                            className="w-full"
+                            className={`w-full bg-[#9DCBF0] hover:bg-[#7DBAE0] text-black ${
+                                selectedCategory === category ? 'ring-2 ring-black' : ''
+                            }`}
                         >
                             {category}
                         </Button>
