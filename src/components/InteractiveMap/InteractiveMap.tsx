@@ -103,7 +103,7 @@ export const InteractiveMap: React.FC = () => {
                                 <p className="text-sm text-center text-muted-foreground">RestConnect Risk Score</p>
                                 <p className="text-sm text-center">
                                     Current Location has: Moderate Risk.
-                                    <a href="/statistics" className="text-primary hover:underline ml-1">
+                                    <a href="/statistics" className="text-primary hover:underline ml-1 text-red-400 font-bold">
                                         Know your risks
                                     </a>
                                 </p>
