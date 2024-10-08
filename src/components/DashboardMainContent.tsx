@@ -5,7 +5,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Divider } from '@aws-amplify/ui-react';
 import { Link } from 'react-router-dom';
-import { Map, ClipboardList, Image, Newspaper } from 'lucide-react';
+import { Map, ClipboardList, Image } from 'lucide-react';
 import {FaHandHoldingMedical} from "react-icons/fa6";
 import { Heading, Button } from '@aws-amplify/ui-react'; 
 
