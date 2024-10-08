@@ -53,20 +53,20 @@ const toggleTheme = createTheme({
   tokens: {
     components: {
     togglebutton: {
-      borderColor: { value: '{colors.blue.90}' },
-      color: { value: '{colors.blue.90}' },
+      borderColor: { value: '#666666' },
+      color: { value: '#777777' },
       _hover: {
           backgroundColor: { value: '{colors.white}' },
         },
       _focus: {
-          color: { value: '#666666' },
+          color: { value: '#777777' },
         },
       _active: {
           backgroundColor: { value: '{colors.red.10}' },
           },
       _pressed: {
           backgroundColor: { value: '{colors.green.20}' },
-          color: { value: '#666666' },
+          color: { value: '#777777' },
           _hover: {
             backgroundColor: { value: '{colors.green.20}' },
           },
@@ -169,7 +169,7 @@ export const CanIParkHere: React.FC = () => {
                             isExclusive
                             onChange={(value) => setSelectedDirection(value as string)}
                           >                            
-                            <ToggleButton height={"5em"} width={"6em"} fontWeight={"500"} value="Left">Left</ToggleButton>
+                            <ToggleButton height={"3em"} width={"6em"} value="Left">Left</ToggleButton>
                             &nbsp;&nbsp;&nbsp;
                             <Image
                               alt="A Parking Sign"
@@ -179,7 +179,7 @@ export const CanIParkHere: React.FC = () => {
                               opacity="100%"
                             />
                             &nbsp;&nbsp;&nbsp;
-                            <ToggleButton height={"5em"} width={"6em"}  fontWeight={"500"} value="Right">Right</ToggleButton>
+                            <ToggleButton height={"3em"} width={"6em"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
                       <Divider size="small" orientation="horizontal" margin={'0px 0px 10px 0px'} />
@@ -188,17 +188,17 @@ export const CanIParkHere: React.FC = () => {
                       <ThemeProvider theme={toggleTheme}>
                           <ToggleButton isPressed={isCommercial}
                             onClick= {toggleVehicleType} // Use an arrow function here
-                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            height={"3em"} className = 'btnmax'>
                             Vehicle is a truck or van
                           </ToggleButton>
                           <ToggleButton  isPressed={isDisabled}
                             onClick={toggleDisabledType}
-                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            height={"3em"} className = 'btnmax'>
                             Disabled permit is displayed</ToggleButton>&nbsp;
                           <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
                       </ThemeProvider>
 
-                      <Button className = 'btnmax'  height={"4em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
+                      <Button className = 'btnmax'  height={"3em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
                         variation="primary" onClick={() => hiddenInput.current?.click()}>Select Photo</Button>
                       <VisuallyHidden>
                           <input
