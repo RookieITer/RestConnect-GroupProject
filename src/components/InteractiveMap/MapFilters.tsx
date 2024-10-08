@@ -77,7 +77,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
                             className="capitalize bg-green-400"
                             endContent={<ChevronDownIcon className="h-4 w-4" />}
                         >
-                            Open Spaces
+                            Rest Spot
                         </Button>
                     </DropdownTrigger>
                     <DropdownMenu

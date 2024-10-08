@@ -27,7 +27,7 @@ export function LocationTypeFilter({ selectedTypes, onChange }: LocationTypeFilt
                     endContent={<ChevronDownIcon className={`h-4 w-4 ${selectedTypes.length > 0 ? 'text-white' : 'text-black'}`} />}
                 >
                     {selectedTypes.length > 0
-                        ? `${selectedTypes.length} selected`
+                        ? `Select Amenities amount is ${selectedTypes.length} `
                         : "Select location types"}
                 </Button>
             </DropdownTrigger>
