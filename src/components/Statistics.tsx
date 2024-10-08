@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { Heading } from '@aws-amplify/ui-react'
 import { useNavigate } from 'react-router-dom'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis, Cell } from 'recharts'
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, Play, Bike, Car, User } from 'lucide-react'
@@ -28,7 +28,7 @@ interface CrimeData {
     Suggested_Video: string | null
 }
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE']
+const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A4DE6C', '#FF6B6B']
 
 const CustomizedPointer = ({ cx, cy, midAngle, outerRadius, safety_index }: { cx: number, cy: number, midAngle: number, outerRadius: number, safety_index: number }) => {
     const RADIAN = Math.PI / 180;
@@ -52,8 +52,8 @@ export default function Statistics() {
     const [crimeData, setCrimeData] = useState<CrimeData[]>([])
     const [selectedSuburb, setSelectedSuburb] = useState<string>('')
     const [suburbs, setSuburbs] = useState<string[]>([])
-    const [selectedPostcode, setSelectedPostcode] = useState<string>('')
-    const [postcodes, setPostcodes] = useState<string[]>([])
+    const [selectedArea, setSelectedArea] = useState<string>('')
+    const [areas, setAreas] = useState<string[]>([])
     const [activeTab, setActiveTab] = useState<'accident' | 'crime'>('accident')
     const [videoError, setVideoError] = useState<boolean>(false)
     const [videoErrorMessage, setVideoErrorMessage] = useState<string>('')
@@ -79,12 +79,12 @@ export default function Statistics() {
             setSuburbs(uniqueSuburbs)
             setSelectedSuburb(uniqueSuburbs[0])
 
-            const uniquePostcodes = Array.from(new Set(parsedCrimeData.map(item => item.Postcode.toString())))
-            setPostcodes(uniquePostcodes)
-            setSelectedPostcode(uniquePostcodes[0])
+            const uniqueAreas = Array.from(new Set(parsedCrimeData.map(item => item.LGA)))
+            setAreas(uniqueAreas)
+            setSelectedArea(uniqueAreas[0])
 
             console.log('Fetched data successfully')
-            console.log('Unique postcodes:', uniquePostcodes)
+            console.log('Unique areas:', uniqueAreas)
         } catch (error) {
             console.error('Error fetching data:', error)
         } finally {
@@ -100,9 +100,9 @@ export default function Statistics() {
         setSelectedSuburb(value)
     }
 
-    const handlePostcodeChange = (value: string) => {
-        console.log('Postcode changed to:', value)
-        setSelectedPostcode(value)
+    const handleAreaChange = (value: string) => {
+        console.log('Area changed to:', value)
+        setSelectedArea(value)
         setVideoError(false)
         setVideoErrorMessage('')
         setSelectedVideo(null)
@@ -131,13 +131,13 @@ export default function Statistics() {
         return totalCrashes < (safest.crashes || Infinity) ? { mode, crashes: totalCrashes } : safest
     }, { mode: '', crashes: Infinity })
 
-    const selectedPostcodeData = crimeData.filter(item => item.Postcode.toString() === selectedPostcode)
-    const top5Risks = selectedPostcodeData
+    const selectedAreaData = crimeData.filter(item => item.LGA === selectedArea)
+    const top5Risks = selectedAreaData
         .sort((a, b) => b.Incidents_Recorded - a.Incidents_Recorded)
         .slice(0, 5)
 
-    const safetyIndex = selectedPostcodeData[0]?.Safety_Index || 0
-    const suggestedVideos = selectedPostcodeData
+    const safetyIndex = selectedAreaData[0]?.Safety_Index || 0
+    const suggestedVideos = selectedAreaData
         .map(item => item.Suggested_Video)
         .filter((video, index, self) => video && self.indexOf(video) === index) as string[]
 
@@ -145,7 +145,7 @@ export default function Statistics() {
         if (suggestedVideos.length > 0) {
             console.log('Suggested video URLs:', suggestedVideos)
         } else {
-            console.log('No suggested videos for this postcode')
+            console.log('No suggested videos for this area')
         }
     }, [suggestedVideos])
 
@@ -199,7 +199,7 @@ export default function Statistics() {
                     safer area.</p>
                 <p className="font-semibold text-red-500">The most prevalent type of offense is {highestRisk?.Offence_Division},
                     with {highestRisk?.Incidents_Recorded} recorded incidents.</p>
-                <p>In the postcode area {selectedPostcode}, there have been a total of {totalIncidents} recorded
+                <p>In the area {selectedArea}, there have been a total of {totalIncidents} recorded
                     incidents across the top 5 risk categories.</p>
                 <p>Based on this data, residents and visitors should be particularly vigilant
                     about {highestRisk?.Offence_Division.toLowerCase()} in this area. However, it's important to note
@@ -229,6 +229,21 @@ export default function Statistics() {
                 return null;
         }
     };
+
+    const crimeChartData = selectedAreaData
+        .reduce((acc, item) => {
+            const existingItem = acc.find(i => i.Offence_Division === item.Offence_Division);
+            if (existingItem) {
+                existingItem.Incidents_Recorded += item.Incidents_Recorded;
+            } else {
+                acc.push({
+                    Offence_Division: item.Offence_Division,
+                    Incidents_Recorded: item.Incidents_Recorded
+                });
+            }
+            return acc;
+        }, [] as { Offence_Division: string; Incidents_Recorded: number }[])
+        .sort((a, b) => b.Incidents_Recorded - a.Incidents_Recorded);
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
@@ -266,20 +281,20 @@ export default function Statistics() {
                             <div className="flex flex-col items-center mb-6">
                                 <SafestModeIcon />
                                 <p className="mt-2 text-center">
-                                    Safest transport mode in {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
+                                    Safest transport mode in  {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
                                 </p>
                             </div>
                             {analyzeCrashData()}
                             <ResponsiveContainer width="100%" height={400}>
                                 <BarChart
                                     data={crashChartData}
-                                    margin={{top: 20, right: 30, left: 20, bottom: 60}}
+                                    margin={{top: 20, right:  30, left: 20, bottom: 60}}
                                     layout="vertical"
                                 >
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis
                                         type="number"
-                                        label={{value: 'Number of Accidents', position: 'insideBottom', offset: -10}}
+                                        label={{value: '(Number of Accidents 2020-2023)', position: 'insideBottom', offset: -10}}
                                     />
                                     <YAxis
                                         dataKey="SPEED_ZONE"
@@ -305,20 +320,20 @@ export default function Statistics() {
                 {activeTab === 'crime' && (
                     <div>
                         <div className="mb-6 flex space-x-4">
-                            <Select value={selectedPostcode} onValueChange={handlePostcodeChange}>
+                            <Select value={selectedArea} onValueChange={handleAreaChange}>
                                 <SelectTrigger className="w-[200px]">
-                                    <SelectValue placeholder="Select postcode" />
+                                    <SelectValue placeholder="Select area" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {postcodes.map(postcode => (
-                                        <SelectItem key={postcode} value={postcode}>{postcode}</SelectItem>
+                                    {areas.map(area => (
+                                        <SelectItem key={area} value={area}>{area}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-2xl font-semibold mb-4">Crime Risk Score for {selectedPostcode}</h2>
+                            <h2 className="text-2xl font-semibold mb-4">Crime Risk Score for {selectedArea}</h2>
                             <ResponsiveContainer width="100%" height={300}>
                                 <RadialBarChart
                                     innerRadius="60%"
@@ -363,6 +378,34 @@ export default function Statistics() {
                                 </p>
                             </div>
                             {analyzeCrimeData()}
+                            <div className="mt-6">
+                                <h3 className="text-lg font-semibold mb-2">Crime Incidents by Offence Type</h3>
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <BarChart
+                                        data={crimeChartData}
+                                        layout="vertical"
+                                        margin={{top: 5, right: 30, left: 20, bottom: 5}}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis
+                                            type="number"
+                                            label={{ value: 'Incidents Recorded', position: 'insideBottom', offset: -5 }}
+                                        />
+                                        <YAxis
+                                            type="category"
+                                            dataKey="Offence_Division"
+                                            width={150}
+                                        />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="Incidents_Recorded" name="Incidents Recorded">
+                                            {crimeChartData.map((_, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                             {suggestedVideos.length > 0 && (
                                 <div className="mt-4">
                                     <h3 className="text-lg font-semibold mb-2">Suggested Videos:</h3>

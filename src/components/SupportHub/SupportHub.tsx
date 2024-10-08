@@ -111,6 +111,11 @@ export default function Component() {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
     const categories = Array.from(new Set(supportServices.map(service => service.Category)))
+        .sort((a, b) => {
+            if (a === "OTHER") return 1
+            if (b === "OTHER") return -1
+            return a.localeCompare(b)
+        })
 
     const toggleCategory = (category: string) => {
         setSelectedCategory(selectedCategory === category ? null : category)
@@ -143,8 +148,9 @@ export default function Component() {
                         <Button
                             key={category}
                             onClick={() => toggleCategory(category)}
-                            variant={selectedCategory === category ? "default" : "outline"}
-                            className="w-full"
+                            className={`w-full bg-[#9DCBF0] hover:bg-[#7DBAE0] text-black ${
+                                selectedCategory === category ? 'ring-2 ring-black' : ''
+                            }`}
                         >
                             {category}
                         </Button>

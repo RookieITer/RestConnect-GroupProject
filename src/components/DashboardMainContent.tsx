@@ -87,7 +87,7 @@ export const DashboardMainContent: React.FC = () => {
                             <br /><br />
                         </p>
                         <Link to="/interactive-map">
-                            <Button variation="primary">Locate the nearest rest area and amenities</Button>
+                            <Button variation="primary" className="bg-blue-400">Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>
                     <motion.div
