@@ -9,6 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { Card, CardContent } from "@/components/ui/card"
+import { Heading } from '@aws-amplify/ui-react'; 
 
 export const InteractiveMap: React.FC = () => {
     const [toilets, setToilets] = useState<ToiletData[]>([])
@@ -93,11 +94,11 @@ export const InteractiveMap: React.FC = () => {
 
     return (
         <ErrorBoundary>
-            <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
-                <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
-                    <div className="flex justify-between items-center mb-4">
-                        <h1 className="text-2xl font-bold">Find the nearest rest areas and amenities</h1>
-                        <Card className="w-64">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
+            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+                <div className="flex justify-between items-center mb-4">
+                    <Heading level={3}>Find the nearest rest areas and amenities</Heading>
+                        <Card className="w-128">
                             <CardContent className="p-4">
                                 <h2 className="text-3xl font-bold text-center text-primary">3.4</h2>
                                 <p className="text-sm text-center text-muted-foreground">RestConnect Risk Score</p>

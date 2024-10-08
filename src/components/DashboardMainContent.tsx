@@ -3,10 +3,12 @@
 import React, { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Button, Divider } from '@aws-amplify/ui-react';
+import { Divider } from '@aws-amplify/ui-react';
 import { Link } from 'react-router-dom';
 import { Map, ClipboardList, Image, Newspaper } from 'lucide-react';
 import {FaHandHoldingMedical} from "react-icons/fa6";
+import { Heading, Button } from '@aws-amplify/ui-react'; 
+
 
 export const DashboardMainContent: React.FC = () => {
     const controls1 = useAnimation();
@@ -78,16 +80,17 @@ export const DashboardMainContent: React.FC = () => {
                     variants={containerVariants}
                 >
                     <motion.div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8 p-6 rounded-lg" variants={itemVariants}>
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-green-400 leading-tight">
-                            Gig worker life made easy
-                        </h1>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
+    
+                            <Heading level={2}>Gig Worker life made easy</Heading>
+                            <br />
+
                             <b>Master Your Gig Journey!</b>&nbsp;
                             Explore Melbourne's rest spots, amenities, and simplified parking information, along with essential resources from our Support Hub, to ensure peace of mind with RestConnect.
                             <br /><br />
                         </p>
                         <Link to="/interactive-map">
-                            <Button variation="primary" className="bg-blue-400">Locate the nearest rest area and amenities</Button>
+                            <Button variation="primary" height={"3em"}>Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>
                     <motion.div
@@ -145,10 +148,8 @@ export const DashboardMainContent: React.FC = () => {
                     className="mb-12 md:mb-16 text-center"
                 >
                     <motion.div className="inline-block mb-8" variants={itemVariants}>
-                        <div className="flex items-center justify-center space-x-2 bg-blue-100 px-6 py-3 rounded-full">
-                            <Newspaper className="w-6 h-6 text-blue-500" />
-                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Latest News</h2>
-                        </div>
+                        <Heading level={2}>Latest News</Heading>
+
                     </motion.div>
                     <motion.p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed max-w-2xl mx-auto" variants={itemVariants}>
                         As part of the gig community, you face unique challenges. Explore the 'Learn More' links to discover key issues, and press the associated buttons to see how RestConnect can support you.

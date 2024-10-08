@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Heading } from '@aws-amplify/ui-react'; 
+
 
 interface SupportService {
     Name: string
@@ -40,7 +42,7 @@ const supportServices: SupportService[] = [
         "Phone": "9429 1833",
         "Email": "NULL",
         "address": "Level 1 36 Church Street Richmond",
-        "Category": "OTHER"
+        "Category": "Other"
     },
     {
         "Name": "Anglicare Victoria – St.Mark's Community Centre",
@@ -49,7 +51,7 @@ const supportServices: SupportService[] = [
         "Phone": "9419 3288",
         "Email": "NULL",
         "address": " 250 George Street Fitzroy",
-        "Category": "OTHER"
+        "Category": "Other"
     },
     {
         "Name": "Royal Melbourne Hospital",
@@ -112,8 +114,8 @@ export default function Component() {
 
     const categories = Array.from(new Set(supportServices.map(service => service.Category)))
         .sort((a, b) => {
-            if (a === "OTHER") return 1
-            if (b === "OTHER") return -1
+            if (a === "Other") return 1
+            if (b === "Other") return -1
             return a.localeCompare(b)
         })
 
@@ -136,19 +138,18 @@ export default function Component() {
     )
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-2 text-center">Support Hub</h1>
-            <p className="text-center mb-6 text-gray-600">Support Resources When You Need It</p>
-            <Card className="mb-8">
-                <CardHeader>
-                    <CardTitle>Need Assistance? Choose below:</CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-4">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
+        <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+            <Heading level={3}>Support Hub</Heading>
+            <p>Support Resources When You Need It</p><br />
+            <Card>
+                <CardContent className="grid gap-0.5">
+                    <br />
                     {categories.map((category) => (
                         <Button
                             key={category}
                             onClick={() => toggleCategory(category)}
-                            className={`w-full bg-[#9DCBF0] hover:bg-[#7DBAE0] text-black ${
+                            className={`w-full bg-[#f1f1f1] hover:bg-[#7DBAE0] text-black ${
                                 selectedCategory === category ? 'ring-2 ring-black' : ''
                             }`}
                         >
@@ -159,12 +160,14 @@ export default function Component() {
             </Card>
             {selectedCategory && (
                 <div>
-                    <h2 className="text-2xl font-semibold mb-4">{selectedCategory}</h2>
+                    <br />
+                    <Heading level={4}>{selectedCategory}</Heading><br />
                     {supportServices
                         .filter(service => service.Category === selectedCategory)
                         .map(renderServiceInfo)}
                 </div>
             )}
+        </main>
         </div>
     )
 }
