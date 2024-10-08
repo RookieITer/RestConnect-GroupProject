@@ -163,14 +163,13 @@ export const CanIParkHere: React.FC = () => {
                   <>
                     <div className='percaaa'>
                     <div className="pseudoheading">Which side of the sign is the vehicle on?</div>
-                    <div className="fineprint">Click the buttons to select or de-select options</div>
                     <ThemeProvider theme={toggleTheme}>
                           <ToggleButtonGroup 
                             value = {selectedDirection}
                             isExclusive
                             onChange={(value) => setSelectedDirection(value as string)}
                           >                            
-                            <ToggleButton height={"6em"} width={"6em"} fontWeight={"500"} value="Left">Left</ToggleButton>
+                            <ToggleButton height={"5em"} width={"6em"} fontWeight={"500"} value="Left">Left</ToggleButton>
                             &nbsp;&nbsp;&nbsp;
                             <Image
                               alt="A Parking Sign"
@@ -180,14 +179,27 @@ export const CanIParkHere: React.FC = () => {
                               opacity="100%"
                             />
                             &nbsp;&nbsp;&nbsp;
-                            <ToggleButton height={"6em"} width={"6em"}  fontWeight={"500"} value="Right">Right</ToggleButton>
+                            <ToggleButton height={"5em"} width={"6em"}  fontWeight={"500"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
-                      <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'} />
+                      <Divider size="small" orientation="horizontal" margin={'0px 0px 10px 0px'} />
 
-                      <div className="pseudoheading">Select Your Photo</div>
-                      <div className="fineprint">Mobile devices will prompt you to take a photo</div>
-                      <Button className = 'btnmax'  height={"4em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  variation="primary"onClick={() => hiddenInput.current?.click()}>Browse</Button>
+                      <div className="fineprint">Other Vehicle Options (Click to Select/De-Select)</div>
+                      <ThemeProvider theme={toggleTheme}>
+                          <ToggleButton isPressed={isCommercial}
+                            onClick= {toggleVehicleType} // Use an arrow function here
+                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            Vehicle is a truck or van
+                          </ToggleButton>
+                          <ToggleButton  isPressed={isDisabled}
+                            onClick={toggleDisabledType}
+                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
+                            Disabled permit is displayed</ToggleButton>&nbsp;
+                          <Divider size="small" orientation="horizontal" margin={'20px 0px 10px 0px'} />
+                      </ThemeProvider>
+
+                      <Button className = 'btnmax'  height={"4em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
+                        variation="primary"onClick={() => hiddenInput.current?.click()}>Select Photo</Button>
                       <VisuallyHidden>
                           <input
                           type="file"
@@ -198,24 +210,8 @@ export const CanIParkHere: React.FC = () => {
                           accept={acceptedFileTypes.join(',')}
                           />
                       </VisuallyHidden>
+                      <div className="fineprint"><br />Mobile devices will prompt you to take a photo</div>
 
-                      <Divider size="small" orientation="horizontal" margin={'20px 0px 20px 0px'} />
-
-                      <div className="pseudoheading">Other Vehicle Options</div>
-
-                      <ThemeProvider theme={toggleTheme}>
-                          <div className="fineprint">Click the buttons to select or un-select options</div>
-                          <ToggleButton isPressed={isCommercial}
-                            onClick= {toggleVehicleType} // Use an arrow function here
-                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
-                            Vehicle is a truck or van
-                          </ToggleButton>
-                          <ToggleButton  isPressed={isDisabled}
-                            onClick={toggleDisabledType}
-                            height={"3em"} fontWeight={"500"} className = 'btnmax'>
-                            Disabled permit is displayed</ToggleButton>&nbsp;
-                          <Divider size="small" orientation="horizontal" margin={'30px 0px 20px 0px'} />
-                      </ThemeProvider>
                     </div>
                   </>
                 )},
