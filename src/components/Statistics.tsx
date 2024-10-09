@@ -285,7 +285,7 @@ export default function Statistics() {
                     </div>
                 </div>
     
-                <p className="text-gray-300 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
+                <p className="text-gray-400 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
 
                 <div className="flex justify-between items-center">
                    <div>

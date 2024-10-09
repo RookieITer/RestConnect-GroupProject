@@ -105,8 +105,8 @@ export const InteractiveMap: React.FC = () => {
 
     return (
         <ErrorBoundary>
-        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-6">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
+            <div className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
                 <div className="flex justify-between items-center">
                     <Heading level={3}>Find the nearest rest areas and amenities</Heading>
                     <div className='pseudoheading'>RestConnect Risk Score for this area: 3.4</div>
@@ -129,8 +129,7 @@ export const InteractiveMap: React.FC = () => {
 
                     <Button 
                         onClick={handleClick}
-                        height={"3em"} 
-                        variation="primary">
+                        variation="primary" className='btnmaxtallthin'>
                             Click Here To Know Your Risks
                     </Button>
                 </div>

@@ -79,7 +79,7 @@ export const DashboardMainContent: React.FC = () => {
                     animate={controls1}
                     variants={containerVariants}
                 >
-                    <motion.div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8 p-6 rounded-lg" variants={itemVariants}>
+                    <motion.div className="md:w-1/2 mb-8 md:mb-0 pr-0 md:pr-8 p-0 rounded-lg" variants={itemVariants}>
                         <p className="text-base md:text-lg text-gray-700 mb-4 leading-relaxed">
     
                             <Heading level={2}>Gig Worker life made easy</Heading>
@@ -90,7 +90,7 @@ export const DashboardMainContent: React.FC = () => {
                             <br /><br />
                         </p>
                         <Link to="/interactive-map">
-                            <Button variation="primary" height={"3em"}>Locate the nearest rest area and amenities</Button>
+                            <Button variation="primary" className='btnmaxtall'>Locate the nearest rest area and amenities</Button>
                         </Link>
                     </motion.div>
                     <motion.div

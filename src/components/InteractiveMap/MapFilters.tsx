@@ -33,7 +33,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
     }
 
     return (
-        <div className="mb-1 mt-4 flex flex-wrap gap-4">
+        <div className="mb-1 mt-4 flex flex-wrap gap-1">
             <LocationTypeFilter
                 selectedTypes={filter.locationTypes}
                 onChange={onLocationTypeChange}
@@ -101,7 +101,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
 
             {filter.locationTypes.includes('parking') && (
                 <Button onClick={() => window.location.href='CanIParkHere'} className="bg-yellow-300">
-                    Need help with a parking sign? Click Here
+                    Can I Park Here?
                 </Button>
             )}
         </div>
