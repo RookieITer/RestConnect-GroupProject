@@ -35,7 +35,7 @@ const acctheme = createTheme({
             backgroundColor: '#555555',
             _hover: {
               color: '#333333',
-              backgroundColor: '#f5f5f5',
+              backgroundColor: 'f5f5f5',
             },
           },
           content: {
@@ -85,23 +85,31 @@ const tabtheme = createTheme({
       tabs: {
         item: {
           color: { value: '#999999' },
+          borderWidth: { value: '1px' },
+          borderStyle: { value: 'solid' }, // Ensure the border is solid
+          borderColor: { value: '#333333' }, // Default border color
+          
           paddingHorizontal: { value: '9px' },
           paddingVertical: { value: '9px' },
           fontSize: { value: '0.95em' },
           fontWeight: { value: '500' },
           _hover: {
-            color: { value: '#66bbbb' },
+            color: { value: '#dddddd' },
+            borderColor: { value: '#333333' }, // Default border color
           },
           _focus: {
-            color: { value: '{colors.blue.60}' },
+            color: { value: '#ffffff'},
+            borderColor: { value: '#333333' }, // Default border color
           },
           _active: {
-            color: { value: '#888888' },
-            backgroundColor: { value: '#f1f1f1' },
+            color: { value: '#f5f5f5' },
+            backgroundColor: { value: '#666666' },
+            borderColor: { value: '#111111' },
           },
           _disabled: {
-            color: { value: '#dddddd' },
+            color: { value: '#e5e5e5' },
             backgroundColor: { value: 'transparent' },
+            borderColor: { value: '#dddddd' }, // Default border color
           },
         },
       },
@@ -182,7 +190,8 @@ export const CanIParkHere: React.FC = () => {
                             <ToggleButton height={"3em"} width={"6em"} value="Right">Right</ToggleButton>
                           </ToggleButtonGroup>
                       </ThemeProvider>
-                      <Divider size="small" orientation="horizontal" margin={'0px 0px 10px 0px'} />
+                      <div className='divide1'></div>
+                      <Divider size="small" orientation="horizontal" margin={'10px 0px 20px 0px'}/>
 
                       <div className="fineprint">Other Vehicle Options (Click to Select/De-Select)</div>
                       <ThemeProvider theme={toggleTheme}>
@@ -195,8 +204,11 @@ export const CanIParkHere: React.FC = () => {
                             onClick={toggleDisabledType}
                             height={"3em"} className = 'btnmax'>
                             Disabled permit is displayed</ToggleButton>&nbsp;
-                          <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'} />
+                            <div className='divide1'></div>
+                            <div className='divide1'></div>
+                            <Divider size="small" orientation="horizontal" margin={'10px 0px 20px 0px'} />
                       </ThemeProvider>
+
 
                       <Button className = 'btnmax'  height={"3em"} isDisabled = {(selectedDirection == null || selectedDirection == '' )}  
                         variation="primary" onClick={() => hiddenInput.current?.click()}>Select Photo</Button>
@@ -995,10 +1007,14 @@ export const CanIParkHere: React.FC = () => {
                 <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"} padding={"0px 0px 3px 15px"}>
                     <Heading level={3}>Can I Park Here?</Heading>
                 </Card>
+                <br />
 
-                <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
-                    <ControlledTabDisplay />
-                </Card>
+                <div className="bg-white p-1 rounded-lg border border-gray-200">
+                  <Card columnStart="1" columnEnd="1"  backgroundColor={"#ffffff"}>
+                      <ControlledTabDisplay />
+                  </Card>
+                  </div>
+
             </div>
           </main>
         </div>

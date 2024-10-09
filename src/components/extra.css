@@ -3,9 +3,18 @@
     width: 100%;
     margin: 0px 0px 6px 0px;
   }
+  .btnmax16 {
+    width: 16em;
+    height: 3em;
+    margin: 0px 0px 0px 0px;
+  }  
   .listmax {
     width: 100%;
     margin: 3px 0px 3px 0px;
+  }
+
+  .divide1 {
+    height: 0em;
   }
 }
 
@@ -14,10 +23,20 @@
     width: 16em;
     margin: 0px 2px 0px 2px;
   }
+  .btnmax16 {
+    width: 16em;
+    height: 3em;
+    margin: 0px 0px 0px 0px;
+  }  
   .listmax {
     width: 50em;
     margin: 6px 0px 3px 0px;
   }
+
+  .divide1 {
+    height: 1em;
+  }
+
 }
 
 
@@ -50,4 +69,11 @@
   font-size: 1.20em;
   font-weight: 600;
   padding: 6px 0px 6px 0px;
+}
+
+.guagewidth300 {
+  width: 20em;
+  height: 15em;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }

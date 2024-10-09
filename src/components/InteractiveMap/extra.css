@@ -3,11 +3,19 @@
   .perc50 {
     width: 100%;
   }
+
+  .divide1 {
+    margin: 0px 0px 100px 0px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .perc50 {
     width: 800px;
+  }
+
+  .divide1 {
+    margin: 0px 0px 100px 0px;
   }
 }
 
@@ -33,4 +41,9 @@
   font-size: 1.20em;
   font-weight: 600;
   padding: 6px 0px 6px 0px;
+}
+
+.guagewidth300 {
+  width: 40em;
+
 }

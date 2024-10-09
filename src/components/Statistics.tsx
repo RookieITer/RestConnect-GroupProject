@@ -257,19 +257,13 @@ export default function Statistics() {
                 <p className="text-gray-600 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
 
                 <div className="flex justify-between items-center">
-                    <div>
-                    <Button onClick={() => setActiveTab('accident')}>Accident Data</Button>
-                    <Button onClick={() => setActiveTab('crime')}>Crime Insight</Button>
-                    </div>
-                    <Button variation="primary" width="15em" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
-                </div>
-                <br />
+                    <div className="flex inline-block">
+                        <Button width={"18em"} height={"3em"} onClick={() => setActiveTab('accident')}>Accident Data</Button>&nbsp;
+                        <Button  width={"18em"} height={"3em"} onClick={() => setActiveTab('crime')}>Crime Insight</Button>&nbsp;
 
-                {activeTab === 'accident' && (
-                    <div>
-                        <div className="mb-6 flex space-x-4">
+                        {activeTab === 'accident' && (
                             <Select value={selectedSuburb} onValueChange={handleSuburbChange}>
-                                <SelectTrigger className="w-[200px]">
+                                <SelectTrigger style={{ height: '3.5em', border: '2px solid #999999'}}>
                                     <SelectValue placeholder="Select suburb" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -278,9 +272,29 @@ export default function Statistics() {
                                     ))}
                                 </SelectContent>
                             </Select>
-                        </div>
+                        )}
 
-                        <div className="bg-white p-6 rounded-lg shadow-md">
+                        {activeTab === 'crime' && (
+                            <Select value={selectedArea} onValueChange={handleAreaChange}>
+                                <SelectTrigger style={{ height: '3.5em', border: '2px solid #999999' }}>
+                                    <SelectValue placeholder="Select area" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {areas.map(area => (
+                                        <SelectItem key={area} value={area}>{area}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+
+                    </div>
+                    <Button variation="primary" width="15em" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
+                </div>
+                <br />
+
+                {activeTab === 'accident' && (
+                    <div>
+                        <div className="bg-white p-3 rounded-lg border border-gray-200">
                             <div className='pseudoheading'>
                                 Safest transport mode in  {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
                             </div>
@@ -324,64 +338,61 @@ export default function Statistics() {
 
                 {activeTab === 'crime' && (
                     <div>
-                        <div className="mb-6 flex space-x-4">
-                            <Select value={selectedArea} onValueChange={handleAreaChange}>
-                                <SelectTrigger className="w-[200px]">
-                                    <SelectValue placeholder="Select area" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {areas.map(area => (
-                                        <SelectItem key={area} value={area}>{area}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-lg shadow-md">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200">
                             <h2 className="text-2xl font-semibold mb-4">Crime Risk Score for {selectedArea}</h2>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <RadialBarChart
-                                    innerRadius="60%"
-                                    outerRadius="100%"
-                                    data={[{name: 'Safety Index', value: safetyIndex}]}
-                                    startAngle={180}
-                                    endAngle={0}
-                                    barSize={30}
-                                >
-                                    <defs>
-                                        <linearGradient id="safetyGradient" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stopColor="#F44336"/>
-                                            <stop offset="60%" stopColor="#FFC107"/>
-                                            <stop offset="100%" stopColor="#4CAF50"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <PolarAngleAxis
-                                        type="number"
-                                        domain={[0, 5]}
-                                        angleAxisId={0}
-                                        tick={false}
-                                    />
-                                    <RadialBar
-                                        background
-                                        dataKey="value"
-                                        cornerRadius={30}
-                                        fill="url(#safetyGradient)"
-                                    />
-                                    <CustomizedPointer
-                                        cx={150}
-                                        cy={150}
-                                        midAngle={90 - (safetyIndex / 5) * 180}
-                                        outerRadius={100}
-                                        safety_index={safetyIndex}
-                                    />
-                                </RadialBarChart>
-                            </ResponsiveContainer>
-                            <div className="mt-4 text-center">
+                            <div>
+                                <div className="mt-4 text-left">
                                 <p className="text-lg font-semibold">Rest Connect Risk Score: {safetyIndex.toFixed(2)}</p>
                                 <p className="text-sm text-gray-600">
-                                    Interpretation: {getColorInterpretation(safetyIndex)}
+                                Interpretation: {getColorInterpretation(safetyIndex)}
                                 </p>
+                                <br />
                             </div>
+
+
+                            <div>
+                                <ResponsiveContainer width={300} height={300}>
+                                            <RadialBarChart
+                                                innerRadius="90%"
+                                                outerRadius="90%"
+                                                data={[{name: 'Safety Index', value: safetyIndex}]}
+                                                startAngle={180}
+                                                endAngle={0}
+                                                barSize={30}
+                                                
+                                            >
+                                            <defs>
+                                                <linearGradient id="safetyGradient" x1="0" y1="0" x2="1" y2="0">
+                                                    <stop offset="0%" stopColor="#F44336"/>
+                                                    <stop offset="60%" stopColor="#FFC107"/>
+                                                    <stop offset="100%" stopColor="#4CAF50"/>
+                                                </linearGradient>
+                                            </defs>
+                                            <PolarAngleAxis
+                                                type="number"
+                                                domain={[0, 5]}
+                                                angleAxisId={0}
+                                                tick={false}
+                                            />
+                                            <RadialBar
+                                                background
+                                                dataKey="value"
+                                                cornerRadius={30}
+                                                fill="url(#safetyGradient)"
+                                            />
+                                            <CustomizedPointer
+                                                cx={150}
+                                                cy={200}
+                                                midAngle={90 - (safetyIndex / 5) * 180}
+                                                outerRadius={100}
+                                                safety_index={safetyIndex}
+                                            />
+                                        </RadialBarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+
                             {analyzeCrimeData()}
                             <div className="mt-6">
                                 <h3 className="text-lg font-semibold mb-2">Crime Incidents by Offence Type</h3>
