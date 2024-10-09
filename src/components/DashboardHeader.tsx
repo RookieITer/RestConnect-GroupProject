@@ -43,17 +43,17 @@ export const DashboardHeader: React.FC = () => {
                                     text-gray-700 hover:text-gray-900
                                     transition-all duration-300 ease-in-out
                                     text-sm xl:text-base font-medium
-                                    px-2 py-1 xl:px-3 xl:py-2 rounded-full
-                                    bg-[#e6f3ff] hover:bg-[#d1e9ec] hover:shadow-lg
-                                    hover:scale-110 transform
-                                    ${location.pathname === item.path ? 'font-semibold bg-[#d1e9ec] text-gray-900 shadow-lg' : ''}
+                                    px-2 py-1 xl:px-3 xl:py-2 rounded-sm
+                                    bg-[#e6f3ff] hover:bg-[#d1e9ec] 
+                                    hover:scale-110 transform  rounded-lg border border-blue-200
+                                    ${location.pathname === item.path ? 'font-semibold bg-[#cae9ec] text-gray-900' : ''}
                                     relative
                                     group
                                 `}
                             >
                                 {item.name}
                                 <span className={`
-                                    absolute inset-0 rounded-full
+                                    absolute inset-0 rounded-sm
                                     bg-[#c0e0e4] opacity-0 group-hover:opacity-25
                                     transition-opacity duration-300 ease-in-out
                                     blur-md

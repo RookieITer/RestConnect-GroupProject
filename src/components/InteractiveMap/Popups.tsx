@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Icons } from '@/components/Icons'
 import { ToiletData, OpenSpaceData, ParkingData } from '@/utils/types'
 import { handleCopyLocation } from '@/utils/utils'
+import { useNavigate } from 'react-router-dom'
+
+
 
 interface PopupProps {
     item: ToiletData | OpenSpaceData | ParkingData
@@ -13,6 +16,13 @@ interface PopupProps {
 const handleGetDirections = (lat: number, lon: number) => {
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, '_blank')
 }
+
+const handleGetSignInfo = () => {
+    const navigate = useNavigate()
+    navigate('/caniparkhere')
+}
+
+
 
 export const ToiletPopup: React.FC<PopupProps> = ({ item, onClose }) => {
     const toilet = item as ToiletData
@@ -127,8 +137,19 @@ export const ParkingPopup: React.FC<PopupProps> = ({ item, onClose }) => {
                     <Icons.X className="w-6 h-6" />
                 </button>
                 <h3 className="font-bold mb-2 pr-8 text-gray-800">{parking.onstreet}</h3>
-                <p className="text-gray-700">Restriction: {parking.restriction_display}</p>
-                <p className="text-gray-700">Time: {parking.time_restrictions_start} - {parking.time_restrictions_finish}</p>
+
+                {/* <p className="text-gray-700">Restriction: {parking.restriction_display}</p> */}
+                {/* <p className="text-gray-700">Time: {parking.time_restrictions_start} - {parking.time_restrictions_finish}</p> */}
+
+                <Button
+                    onClick={() => handleGetSignInfo()}
+                    className="mt-2 h-16 w-full bg-yellow-500 hover:bg-yellow-400 text-white"
+                    variant="outline"
+                >
+                    <Icons.Navigation className="w-4 h-4 mr-2" />
+                    Can I Park Here?<br />Parking Sign Help
+                </Button>
+
                 <Button
                     onClick={() => handleCopyLocation(parking.onstreet)}
                     className="mt-2 w-full bg-pink-500 hover:bg-pink-600 text-white"

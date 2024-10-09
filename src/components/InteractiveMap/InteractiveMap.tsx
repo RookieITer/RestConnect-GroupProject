@@ -39,6 +39,7 @@ export const InteractiveMap: React.FC = () => {
     const loadInitialData = useCallback(async () => {
         setIsLoading(true)
         setError(null)
+
         try {
             const [toiletsData, parkingData] = await Promise.all([
                 fetchToilets(),

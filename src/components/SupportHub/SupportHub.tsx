@@ -143,13 +143,13 @@ export default function Component() {
             <Heading level={3}>Support Hub</Heading>
             <p>Support Resources When You Need It</p><br />
             <Card>
-                <CardContent className="grid gap-0.5">
+                <CardContent className="grid grid-cols-1 gap-0.5 items-start justify-start">
                     <br />
                     {categories.map((category) => (
                         <Button
                             key={category}
                             onClick={() => toggleCategory(category)}
-                            className={`w-full bg-[#f1f1f1] hover:bg-[#7DBAE0] text-black ${
+                            className={`w-full bg-[#fcfcfc] hover:bg-[#eaeaea]  border border-gray-400 text-gray-800 ${
                                 selectedCategory === category ? 'ring-2 ring-black' : ''
                             }`}
                         >
