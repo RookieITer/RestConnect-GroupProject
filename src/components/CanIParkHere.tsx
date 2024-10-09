@@ -1004,7 +1004,7 @@ export const CanIParkHere: React.FC = () => {
       <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
         <main className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
               <div>
-                <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"} padding={"0px 0px 3px 15px"}>
+                <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"} padding={"0px 0px 3px 0px"}>
                     <Heading level={3}>Can I Park Here?</Heading>
                 </Card>
                 <br />
