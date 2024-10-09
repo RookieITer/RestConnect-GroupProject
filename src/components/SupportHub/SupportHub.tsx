@@ -138,8 +138,8 @@ export default function Component() {
     )
 
     return (
-        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-        <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
+        <main className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
             <Heading level={3}>Support Hub</Heading>
             <p>Support Resources When You Need It</p><br />
             <Card>

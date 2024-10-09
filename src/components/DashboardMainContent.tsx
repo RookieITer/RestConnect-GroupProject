@@ -70,8 +70,8 @@ export const DashboardMainContent: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-white text-gray-800 overflow-auto font-sans">
-            <main className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
+            <main className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
                 <motion.section
                     ref={ref1}
                     className="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16"
