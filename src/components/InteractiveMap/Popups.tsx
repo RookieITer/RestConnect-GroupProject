@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Icons } from '@/components/Icons'
 import { ToiletData, OpenSpaceData, ParkingData } from '@/utils/types'
 import { handleCopyLocation } from '@/utils/utils'
-import { useNavigate } from 'react-router-dom'
-
 
 
 interface PopupProps {
@@ -17,10 +15,7 @@ const handleGetDirections = (lat: number, lon: number) => {
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, '_blank')
 }
 
-const handleGetSignInfo = () => {
-    const navigate = useNavigate()
-    navigate('/caniparkhere')
-}
+
 
 
 
@@ -142,7 +137,7 @@ export const ParkingPopup: React.FC<PopupProps> = ({ item, onClose }) => {
                 {/* <p className="text-gray-700">Time: {parking.time_restrictions_start} - {parking.time_restrictions_finish}</p> */}
 
                 <Button
-                    onClick={() => handleGetSignInfo()}
+                    onClick={() => window.location.href='CanIParkHere'}
                     className="mt-2 h-16 w-full bg-yellow-500 hover:bg-yellow-400 text-white"
                     variant="outline"
                 >
