@@ -191,7 +191,7 @@ export const CanIParkHere: React.FC = () => {
                           </ToggleButtonGroup>
                       </ThemeProvider>
                       <div className='divide1'></div>
-                      <Divider size="small" orientation="horizontal" margin={'10px 0px 20px 0px'}/>
+                      <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'}/>
 
                       <div className="fineprint">Other Vehicle Options (Click to Select/De-Select)</div>
                       <ThemeProvider theme={toggleTheme}>
@@ -205,8 +205,7 @@ export const CanIParkHere: React.FC = () => {
                             height={"3em"} className = 'btnmax'>
                             Disabled permit is displayed</ToggleButton>&nbsp;
                             <div className='divide1'></div>
-                            <div className='divide1'></div>
-                            <Divider size="small" orientation="horizontal" margin={'10px 0px 20px 0px'} />
+                            <Divider size="small" orientation="horizontal" margin={'10px 0px 10px 0px'} />
                       </ThemeProvider>
 
 
@@ -1001,7 +1000,7 @@ export const CanIParkHere: React.FC = () => {
     //-------------------------------------------------------------------------
 
     return (
-      <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
+      <div className="min-h-screen bg-white text-gray-800 overflow-auto p-2">
         <main className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
               <div>
                 <Card columnStart="1" columnEnd="1" backgroundColor={"#ffffff"} padding={"0px 0px 3px 0px"}>

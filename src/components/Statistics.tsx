@@ -251,7 +251,7 @@ export default function Statistics() {
     }
 
     return (
-        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
+        <div className="min-h-screen bg-white text-gray-800 overflow-auto p-2">
             <div className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
                 <div className="flex items-center">
                     <Heading level={3}>Know your risks&nbsp;&nbsp;

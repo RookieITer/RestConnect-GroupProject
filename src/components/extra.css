@@ -51,7 +51,7 @@
   }
 
   .divide1 {
-    height: 0em;
+    display: none;
   }
 }
 
@@ -96,7 +96,7 @@
   }
 
   .divide1 {
-    height: 1em;
+    height: 1.5em;
   }
 
 }
