@@ -23,12 +23,12 @@ export function LocationTypeFilter({ selectedTypes, onChange }: LocationTypeFilt
             <DropdownTrigger>
                 <Button
                     variant="flat"
-                    className={`capitalize ${selectedTypes.length > 0 ? 'bg-blue-400 text-white' : 'bg-white text-black'}`}
+                    className={`capitalize ${selectedTypes.length > 0 ? 'bg-blue-400 text-white' : 'bg-blue-400 text-white'}`}
                     endContent={<ChevronDownIcon className={`h-4 w-4 ${selectedTypes.length > 0 ? 'text-white' : 'text-black'}`} />}
                 >
                     {selectedTypes.length > 0
-                        ? `Select Amenities amount is ${selectedTypes.length} `
-                        : "Select location types"}
+                        ? `Selected Amenities `
+                        : "Select Amenities"}
                 </Button>
             </DropdownTrigger>
             <DropdownMenu

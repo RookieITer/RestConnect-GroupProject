@@ -33,7 +33,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
     }
 
     return (
-        <div className="mb-4 flex flex-wrap gap-4">
+        <div className="mb-1 mt-4 flex flex-wrap gap-4">
             <LocationTypeFilter
                 selectedTypes={filter.locationTypes}
                 onChange={onLocationTypeChange}

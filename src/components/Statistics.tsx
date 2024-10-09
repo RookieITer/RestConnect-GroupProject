@@ -5,9 +5,10 @@ import axios from 'axios'
 import { Heading } from '@aws-amplify/ui-react'
 import { useNavigate } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis, Cell } from 'recharts'
-import { Button } from "@/components/ui/button"
+//import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertCircle, Play, Bike, Car, User } from 'lucide-react'
+import { Button } from '@aws-amplify/ui-react'; 
 
 interface CrashData {
     Suburb: string
@@ -255,11 +256,14 @@ export default function Statistics() {
                 <Heading level={3}>Know your risks</Heading>
                 <p className="text-gray-600 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
 
-                <div className="mb-6 flex space-x-4">
-                    <Button variant={activeTab === 'crime' ? 'default' : 'outline'} onClick={() => setActiveTab('crime')}>Crime Insight</Button>
-                    <Button variant={activeTab === 'accident' ? 'default' : 'outline'} onClick={() => setActiveTab('accident')}>Accident Data</Button>
-                    <Button variant="outline" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
+                <div className="flex justify-between items-center">
+                    <div>
+                    <Button onClick={() => setActiveTab('accident')}>Accident Data</Button>
+                    <Button onClick={() => setActiveTab('crime')}>Crime Insight</Button>
+                    </div>
+                    <Button variation="primary" width="15em" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
                 </div>
+                <br />
 
                 {activeTab === 'accident' && (
                     <div>
@@ -277,13 +281,14 @@ export default function Statistics() {
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-2xl font-semibold mb-4">Crash Data by Speed Zone and Transport Mode</h2>
-                            <div className="flex flex-col items-center mb-6">
-                                <SafestModeIcon />
-                                <p className="mt-2 text-center">
-                                    Safest transport mode in  {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
-                                </p>
+                            <div className='pseudoheading'>
+                                Safest transport mode in  {selectedSuburb}: <strong className="ml-1">{safestMode.mode}</strong>
                             </div>
+                            <br />
+                            <div className="flex flex-col items-left mb-6">
+                                <SafestModeIcon />
+                            </div>
+
                             {analyzeCrashData()}
                             <ResponsiveContainer width="100%" height={400}>
                                 <BarChart

@@ -9,7 +9,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import ErrorBoundary from '@/components/ErrorBoundary'
 import { Card, CardContent } from "@/components/ui/card"
-import { Heading } from '@aws-amplify/ui-react'; 
+import { Heading, Button } from '@aws-amplify/ui-react'; 
+import { useNavigate } from 'react-router-dom';
 
 export const InteractiveMap: React.FC = () => {
     const [toilets, setToilets] = useState<ToiletData[]>([])
@@ -19,6 +20,9 @@ export const InteractiveMap: React.FC = () => {
     const [error, setError] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isLoadingOpenSpaces, setIsLoadingOpenSpaces] = useState(false)
+
+    const navigate = useNavigate();
+
     const [filter, setFilter] = useState<FilterState>({
         locationTypes: ['toilets'],
         toiletFilters: {
@@ -81,6 +85,13 @@ export const InteractiveMap: React.FC = () => {
         }))
     }, [])
 
+
+    // handles button click event to go statistics page
+    const handleClick = () => {
+        navigate('/statistics');
+    }
+
+
     const handleLocationTypeChange = useCallback((types: LocationType[]) => {
         setFilter(prev => ({ ...prev, locationTypes: types }))
         if (types.includes('openSpaces') && openSpaces.length === 0) {
@@ -95,22 +106,14 @@ export const InteractiveMap: React.FC = () => {
     return (
         <ErrorBoundary>
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-8">
-            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-10">
-                <div className="flex justify-between items-center mb-4">
+            <div className="container mx-auto px-4 py-6 sm:py-8 md:py-6">
+                <div className="flex justify-between items-center">
                     <Heading level={3}>Find the nearest rest areas and amenities</Heading>
-                        <Card className="w-128">
-                            <CardContent className="p-4">
-                                <h2 className="text-3xl font-bold text-center text-primary">3.4</h2>
-                                <p className="text-sm text-center text-muted-foreground">RestConnect Risk Score</p>
-                                <p className="text-sm text-center">
-                                    Current Location has: Moderate Risk.
-                                    <a href="/statistics" className="text-primary hover:underline ml-1 text-red-400 font-bold">
-                                        Click here to Know your risks
-                                    </a>
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </div>
+                    <div className='pseudoheading'>RestConnect Risk Score for this area: 3.4</div>
+                </div>
+
+
+                <div className="flex justify-between items-center mb-4">
                     {error && (
                         <Alert variant="destructive" className="mb-4">
                             <AlertCircle className="h-4 w-4" />
@@ -123,6 +126,18 @@ export const InteractiveMap: React.FC = () => {
                         onFilterChange={handleFilterChange}
                         onLocationTypeChange={handleLocationTypeChange}
                     />
+
+                    <Button 
+                        onClick={handleClick}
+                        height={"3em"} 
+                        variation="primary">
+                            Click Here To Know Your Risks
+                    </Button>
+                </div>
+
+
+
+
                     <MapView
                         toilets={toilets}
                         openSpaces={openSpaces}
@@ -132,8 +147,12 @@ export const InteractiveMap: React.FC = () => {
                         onItemSelect={setSelectedItem}
                         isLoadingOpenSpaces={isLoadingOpenSpaces}
                     />
-                </div>
+
+
+
+
             </div>
+        </div>
         </ErrorBoundary>
     )
 }
