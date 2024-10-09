@@ -3,10 +3,29 @@
     width: 100%;
     margin: 0px 0px 6px 0px;
   }
+  .btnmax100 {
+    width: 100%;
+  }
+  .btnmax10 {
+    width: 50%;
+    margin: 0px 2px 0px 2px;
+  }
   .btnmax16 {
     width: 16em;
     height: 3em;
     margin: 0px 0px 0px 0px;
+  }  
+  .btnmax8 {
+    width: 10em;
+    height: 3em;
+    margin: 0px 0px 0px 0px;
+  }  
+  .btnmax12 {
+    width: 7em;
+    height: 5em;
+    margin: 1px 0px 1px 0px;
+    padding: 0px 6px 0px 6px;
+    text-align: center;
   }  
   .listmax {
     width: 100%;
@@ -23,8 +42,25 @@
     width: 16em;
     margin: 0px 2px 0px 2px;
   }
+  .btnmax10 {
+    width: 10em;
+    margin: 0px 2px 0px 2px;
+  }
+  .btnmax100 {
+    width: 100%;
+  }
   .btnmax16 {
     width: 16em;
+    height: 3em;
+    margin: 0px 0px 0px 0px;
+  }  
+  .btnmax8 {
+    width: 10em;
+    height: 3em;
+    margin: 0px 0px 0px 0px;
+  }  
+  .btnmax12 {
+    width: 12em;
     height: 3em;
     margin: 0px 0px 0px 0px;
   }  

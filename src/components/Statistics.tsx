@@ -253,17 +253,13 @@ export default function Statistics() {
     return (
         <div className="min-h-screen bg-white text-gray-800 overflow-auto p-4">
             <div className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
-                <Heading level={3}>Know your risks</Heading>
-                <p className="text-gray-600 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
-
-                <div className="flex justify-between items-center">
-                    <div className="flex inline-block">
-                        <Button width={"18em"} height={"3em"} onClick={() => setActiveTab('accident')}>Accident Data</Button>&nbsp;
-                        <Button  width={"18em"} height={"3em"} onClick={() => setActiveTab('crime')}>Crime Insight</Button>&nbsp;
-
+                <div className="flex items-center">
+                    <Heading level={3}>Know your risks&nbsp;&nbsp;
+                    </Heading>
+                    <div>
                         {activeTab === 'accident' && (
                             <Select value={selectedSuburb} onValueChange={handleSuburbChange}>
-                                <SelectTrigger style={{ height: '3.5em', border: '2px solid #999999'}}>
+                                <SelectTrigger style={{width: '12em', height: '2.5em', border: '2px solid #999999', margin: '8px 0px 0px 0px' }}>
                                     <SelectValue placeholder="Select suburb" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -272,11 +268,11 @@ export default function Statistics() {
                                     ))}
                                 </SelectContent>
                             </Select>
-                        )}
+                            )}
 
                         {activeTab === 'crime' && (
                             <Select value={selectedArea} onValueChange={handleAreaChange}>
-                                <SelectTrigger style={{ height: '3.5em', border: '2px solid #999999' }}>
+                                <SelectTrigger style={{width: '12em',  height: '2.5em', border: '2px solid #999999', margin: '8px 0px 0px 0px' }}>
                                     <SelectValue placeholder="Select area" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -286,9 +282,17 @@ export default function Statistics() {
                                 </SelectContent>
                             </Select>
                         )}
-
                     </div>
-                    <Button variation="primary" width="15em" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
+                </div>
+    
+                <p className="text-gray-300 mb-6">Stay informed and rest easy with these insights on crime and accident data</p>
+
+                <div className="flex justify-between items-center">
+                   <div>
+                        <Button className='btnmax12' onClick={() => setActiveTab('accident')}>Accident Data</Button>&nbsp;
+                        <Button className='btnmax12' onClick={() => setActiveTab('crime')}>Crime Insight</Button>&nbsp;
+                    </div>
+                    <Button variation="primary" className="btnmax12" onClick={navigateToCanIParkHere}>Can I Park Here?</Button>
                 </div>
                 <br />
 
@@ -307,7 +311,7 @@ export default function Statistics() {
                             <ResponsiveContainer width="100%" height={400}>
                                 <BarChart
                                     data={crashChartData}
-                                    margin={{top: 20, right:  30, left: 20, bottom: 60}}
+                                    margin={{top: 20, right: 30, left: 20, bottom: 60}}
                                     layout="vertical"
                                 >
                                     <CartesianGrid strokeDasharray="3 3"/>
