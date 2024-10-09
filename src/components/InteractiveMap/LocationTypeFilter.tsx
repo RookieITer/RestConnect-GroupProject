@@ -23,7 +23,7 @@ export function LocationTypeFilter({ selectedTypes, onChange }: LocationTypeFilt
             <DropdownTrigger>
                 <Button
                     variant="flat"
-                    className={`capitalize ${selectedTypes.length > 0 ? 'bg-blue-400 text-white' : 'bg-blue-400 text-white'}`}
+                    className={`capitalize ${selectedTypes.length > 0 ? 'bg-blue-400 text-white pr-2 pl-2' : 'bg-blue-400 text-white pr-2 pl-2'}`}
                     endContent={<ChevronDownIcon className={`h-4 w-4 ${selectedTypes.length > 0 ? 'text-white' : 'text-black'}`} />}
                 >
                     {selectedTypes.length > 0
@@ -40,7 +40,7 @@ export function LocationTypeFilter({ selectedTypes, onChange }: LocationTypeFilt
                 style={dropdownStyles}
             >
                 {locationTypeOptions.map((type) => (
-                    <DropdownItem key={type.value} className="bg-blue-400 hover:bg-blue-500 text-white">
+                    <DropdownItem key={type.value} className="bg-blue-400 hover:bg-blue-500 text-white pr-2 pl-2">
                         {type.label}
                     </DropdownItem>
                 ))}

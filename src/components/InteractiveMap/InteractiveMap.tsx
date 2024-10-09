@@ -109,7 +109,7 @@ export const InteractiveMap: React.FC = () => {
             <div className="container mx-auto px-0 py-0 sm:py-2 md:py-4">
                 <div className="flex justify-between items-center">
                     <Heading level={3}>Find the nearest rest areas and amenities</Heading>
-                    <div className='pseudoheading'>RestConnect Risk Score for this area: 3.4</div>
+                    <div className='pseudoheading hideonmobile'>RestConnect Risk Score for this area: 3.4</div>
                 </div>
 
 

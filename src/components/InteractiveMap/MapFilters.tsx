@@ -44,7 +44,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
                     <DropdownTrigger>
                         <Button
                             variant="flat"
-                            className="capitalize bg-black text-white"
+                            className="capitalize bg-black text-white pr-2 pl-2"
                             endContent={<ChevronDownIcon className="h-4 w-4 text-white" />}
                         >
                             Toilet Facilities
@@ -74,7 +74,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
                     <DropdownTrigger>
                         <Button
                             variant="flat"
-                            className="capitalize bg-green-400"
+                            className="capitalize bg-green-400 pr-2 pl-2"
                             endContent={<ChevronDownIcon className="h-4 w-4" />}
                         >
                             Rest Spot

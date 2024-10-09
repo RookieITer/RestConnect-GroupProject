@@ -3,6 +3,10 @@
     width: 100%;
     margin: 0px 0px 6px 0px;
   }
+  .hideonmobile {
+    display: none;
+  }
+
   .btnmaxtall {
     width: 100%;
     height: 5em;
@@ -11,7 +15,7 @@
     text-align: center;
   }
   .btnmaxtallthin {
-    width: 100%;
+    width: 10em;
     height: 5em;
     padding: 0px 6px 0px 6px;
     margin: 0px 0px 6px 0px;
