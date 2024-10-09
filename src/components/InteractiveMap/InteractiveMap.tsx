@@ -136,8 +136,8 @@ export const InteractiveMap: React.FC = () => {
                 </div>
 
 
-
-
+                <div className=" bg-white p-3 rounded-lg border border-gray-200">
+              
                     <MapView
                         toilets={toilets}
                         openSpaces={openSpaces}
@@ -147,7 +147,7 @@ export const InteractiveMap: React.FC = () => {
                         onItemSelect={setSelectedItem}
                         isLoadingOpenSpaces={isLoadingOpenSpaces}
                     />
-
+                </div>
 
 
 

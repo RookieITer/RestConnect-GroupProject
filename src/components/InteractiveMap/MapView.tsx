@@ -64,7 +64,7 @@ export const MapView: React.FC<MapViewProps> = ({ toilets, openSpaces, parkingSp
     };
 
     return (
-        <div className="w-full h-[calc(100vh-200px)] min-h-[400px] rounded-lg overflow-hidden bg-white relative">
+        <div className="w-full h-[calc(100vh-350px)] min-h-[400px] rounded-lg overflow-hidden bg-white relative">
             <Map
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}

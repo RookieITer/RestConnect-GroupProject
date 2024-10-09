@@ -349,7 +349,6 @@ export default function Statistics() {
                                 <br />
                             </div>
 
-
                             <div>
                                 <ResponsiveContainer width={300} height={300}>
                                             <RadialBarChart
