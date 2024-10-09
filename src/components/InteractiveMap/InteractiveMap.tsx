@@ -8,7 +8,7 @@ import { MapView } from './MapView'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import ErrorBoundary from '@/components/ErrorBoundary'
-import { Card, CardContent } from "@/components/ui/card"
+//import { Card, CardContent } from "@/components/ui/card"
 import { Heading, Button } from '@aws-amplify/ui-react'; 
 import { useNavigate } from 'react-router-dom';
 
