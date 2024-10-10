@@ -100,7 +100,7 @@ export const MapFilters: React.FC<MapFiltersProps> = ({ filter, onFilterChange, 
             )}
 
             {filter.locationTypes.includes('parking') && (
-                <Button onClick={() => window.location.href='CanIParkHere'} className="bg-yellow-300">
+                <Button onClick={() => window.location.href='./CanIParkHere'} className="bg-yellow-300">
                     Can I Park Here?
                 </Button>
             )}
